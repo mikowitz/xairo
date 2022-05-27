@@ -3,7 +3,7 @@ use rustler::ResourceArc;
 use std::fs::File;
 
 pub struct ImageSurfaceRaw {
-    surface: cairo::ImageSurface,
+    pub surface: cairo::ImageSurface,
 }
 
 unsafe impl Send for ImageSurfaceRaw {}
