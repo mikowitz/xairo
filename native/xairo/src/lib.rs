@@ -1,6 +1,22 @@
-#[rustler::nif]
-fn add(a: i64, b: i64) -> i64 {
-    a + b
-}
+use rustler::{Env, Term};
 
-rustler::init!("Elixir.Xairo.Native", [add]);
+mod enums;
+mod image_surface;
+
+rustler::init!(
+    "Elixir.Xairo.Native",
+    [
+        image_surface::image_surface_create,
+        image_surface::image_surface_write_to_png,
+        image_surface::image_surface_width,
+        image_surface::image_surface_height,
+        image_surface::image_surface_stride,
+        image_surface::image_surface_format,
+    ],
+    load = on_load
+);
+
+fn on_load(env: Env, _info: Term) -> bool {
+    rustler::resource!(image_surface::ImageSurfaceRaw, env);
+    true
+}
