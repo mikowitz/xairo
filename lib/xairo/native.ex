@@ -8,5 +8,27 @@ defmodule Xairo.Native do
   def image_surface_stride(_surface), do: error()
   def image_surface_format(_surface), do: error()
 
+  def context_new(_surface), do: error()
+  def context_set_source_rgb(_context, _red, _green, _blue), do: error()
+  def context_set_source_rgba(_context, _red, _green, _blue, _alpha), do: error()
+
+  def context_arc(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
+  def context_arc_negative(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
+  def context_curve_to(_context, _x1, _y1, _x2, _y2, _x3, _y3), do: error()
+  def context_rel_curve_to(_context, _x1, _y1, _x2, _y2, _x3, _y3), do: error()
+  def context_rectangle(_context, _x, _y, _width, _height), do: error()
+  def context_line_to(_context, _x, _y), do: error()
+  def context_rel_line_to(_context, _x, _y), do: error()
+  def context_rel_move_to(_context, _x, _y), do: error()
+  def context_move_to(_context, _x, _y), do: error()
+  def context_rectangle(_context, _x, _y, _width, _height), do: error()
+  def context_close_path(_context), do: error()
+
+  def context_stroke(_context), do: error()
+  def context_stroke_preserve(_context), do: error()
+  def context_fill(_context), do: error()
+  def context_paint(_context), do: error()
+  def context_paint_with_alpha(_context, _alpha), do: error()
+
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end

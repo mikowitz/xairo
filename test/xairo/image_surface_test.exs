@@ -1,5 +1,6 @@
 defmodule Xairo.ImageSurfaceTest do
   use ExUnit.Case, async: true
+  import Xairo.Test.Support.ImageHelpers
 
   alias Xairo.ImageSurface
 
@@ -25,11 +26,7 @@ defmodule Xairo.ImageSurfaceTest do
     test "writes the ImageSurface to disk when given a valid filename" do
       surface = ImageSurface.create(:argb32, 100, 100)
 
-      :ok = ImageSurface.write_to_png(surface, "image_surface.png")
-
-      assert_image("image_surface.png")
-
-      :ok = File.rm("image_surface.png")
+      assert_image(surface, "image_surface.png")
     end
 
     test "returns an error when the location is invalid" do
@@ -75,12 +72,5 @@ defmodule Xairo.ImageSurfaceTest do
 
       assert ImageSurface.format(surface) == :argb32
     end
-  end
-
-  defp assert_image(filename) do
-    actual = :crypto.hash(:md5, File.read!(filename))
-    expected = :crypto.hash(:md5, File.read!(Path.join("test/images", filename)))
-
-    assert actual == expected
   end
 end

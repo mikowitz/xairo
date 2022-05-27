@@ -1,22 +1,44 @@
 use rustler::{Env, Term};
 
+mod context;
 mod enums;
 mod image_surface;
 
 rustler::init!(
     "Elixir.Xairo.Native",
     [
+        // image surface
         image_surface::image_surface_create,
         image_surface::image_surface_write_to_png,
         image_surface::image_surface_width,
         image_surface::image_surface_height,
         image_surface::image_surface_stride,
         image_surface::image_surface_format,
+        // context
+        context::context_new,
+        context::context_set_source_rgb,
+        context::context_set_source_rgba,
+        context::context_arc,
+        context::context_arc_negative,
+        context::context_curve_to,
+        context::context_rel_curve_to,
+        context::context_line_to,
+        context::context_rel_line_to,
+        context::context_rectangle,
+        context::context_move_to,
+        context::context_rel_move_to,
+        context::context_close_path,
+        context::context_stroke,
+        context::context_stroke_preserve,
+        context::context_fill,
+        context::context_paint,
+        context::context_paint_with_alpha,
     ],
     load = on_load
 );
 
 fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(image_surface::ImageSurfaceRaw, env);
+    rustler::resource!(context::ContextRaw, env);
     true
 }
