@@ -2,7 +2,7 @@ defmodule Xairo.ContextTest do
   use ExUnit.Case, async: true
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface}
+  alias Xairo.{Context, ImageSurface, PdfSurface, PsSurface, SvgSurface}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -132,6 +132,47 @@ defmodule Xairo.ContextTest do
       |> Context.stroke()
 
       assert_image(sfc, "close_path.png")
+    end
+  end
+
+  describe "target/1" do
+    test "returns the correct surface stsruct for a PNG image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      target = Context.target(context)
+
+      assert is_struct(target, ImageSurface)
+    end
+
+    test "returns the correct surface stsruct for a PDF image" do
+      surface = PdfSurface.new(100, 100, "pdf.pdf")
+      context = Context.new(surface)
+
+      target = Context.target(context)
+      assert is_struct(target, PdfSurface)
+
+      File.rm("pdf.pdf")
+    end
+
+    test "returns the correct surface stsruct for a PS image" do
+      surface = PsSurface.new(100, 100, "ps.ps")
+      context = Context.new(surface)
+
+      target = Context.target(context)
+      assert is_struct(target, PsSurface)
+
+      File.rm("ps.ps")
+    end
+
+    test "returns the correct surface stsruct for an SVG image" do
+      surface = SvgSurface.new(100, 100, "svg.svg")
+      context = Context.new(surface)
+
+      target = Context.target(context)
+      assert is_struct(target, SvgSurface)
+
+      File.rm("svg.svg")
     end
   end
 end

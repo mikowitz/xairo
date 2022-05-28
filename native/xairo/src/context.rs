@@ -1,4 +1,7 @@
-use crate::{enums::error::Error, image_surface::ImageSurface};
+use crate::{
+    enums::error::Error, image_surface::ImageSurface, pdf_surface::PdfSurface,
+    ps_surface::PsSurface, svg_surface::SvgSurface,
+};
 
 use rustler::ResourceArc;
 
@@ -13,6 +16,30 @@ pub type Context = ResourceArc<ContextRaw>;
 
 #[rustler::nif]
 fn context_new(surface: ImageSurface) -> Result<Context, Error> {
+    match cairo::Context::new(&surface.surface) {
+        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_new_from_pdf_surface(surface: PdfSurface) -> Result<Context, Error> {
+    match cairo::Context::new(&surface.surface) {
+        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_new_from_ps_surface(surface: PsSurface) -> Result<Context, Error> {
+    match cairo::Context::new(&surface.surface) {
+        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_new_from_svg_surface(surface: SvgSurface) -> Result<Context, Error> {
     match cairo::Context::new(&surface.surface) {
         Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
         Err(err) => Err(err.into()),

@@ -1,12 +1,30 @@
 defmodule Xairo.Context do
-  defstruct [:context]
+  defstruct [:context, :surface]
 
+  alias Xairo.{ImageSurface, PdfSurface, PsSurface, SvgSurface}
   alias Xairo.Native, as: N
 
-  def new(%{surface: surface}) do
-    with {:ok, context} <- N.context_new(surface),
-         do: %__MODULE__{context: context}
+  def new(%ImageSurface{} = surface) do
+    with {:ok, context} <- N.context_new(surface.surface),
+         do: %__MODULE__{context: context, surface: surface}
   end
+
+  def new(%PdfSurface{} = surface) do
+    with {:ok, context} <- N.context_new_from_pdf_surface(surface.surface),
+         do: %__MODULE__{context: context, surface: surface}
+  end
+
+  def new(%SvgSurface{} = surface) do
+    with {:ok, context} <- N.context_new_from_svg_surface(surface.surface),
+         do: %__MODULE__{context: context, surface: surface}
+  end
+
+  def new(%PsSurface{} = surface) do
+    with {:ok, context} <- N.context_new_from_ps_surface(surface.surface),
+         do: %__MODULE__{context: context, surface: surface}
+  end
+
+  def target(%__MODULE__{surface: surface}), do: surface
 
   def set_source_rgb(%__MODULE__{context: ctx} = this, red, green, blue) do
     N.context_set_source_rgb(ctx, red / 1, green / 1, blue / 1)

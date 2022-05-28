@@ -8,7 +8,22 @@ defmodule Xairo.Native do
   def image_surface_stride(_surface), do: error()
   def image_surface_format(_surface), do: error()
 
+  def pdf_surface_new(_width, _height, _path), do: error()
+  def pdf_surface_finish(_surface), do: error()
+
+  def ps_surface_new(_width, _height, _path), do: error()
+  def ps_surface_finish(_surface), do: error()
+
+  def svg_surface_new(_width, _height, _path), do: error()
+  def svg_surface_finish(_surface), do: error()
+  def svg_surface_document_unit(_surface), do: error()
+  def svg_surface_set_document_unit(_surface, _unit), do: error()
+
   def context_new(_surface), do: error()
+  def context_new_from_pdf_surface(_surface), do: error()
+  def context_new_from_ps_surface(_surface), do: error()
+  def context_new_from_svg_surface(_surface), do: error()
+
   def context_set_source_rgb(_context, _red, _green, _blue), do: error()
   def context_set_source_rgba(_context, _red, _green, _blue, _alpha), do: error()
 
@@ -21,7 +36,6 @@ defmodule Xairo.Native do
   def context_rel_line_to(_context, _x, _y), do: error()
   def context_rel_move_to(_context, _x, _y), do: error()
   def context_move_to(_context, _x, _y), do: error()
-  def context_rectangle(_context, _x, _y, _width, _height), do: error()
   def context_close_path(_context), do: error()
 
   def context_stroke(_context), do: error()
