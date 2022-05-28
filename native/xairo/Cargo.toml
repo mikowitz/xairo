@@ -3,6 +3,11 @@ name = "xairo"
 version = "0.1.0"
 authors = []
 edition = "2018"
+license = "MIT"
+repository = "https://github.com/mikowitz/xairo"
+description = "NIF bindings for using the cairo graphics library from Elixir"
+keywords = ["cairo", "graphics", "2d", "rustler", "elixir", "bindings"]
+categories = ["art", "graphics", "drawing"]
 
 [lib]
 name = "xairo"
@@ -11,4 +16,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 rustler = "0.25.0"
-cairo-rs = { version = "0.14.0", features = ["png"] }
+cairo-rs = { version = "0.14.0", features = ["pdf", "png", "ps", "svg", "v1_16"] }

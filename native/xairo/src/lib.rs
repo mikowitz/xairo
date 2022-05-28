@@ -3,6 +3,9 @@ use rustler::{Env, Term};
 mod context;
 mod enums;
 mod image_surface;
+mod pdf_surface;
+mod ps_surface;
+mod svg_surface;
 
 rustler::init!(
     "Elixir.Xairo.Native",
@@ -14,8 +17,22 @@ rustler::init!(
         image_surface::image_surface_height,
         image_surface::image_surface_stride,
         image_surface::image_surface_format,
+        // pdf surface
+        pdf_surface::pdf_surface_new,
+        pdf_surface::pdf_surface_finish,
+        // ps surface
+        ps_surface::ps_surface_new,
+        ps_surface::ps_surface_finish,
+        // svg surface
+        svg_surface::svg_surface_new,
+        svg_surface::svg_surface_finish,
+        svg_surface::svg_surface_document_unit,
+        svg_surface::svg_surface_set_document_unit,
         // context
         context::context_new,
+        context::context_new_from_pdf_surface,
+        context::context_new_from_ps_surface,
+        context::context_new_from_svg_surface,
         context::context_set_source_rgb,
         context::context_set_source_rgba,
         context::context_arc,
@@ -39,6 +56,9 @@ rustler::init!(
 
 fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(image_surface::ImageSurfaceRaw, env);
+    rustler::resource!(pdf_surface::PdfSurfaceRaw, env);
+    rustler::resource!(ps_surface::PsSurfaceRaw, env);
+    rustler::resource!(svg_surface::SvgSurfaceRaw, env);
     rustler::resource!(context::ContextRaw, env);
     true
 }
