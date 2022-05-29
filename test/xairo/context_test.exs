@@ -135,6 +135,37 @@ defmodule Xairo.ContextTest do
     end
   end
 
+  describe "new_path/1" do
+    test "begins a new path and removes any existing path components", %{
+      surface: sfc,
+      context: ctx
+    } do
+      ctx
+      |> Context.set_source_rgb(1, 0, 1)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(15, 80)
+      |> Context.new_path()
+      |> Context.arc(60, 40, 20, 0, 4)
+      |> Context.stroke()
+
+      assert_image(sfc, "new_path.png")
+    end
+  end
+
+  describe "new_sub_path/1" do
+    test "begins a new path but retains existing path components", %{surface: sfc, context: ctx} do
+      ctx
+      |> Context.set_source_rgb(1, 0, 1)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(15, 80)
+      |> Context.new_sub_path()
+      |> Context.arc(60, 40, 20, 0, 4)
+      |> Context.stroke()
+
+      assert_image(sfc, "new_sub_path.png")
+    end
+  end
+
   describe "target/1" do
     test "returns the correct surface stsruct for a PNG image" do
       surface = ImageSurface.create(:argb32, 100, 100)
@@ -173,6 +204,148 @@ defmodule Xairo.ContextTest do
       assert is_struct(target, SvgSurface)
 
       File.rm("svg.svg")
+    end
+  end
+
+  describe "copy_path/1" do
+    test "returns a Path struct" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      path = Context.copy_path(context)
+
+      assert is_struct(path, Xairo.Path)
+    end
+  end
+
+  describe "copy_path_flat/1" do
+    test "returns a Path struct" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      path = Context.copy_path_flat(context)
+
+      assert is_struct(path, Xairo.Path)
+    end
+  end
+
+  describe "append_path/2" do
+    test "appends the given path to the context's path" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.set_source_rgb(0, 1, 0)
+        |> Context.move_to(10, 10)
+        |> Context.line_to(50, 50)
+        |> Context.line_to(20, 70)
+        |> Context.close_path()
+
+      path = Context.copy_path(context)
+
+      Context.new_path(context)
+
+      assert_image(surface, "before_append_path.png")
+
+      context
+      |> Context.append_path(path)
+      |> Context.fill()
+
+      assert_image(surface, "after_append_path.png")
+    end
+  end
+
+  describe "tolerance/1" do
+    test "returns the current path tolerance of the context" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      assert Context.tolerance(context) == 0.1
+    end
+  end
+
+  describe "set_tolerance/2" do
+    test "sets the current path tolerance for the context" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.set_tolerance(10)
+
+      assert Context.tolerance(context) == 10.0
+    end
+  end
+
+  describe "has_current_point/1" do
+    test "returns false before any drawing has been done" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context = Context.new(surface)
+
+      refute Context.has_current_point(context)
+    end
+
+    test "returns false after stroke has been called" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.line_to(50, 50)
+        |> Context.stroke()
+
+      refute Context.has_current_point(context)
+    end
+
+    test "returns true after any addition to the path" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.line_to(50, 50)
+
+      assert Context.has_current_point(context)
+    end
+
+    test "returns false after new_path is called" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.line_to(50, 50)
+        |> Context.new_path()
+
+      refute Context.has_current_point(context)
+    end
+
+    test "returns false after new_sub_path is called" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.line_to(50, 50)
+        |> Context.new_sub_path()
+
+      refute Context.has_current_point(context)
+    end
+  end
+
+  describe "current_point/1" do
+    test "returns the current point when it exists" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.line_to(50, 50)
+
+      assert Context.current_point(context) == {50.0, 50.0}
+    end
+
+    test "returns {0.0, 0.0} when there is no current point" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context = Context.new(surface)
+
+      assert Context.current_point(context) == {0.0, 0.0}
     end
   end
 end

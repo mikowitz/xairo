@@ -3,6 +3,7 @@ use rustler::{Env, Term};
 mod context;
 mod enums;
 mod image_surface;
+mod path;
 mod pdf_surface;
 mod ps_surface;
 mod svg_surface;
@@ -50,6 +51,17 @@ rustler::init!(
         context::context_fill,
         context::context_paint,
         context::context_paint_with_alpha,
+        context::context_copy_path,
+        context::context_copy_path_flat,
+        context::context_append_path,
+        context::context_tolerance,
+        context::context_set_tolerance,
+        context::context_has_current_point,
+        context::context_current_point,
+        context::context_new_path,
+        context::context_new_sub_path,
+        // path
+        path::path_iter,
     ],
     load = on_load
 );
@@ -60,5 +72,6 @@ fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(ps_surface::PsSurfaceRaw, env);
     rustler::resource!(svg_surface::SvgSurfaceRaw, env);
     rustler::resource!(context::ContextRaw, env);
+    rustler::resource!(path::PathRaw, env);
     true
 }

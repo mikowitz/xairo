@@ -2,6 +2,7 @@ defmodule Xairo.Context do
   defstruct [:context, :surface]
 
   alias Xairo.{ImageSurface, PdfSurface, PsSurface, SvgSurface}
+  alias Xairo.Path
   alias Xairo.Native, as: N
 
   def new(%ImageSurface{} = surface) do
@@ -104,5 +105,43 @@ defmodule Xairo.Context do
 
   def paint_with_alpha(%__MODULE__{context: ctx} = this, alpha) do
     with {:ok, _} <- N.context_paint_with_alpha(ctx, alpha / 1), do: this
+  end
+
+  def copy_path(%__MODULE__{context: ctx}) do
+    with {:ok, path} <- N.context_copy_path(ctx), do: Path.from(path)
+  end
+
+  def copy_path_flat(%__MODULE__{context: ctx}) do
+    with {:ok, path} <- N.context_copy_path_flat(ctx), do: Path.from(path)
+  end
+
+  def append_path(%__MODULE__{context: ctx} = this, %Path{path: path}) do
+    N.context_append_path(ctx, path)
+    this
+  end
+
+  def tolerance(%__MODULE__{context: ctx}), do: N.context_tolerance(ctx)
+
+  def set_tolerance(%__MODULE__{context: ctx} = this, tolerance) do
+    N.context_set_tolerance(ctx, tolerance / 1)
+    this
+  end
+
+  def has_current_point(%__MODULE__{context: ctx}) do
+    with {:ok, boolean} <- N.context_has_current_point(ctx), do: boolean
+  end
+
+  def current_point(%__MODULE__{context: ctx}) do
+    with {:ok, point} <- N.context_current_point(ctx), do: point
+  end
+
+  def new_path(%__MODULE__{context: ctx} = this) do
+    N.context_new_path(ctx)
+    this
+  end
+
+  def new_sub_path(%__MODULE__{context: ctx} = this) do
+    N.context_new_sub_path(ctx)
+    this
   end
 end

@@ -15,5 +15,5 @@ path = "src/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-rustler = "0.25.0"
+rustler = { git = "https://github.com/rusterlium/rustler", branch = "master" }
 cairo-rs = { version = "0.14.0", features = ["pdf", "png", "ps", "svg", "v1_16"] }
