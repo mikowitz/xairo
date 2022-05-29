@@ -37,6 +37,7 @@ jobs:
         id: rust-cache
         with:
           working-directory: ./native/xairo
+          target-dir: ./native/xairo/target
           key: rs-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ matrix.rust }}-${{ hashFiles('Cargo.lock') }}
 
       - name: mix-cache
