@@ -44,5 +44,18 @@ defmodule Xairo.Native do
   def context_paint(_context), do: error()
   def context_paint_with_alpha(_context, _alpha), do: error()
 
+  def context_copy_path(_context), do: error()
+  def context_copy_path_flat(_context), do: error()
+  def context_append_path(_context, _path), do: error()
+  def context_tolerance(_context), do: error()
+  def context_set_tolerance(_context, _tolerance), do: error()
+  def context_has_current_point(_context), do: error()
+  def context_current_point(_context), do: error()
+
+  def context_new_path(_context), do: error()
+  def context_new_sub_path(_context), do: error()
+
+  def path_iter(_path), do: error()
+
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end

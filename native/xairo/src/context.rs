@@ -1,6 +1,6 @@
 use crate::{
-    enums::error::Error, image_surface::ImageSurface, pdf_surface::PdfSurface,
-    ps_surface::PsSurface, svg_surface::SvgSurface,
+    enums::error::Error, image_surface::ImageSurface, path::Path, path::PathRaw,
+    pdf_surface::PdfSurface, ps_surface::PsSurface, svg_surface::SvgSurface,
 };
 
 use rustler::ResourceArc;
@@ -144,4 +144,61 @@ fn context_paint_with_alpha(context: Context, alpha: f64) -> Result<(), Error> {
         Ok(_) => Ok(()),
         Err(err) => Err(err.into()),
     }
+}
+
+#[rustler::nif]
+fn context_copy_path(context: Context) -> Result<Path, Error> {
+    match context.context.copy_path() {
+        Ok(path) => Ok(ResourceArc::new(PathRaw { path })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_copy_path_flat(context: Context) -> Result<Path, Error> {
+    match context.context.copy_path_flat() {
+        Ok(path) => Ok(ResourceArc::new(PathRaw { path })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_append_path(context: Context, path: Path) {
+    context.context.append_path(&path.path);
+}
+
+#[rustler::nif]
+fn context_tolerance(context: Context) -> f64 {
+    context.context.tolerance()
+}
+
+#[rustler::nif]
+fn context_set_tolerance(context: Context, tolerance: f64) {
+    context.context.set_tolerance(tolerance);
+}
+
+#[rustler::nif]
+fn context_has_current_point(context: Context) -> Result<bool, Error> {
+    match context.context.has_current_point() {
+        Ok(bool) => Ok(bool),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_current_point(context: Context) -> Result<(f64, f64), Error> {
+    match context.context.current_point() {
+        Ok(point) => Ok(point),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_new_path(context: Context) {
+    context.context.new_path();
+}
+
+#[rustler::nif]
+fn context_new_sub_path(context: Context) {
+    context.context.new_sub_path();
 }
