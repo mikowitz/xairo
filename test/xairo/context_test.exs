@@ -254,6 +254,28 @@ defmodule Xairo.ContextTest do
 
       assert_image(surface, "after_append_path.png")
     end
+
+    test "copy_flat_path copies the path, replacing curves with approximations of straight lines" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.set_source_rgb(0, 0, 0)
+        |> Context.paint()
+        |> Context.set_source_rgb(1, 1, 1)
+        |> Context.arc(50, 50, 40, 0, 3.5)
+        |> Context.set_tolerance(10)
+
+      path = Context.copy_path_flat(context)
+
+      context
+      |> Context.set_tolerance(0.1)
+      |> Context.stroke()
+      |> Context.append_path(path)
+      |> Context.stroke()
+
+      assert_image(surface, "copy_path_flat.png")
+    end
   end
 
   describe "tolerance/1" do
