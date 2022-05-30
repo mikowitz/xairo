@@ -3,7 +3,7 @@ defmodule Xairo.ContextTest do
   import Xairo.Test.Support.ImageHelpers
 
   alias Xairo.{Context, ImageSurface, PdfSurface, PsSurface, SvgSurface}
-  alias Xairo.{LinearGradient, RadialGradient, SolidPattern, SurfacePattern}
+  alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -435,6 +435,43 @@ defmodule Xairo.ContextTest do
       assert_image(surface, "surface_pattern.png")
 
       assert Context.source(context) == sp
+    end
+
+    test "sets a mesh as the color source for an image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      mesh =
+        Mesh.new()
+        |> Mesh.begin_patch()
+        |> Mesh.move_to(10, 10)
+        |> Mesh.curve_to(20, 20, 50, -10, 130, -30)
+        |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
+        |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
+        |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
+        |> Mesh.set_corner_color_rgb(0, 1, 0, 0)
+        |> Mesh.set_corner_color_rgb(1, 1, 0.5, 0)
+        |> Mesh.set_corner_color_rgb(2, 1, 1, 0)
+        |> Mesh.set_corner_color_rgb(3, 0.5, 1, 0)
+        |> Mesh.end_patch()
+        |> Mesh.begin_patch()
+        |> Mesh.move_to(0, 0)
+        |> Mesh.line_to(90, 30)
+        |> Mesh.line_to(30, 90)
+        |> Mesh.line_to(0, 0)
+        |> Mesh.set_corner_color_rgba(0, 0, 1, 0, 0.5)
+        |> Mesh.set_corner_color_rgba(1, 0, 1, 0.5, 0.5)
+        |> Mesh.set_corner_color_rgba(2, 0, 0.5, 1, 0.5)
+        |> Mesh.end_patch()
+
+      context
+      |> Context.set_source_rgb(1, 1, 1)
+      |> Context.paint()
+      |> Context.set_source(mesh)
+      |> Context.rectangle(10, 20, 70, 50)
+      |> Context.fill()
+
+      assert_image(surface, "mesh.png")
     end
   end
 end
