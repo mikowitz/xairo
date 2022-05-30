@@ -26,6 +26,10 @@ defmodule Xairo.Native do
 
   def context_set_source_rgb(_context, _red, _green, _blue), do: error()
   def context_set_source_rgba(_context, _red, _green, _blue, _alpha), do: error()
+  def context_set_source_linear_gradient(_context, _pattern), do: error()
+  def context_set_source_radial_gradient(_context, _pattern), do: error()
+  def context_set_source_solid_pattern(_context, _pattern), do: error()
+  def context_set_source_surface_pattern(_context, _pattern), do: error()
 
   def context_arc(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
   def context_arc_negative(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
@@ -56,6 +60,35 @@ defmodule Xairo.Native do
   def context_new_sub_path(_context), do: error()
 
   def path_iter(_path), do: error()
+
+  def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()
+  def linear_gradient_linear_points(_gradient), do: error()
+  def linear_gradient_color_stop_count(_gradient), do: error()
+  def linear_gradient_add_color_stop_rgb(_gradient, _offset, _red, _green, _blue), do: error()
+
+  def linear_gradient_add_color_stop_rgba(_gradient, _offset, _red, _green, _blue, _alpha),
+    do: error()
+
+  def linear_gradient_color_stop_rgba(_gradient, _index), do: error()
+
+  def radial_gradient_new(_x1, _y1, _r1, _x2, _y2, _r2), do: error()
+  def radial_gradient_radial_circles(_gradient), do: error()
+  def radial_gradient_color_stop_count(_gradient), do: error()
+  def radial_gradient_add_color_stop_rgb(_gradient, _offset, _red, _green, _blue), do: error()
+
+  def radial_gradient_add_color_stop_rgba(_gradient, _offset, _red, _green, _blue, _alpha),
+    do: error()
+
+  def radial_gradient_color_stop_rgba(_gradient, _index), do: error()
+
+  def solid_pattern_from_rgb(_red, _green, _blue), do: error()
+  def solid_pattern_from_rgba(_red, _green, _blue, _alpha), do: error()
+  def solid_pattern_rgba(_pattern), do: error()
+
+  def surface_pattern_create_from_image_surface(_surface), do: error()
+  def surface_pattern_create_from_pdf_surface(_surface), do: error()
+  def surface_pattern_create_from_ps_surface(_surface), do: error()
+  def surface_pattern_create_from_svg_surface(_surface), do: error()
 
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end

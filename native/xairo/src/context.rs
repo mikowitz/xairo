@@ -1,6 +1,7 @@
 use crate::{
-    enums::error::Error, image_surface::ImageSurface, path::Path, path::PathRaw,
-    pdf_surface::PdfSurface, ps_surface::PsSurface, svg_surface::SvgSurface,
+    enums::error::Error, image_surface::ImageSurface, linear_gradient::LinearGradient, path::Path,
+    path::PathRaw, pdf_surface::PdfSurface, ps_surface::PsSurface, radial_gradient::RadialGradient,
+    solid_pattern::SolidPattern, surface_pattern::SurfacePattern, svg_surface::SvgSurface,
 };
 
 use rustler::ResourceArc;
@@ -54,6 +55,47 @@ fn context_set_source_rgb(context: Context, red: f64, green: f64, blue: f64) {
 #[rustler::nif]
 fn context_set_source_rgba(context: Context, red: f64, green: f64, blue: f64, alpha: f64) {
     context.context.set_source_rgba(red, green, blue, alpha);
+}
+
+#[rustler::nif]
+fn context_set_source_linear_gradient(
+    context: Context,
+    gradient: LinearGradient,
+) -> Result<(), Error> {
+    match context.context.set_source(&gradient.gradient) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_set_source_radial_gradient(
+    context: Context,
+    gradient: RadialGradient,
+) -> Result<(), Error> {
+    match context.context.set_source(&gradient.gradient) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_set_source_solid_pattern(context: Context, pattern: SolidPattern) -> Result<(), Error> {
+    match context.context.set_source(&pattern.pattern) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_set_source_surface_pattern(
+    context: Context,
+    pattern: SurfacePattern,
+) -> Result<(), Error> {
+    match context.context.set_source(&pattern.pattern) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
 }
 
 #[rustler::nif]
