@@ -1,9 +1,10 @@
 defmodule Xairo.Context do
-  defstruct [:context, :surface, :source]
+  defstruct [:context, :surface, :source, :font_face]
 
   alias Xairo.{ImageSurface, PdfSurface, PsSurface, SvgSurface}
   alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
   alias Xairo.Path
+  alias Xairo.FontFace
   alias Xairo.Native, as: N
 
   def new(%ImageSurface{} = surface) do
@@ -176,5 +177,33 @@ defmodule Xairo.Context do
   def new_sub_path(%__MODULE__{context: ctx} = this) do
     N.context_new_sub_path(ctx)
     this
+  end
+
+  def show_text(%__MODULE__{context: ctx} = this, text) do
+    with {:ok, _} <- N.context_show_text(ctx, text), do: this
+  end
+
+  def text_path(%__MODULE__{context: ctx} = this, text) do
+    N.context_text_path(ctx, text)
+    this
+  end
+
+  def set_font_size(%__MODULE__{context: ctx} = this, font_size) do
+    N.context_set_font_size(ctx, font_size / 1)
+    this
+  end
+
+  def set_font_face(%__MODULE__{context: ctx} = this, %FontFace{font_face: font_face} = ff) do
+    N.context_set_font_face(ctx, font_face)
+    %{this | font_face: ff}
+  end
+
+  def font_face(%__MODULE__{font_face: font_face}) do
+    font_face
+  end
+
+  def select_font_face(%__MODULE__{context: ctx} = this, family, slant, weight) do
+    with font_face <- N.context_select_font_face(ctx, family, slant, weight),
+         do: %{this | font_face: %FontFace{font_face: font_face}}
   end
 end

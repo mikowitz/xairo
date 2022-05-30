@@ -72,4 +72,4 @@ jobs:
           mix format --check-formatted
 
       - name: mix test
-        run: mix test
+        run: mix test --exclude macos

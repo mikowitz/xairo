@@ -2,6 +2,7 @@ use rustler::{Env, Term};
 
 mod context;
 mod enums;
+mod font_face;
 mod image_surface;
 mod linear_gradient;
 mod mesh;
@@ -70,6 +71,11 @@ rustler::init!(
         context::context_current_point,
         context::context_new_path,
         context::context_new_sub_path,
+        context::context_show_text,
+        context::context_text_path,
+        context::context_set_font_size,
+        context::context_set_font_face,
+        context::context_select_font_face,
         // path
         path::path_iter,
         // linear gradient
@@ -109,6 +115,11 @@ rustler::init!(
         mesh::mesh_set_corner_color_rgba,
         mesh::mesh_corner_color_rgba,
         mesh::mesh_path,
+        // font face
+        font_face::font_face_toy_create,
+        font_face::font_face_toy_get_family,
+        font_face::font_face_toy_get_slant,
+        font_face::font_face_toy_get_weight,
     ],
     load = on_load
 );
@@ -125,5 +136,6 @@ fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(solid_pattern::SolidPatternRaw, env);
     rustler::resource!(surface_pattern::SurfacePatternRaw, env);
     rustler::resource!(mesh::MeshRaw, env);
+    rustler::resource!(font_face::FontFaceRaw, env);
     true
 }

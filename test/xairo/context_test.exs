@@ -4,6 +4,7 @@ defmodule Xairo.ContextTest do
 
   alias Xairo.{Context, ImageSurface, PdfSurface, PsSurface, SvgSurface}
   alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
+  alias Xairo.FontFace
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -494,6 +495,69 @@ defmodule Xairo.ContextTest do
       |> Context.fill()
 
       assert_image(surface, "mesh.png")
+    end
+  end
+
+  describe "show_text/2" do
+    @tag :macos
+    test "displays the text on the image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      context
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.move_to(20, 20)
+      |> Context.show_text("hello")
+      |> Context.stroke()
+
+      assert_image(surface, "show_text.png")
+    end
+  end
+
+  describe "text_path/2" do
+    @tag :macos
+    test "adds closed segments of path to the current path that outline the text" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      context
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.move_to(10, 80)
+      |> Context.set_font_size(40)
+      |> Context.text_path("hello")
+      |> Context.stroke()
+
+      assert_image(surface, "text_path.png")
+    end
+  end
+
+  describe "set_font_face/2" do
+    test "sets the font face for the image" do
+      ff = FontFace.toy_create("serif", :normal, :bold)
+
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.set_font_face(ff)
+
+      assert Context.font_face(context) == ff
+    end
+  end
+
+  describe "select_font_face/4" do
+    test "sets the font face from its component parts" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.select_font_face("sans", :oblique, :normal)
+
+      ff = Context.font_face(context)
+
+      assert FontFace.toy_get_family(ff) == "sans"
+      assert FontFace.toy_get_slant(ff) == :oblique
+      assert FontFace.toy_get_weight(ff) == :normal
     end
   end
 end
