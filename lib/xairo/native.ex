@@ -30,6 +30,7 @@ defmodule Xairo.Native do
   def context_set_source_radial_gradient(_context, _pattern), do: error()
   def context_set_source_solid_pattern(_context, _pattern), do: error()
   def context_set_source_surface_pattern(_context, _pattern), do: error()
+  def context_set_source_mesh(_context, _pattern), do: error()
 
   def context_arc(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
   def context_arc_negative(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
@@ -89,6 +90,20 @@ defmodule Xairo.Native do
   def surface_pattern_create_from_pdf_surface(_surface), do: error()
   def surface_pattern_create_from_ps_surface(_surface), do: error()
   def surface_pattern_create_from_svg_surface(_surface), do: error()
+
+  def mesh_new, do: error()
+  def mesh_patch_count(_mesh), do: error()
+  def mesh_begin_patch(_mesh), do: error()
+  def mesh_end_patch(_mesh), do: error()
+  def mesh_move_to(_mesh, _x, _y), do: error()
+  def mesh_line_to(_mesh, _x, _y), do: error()
+  def mesh_curve_to(_mesh, _x1, _y1, _x2, _y2, _x3, _y3), do: error()
+  def mesh_set_control_point(_mesh, _corner, _x, _y), do: error()
+  def mesh_control_point(_mesh, _patch, _corner), do: error()
+  def mesh_set_corner_color_rgb(_mesh, _corner, _red, _green, _blue), do: error()
+  def mesh_set_corner_color_rgba(_mesh, _corner, _red, _green, _blue, _alpha), do: error()
+  def mesh_corner_color_rgba(_mesh, _patch, _corner), do: error()
+  def mesh_path(_mesh, _patch), do: error()
 
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end

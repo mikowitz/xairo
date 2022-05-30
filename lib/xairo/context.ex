@@ -2,7 +2,7 @@ defmodule Xairo.Context do
   defstruct [:context, :surface, :source]
 
   alias Xairo.{ImageSurface, PdfSurface, PsSurface, SvgSurface}
-  alias Xairo.{LinearGradient, RadialGradient, SolidPattern, SurfacePattern}
+  alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
   alias Xairo.Path
   alias Xairo.Native, as: N
 
@@ -58,6 +58,12 @@ defmodule Xairo.Context do
 
   def set_source(%__MODULE__{context: ctx} = this, %SurfacePattern{pattern: pattern} = gradient) do
     with {:ok, _} <- N.context_set_source_surface_pattern(ctx, pattern) do
+      %{this | source: gradient}
+    end
+  end
+
+  def set_source(%__MODULE__{context: ctx} = this, %Mesh{pattern: pattern} = gradient) do
+    with {:ok, _} <- N.context_set_source_mesh(ctx, pattern) do
       %{this | source: gradient}
     end
   end

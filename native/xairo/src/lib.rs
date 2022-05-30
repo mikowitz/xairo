@@ -4,6 +4,7 @@ mod context;
 mod enums;
 mod image_surface;
 mod linear_gradient;
+mod mesh;
 mod path;
 mod pdf_surface;
 mod ps_surface;
@@ -44,6 +45,7 @@ rustler::init!(
         context::context_set_source_radial_gradient,
         context::context_set_source_solid_pattern,
         context::context_set_source_surface_pattern,
+        context::context_set_source_mesh,
         context::context_arc,
         context::context_arc_negative,
         context::context_curve_to,
@@ -93,6 +95,20 @@ rustler::init!(
         surface_pattern::surface_pattern_create_from_pdf_surface,
         surface_pattern::surface_pattern_create_from_ps_surface,
         surface_pattern::surface_pattern_create_from_svg_surface,
+        // mesh
+        mesh::mesh_new,
+        mesh::mesh_patch_count,
+        mesh::mesh_begin_patch,
+        mesh::mesh_end_patch,
+        mesh::mesh_move_to,
+        mesh::mesh_line_to,
+        mesh::mesh_curve_to,
+        mesh::mesh_set_control_point,
+        mesh::mesh_control_point,
+        mesh::mesh_set_corner_color_rgb,
+        mesh::mesh_set_corner_color_rgba,
+        mesh::mesh_corner_color_rgba,
+        mesh::mesh_path,
     ],
     load = on_load
 );
@@ -108,5 +124,6 @@ fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(radial_gradient::RadialGradientRaw, env);
     rustler::resource!(solid_pattern::SolidPatternRaw, env);
     rustler::resource!(surface_pattern::SurfacePatternRaw, env);
+    rustler::resource!(mesh::MeshRaw, env);
     true
 }

@@ -1,7 +1,8 @@
 use crate::{
-    enums::error::Error, image_surface::ImageSurface, linear_gradient::LinearGradient, path::Path,
-    path::PathRaw, pdf_surface::PdfSurface, ps_surface::PsSurface, radial_gradient::RadialGradient,
-    solid_pattern::SolidPattern, surface_pattern::SurfacePattern, svg_surface::SvgSurface,
+    enums::error::Error, image_surface::ImageSurface, linear_gradient::LinearGradient, mesh::Mesh,
+    path::Path, path::PathRaw, pdf_surface::PdfSurface, ps_surface::PsSurface,
+    radial_gradient::RadialGradient, solid_pattern::SolidPattern, surface_pattern::SurfacePattern,
+    svg_surface::SvgSurface,
 };
 
 use rustler::ResourceArc;
@@ -93,6 +94,14 @@ fn context_set_source_surface_pattern(
     pattern: SurfacePattern,
 ) -> Result<(), Error> {
     match context.context.set_source(&pattern.pattern) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_set_source_mesh(context: Context, mesh: Mesh) -> Result<(), Error> {
+    match context.context.set_source(&mesh.mesh) {
         Ok(_) => Ok(()),
         Err(err) => Err(err.into()),
     }
