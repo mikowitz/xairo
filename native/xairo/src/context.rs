@@ -1,7 +1,16 @@
 use crate::{
-    enums::error::Error, image_surface::ImageSurface, linear_gradient::LinearGradient, mesh::Mesh,
-    path::Path, path::PathRaw, pdf_surface::PdfSurface, ps_surface::PsSurface,
-    radial_gradient::RadialGradient, solid_pattern::SolidPattern, surface_pattern::SurfacePattern,
+    enums::{error::Error, font_slant::FontSlant, font_weight::FontWeight},
+    font_face::{FontFace, FontFaceRaw},
+    image_surface::ImageSurface,
+    linear_gradient::LinearGradient,
+    mesh::Mesh,
+    path::Path,
+    path::PathRaw,
+    pdf_surface::PdfSurface,
+    ps_surface::PsSurface,
+    radial_gradient::RadialGradient,
+    solid_pattern::SolidPattern,
+    surface_pattern::SurfacePattern,
     svg_surface::SvgSurface,
 };
 
@@ -252,4 +261,42 @@ fn context_new_path(context: Context) {
 #[rustler::nif]
 fn context_new_sub_path(context: Context) {
     context.context.new_sub_path();
+}
+
+#[rustler::nif]
+fn context_show_text(context: Context, text: String) -> Result<(), Error> {
+    match context.context.show_text(&text) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_text_path(context: Context, text: String) {
+    context.context.text_path(&text);
+}
+
+#[rustler::nif]
+fn context_set_font_size(context: Context, font_size: f64) {
+    context.context.set_font_size(font_size);
+}
+
+#[rustler::nif]
+fn context_set_font_face(context: Context, font_face: FontFace) {
+    context.context.set_font_face(&font_face.font_face);
+}
+
+#[rustler::nif]
+fn context_select_font_face(
+    context: Context,
+    family: String,
+    slant: FontSlant,
+    weight: FontWeight,
+) -> FontFace {
+    context
+        .context
+        .select_font_face(&family, slant.into(), weight.into());
+    ResourceArc::new(FontFaceRaw {
+        font_face: context.context.font_face(),
+    })
 }

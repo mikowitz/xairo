@@ -60,6 +60,12 @@ defmodule Xairo.Native do
   def context_new_path(_context), do: error()
   def context_new_sub_path(_context), do: error()
 
+  def context_show_text(_context, _text), do: error()
+  def context_text_path(_context, _text), do: error()
+  def context_set_font_size(_context, _font_size), do: error()
+  def context_set_font_face(_context, _font_face), do: error()
+  def context_select_font_face(_context, _family, _slant, _weight), do: error()
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()
@@ -104,6 +110,11 @@ defmodule Xairo.Native do
   def mesh_set_corner_color_rgba(_mesh, _corner, _red, _green, _blue, _alpha), do: error()
   def mesh_corner_color_rgba(_mesh, _patch, _corner), do: error()
   def mesh_path(_mesh, _patch), do: error()
+
+  def font_face_toy_create(_family, _slant, _weight), do: error()
+  def font_face_toy_get_family(_font), do: error()
+  def font_face_toy_get_slant(_font), do: error()
+  def font_face_toy_get_weight(_font), do: error()
 
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end
