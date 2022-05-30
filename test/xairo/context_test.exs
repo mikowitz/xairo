@@ -3,6 +3,7 @@ defmodule Xairo.ContextTest do
   import Xairo.Test.Support.ImageHelpers
 
   alias Xairo.{Context, ImageSurface, PdfSurface, PsSurface, SvgSurface}
+  alias Xairo.{LinearGradient, RadialGradient, SolidPattern, SurfacePattern}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -346,6 +347,94 @@ defmodule Xairo.ContextTest do
       context = Context.new(surface)
 
       assert Context.current_point(context) == {0.0, 0.0}
+    end
+  end
+
+  describe "set_source/2" do
+    test "sets a linear gradient as the color source for an image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      lg =
+        LinearGradient.new(0, 0, 100, 50)
+        |> LinearGradient.add_color_stop_rgb(0.2, 1, 0, 0)
+        |> LinearGradient.add_color_stop_rgb(0.8, 0.5, 0, 1)
+
+      context =
+        context
+        |> Context.set_source(lg)
+        |> Context.paint()
+
+      assert_image(surface, "linear_gradient.png")
+
+      assert Context.source(context) == lg
+    end
+
+    test "sets a radial gradient as the color source for an image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      rg =
+        RadialGradient.new(50, 50, 10, 50, 50, 50)
+        |> RadialGradient.add_color_stop_rgb(0.2, 1, 0, 0)
+        |> RadialGradient.add_color_stop_rgb(1, 0.5, 0, 1)
+
+      context =
+        context
+        |> Context.set_source(rg)
+        |> Context.paint()
+
+      assert_image(surface, "radial_gradient.png")
+
+      assert Context.source(context) == rg
+    end
+
+    test "sets a solid pattern as the color source for an image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      sp = SolidPattern.from_rgb(0.3, 0.5, 1.0)
+
+      context =
+        context
+        |> Context.set_source(sp)
+        |> Context.paint()
+
+      assert_image(surface, "solid_pattern.png")
+
+      assert Context.source(context) == sp
+    end
+
+    test "sets a surface pattern as the color source for an image" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      pattern_surface = ImageSurface.create(:argb32, 100, 100)
+      pattern_context = Context.new(pattern_surface)
+
+      pattern_context
+      |> Context.set_source_rgb(1, 1, 1)
+      |> Context.paint()
+      |> Context.set_source_rgb(1, 0.5, 0)
+      |> Context.move_to(0, 0)
+      |> Context.line_to(100, 100)
+      |> Context.stroke()
+      |> Context.set_source_rgba(0, 1, 1, 0.5)
+      |> Context.move_to(100, 0)
+      |> Context.line_to(0, 100)
+      |> Context.stroke()
+
+      sp = SurfacePattern.create(pattern_surface)
+
+      context =
+        context
+        |> Context.set_source(sp)
+        |> Context.rectangle(20, 20, 60, 70)
+        |> Context.fill()
+
+      assert_image(surface, "surface_pattern.png")
+
+      assert Context.source(context) == sp
     end
   end
 end

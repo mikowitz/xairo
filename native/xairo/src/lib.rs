@@ -3,9 +3,13 @@ use rustler::{Env, Term};
 mod context;
 mod enums;
 mod image_surface;
+mod linear_gradient;
 mod path;
 mod pdf_surface;
 mod ps_surface;
+mod radial_gradient;
+mod solid_pattern;
+mod surface_pattern;
 mod svg_surface;
 
 rustler::init!(
@@ -36,6 +40,10 @@ rustler::init!(
         context::context_new_from_svg_surface,
         context::context_set_source_rgb,
         context::context_set_source_rgba,
+        context::context_set_source_linear_gradient,
+        context::context_set_source_radial_gradient,
+        context::context_set_source_solid_pattern,
+        context::context_set_source_surface_pattern,
         context::context_arc,
         context::context_arc_negative,
         context::context_curve_to,
@@ -62,6 +70,29 @@ rustler::init!(
         context::context_new_sub_path,
         // path
         path::path_iter,
+        // linear gradient
+        linear_gradient::linear_gradient_new,
+        linear_gradient::linear_gradient_linear_points,
+        linear_gradient::linear_gradient_color_stop_count,
+        linear_gradient::linear_gradient_add_color_stop_rgb,
+        linear_gradient::linear_gradient_add_color_stop_rgba,
+        linear_gradient::linear_gradient_color_stop_rgba,
+        // radial gradient
+        radial_gradient::radial_gradient_new,
+        radial_gradient::radial_gradient_radial_circles,
+        radial_gradient::radial_gradient_color_stop_count,
+        radial_gradient::radial_gradient_add_color_stop_rgb,
+        radial_gradient::radial_gradient_add_color_stop_rgba,
+        radial_gradient::radial_gradient_color_stop_rgba,
+        // solid pattern
+        solid_pattern::solid_pattern_from_rgb,
+        solid_pattern::solid_pattern_from_rgba,
+        solid_pattern::solid_pattern_rgba,
+        // surface pattern
+        surface_pattern::surface_pattern_create_from_image_surface,
+        surface_pattern::surface_pattern_create_from_pdf_surface,
+        surface_pattern::surface_pattern_create_from_ps_surface,
+        surface_pattern::surface_pattern_create_from_svg_surface,
     ],
     load = on_load
 );
@@ -73,5 +104,9 @@ fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(svg_surface::SvgSurfaceRaw, env);
     rustler::resource!(context::ContextRaw, env);
     rustler::resource!(path::PathRaw, env);
+    rustler::resource!(linear_gradient::LinearGradientRaw, env);
+    rustler::resource!(radial_gradient::RadialGradientRaw, env);
+    rustler::resource!(solid_pattern::SolidPatternRaw, env);
+    rustler::resource!(surface_pattern::SurfacePatternRaw, env);
     true
 }

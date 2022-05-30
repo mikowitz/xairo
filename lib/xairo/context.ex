@@ -1,7 +1,8 @@
 defmodule Xairo.Context do
-  defstruct [:context, :surface]
+  defstruct [:context, :surface, :source]
 
   alias Xairo.{ImageSurface, PdfSurface, PsSurface, SvgSurface}
+  alias Xairo.{LinearGradient, RadialGradient, SolidPattern, SurfacePattern}
   alias Xairo.Path
   alias Xairo.Native, as: N
 
@@ -36,6 +37,32 @@ defmodule Xairo.Context do
     N.context_set_source_rgba(ctx, red / 1, green / 1, blue / 1, alpha / 1)
     this
   end
+
+  def set_source(%__MODULE__{context: ctx} = this, %LinearGradient{pattern: pattern} = gradient) do
+    with {:ok, _} <- N.context_set_source_linear_gradient(ctx, pattern) do
+      %{this | source: gradient}
+    end
+  end
+
+  def set_source(%__MODULE__{context: ctx} = this, %RadialGradient{pattern: pattern} = gradient) do
+    with {:ok, _} <- N.context_set_source_radial_gradient(ctx, pattern) do
+      %{this | source: gradient}
+    end
+  end
+
+  def set_source(%__MODULE__{context: ctx} = this, %SolidPattern{pattern: pattern} = gradient) do
+    with {:ok, _} <- N.context_set_source_solid_pattern(ctx, pattern) do
+      %{this | source: gradient}
+    end
+  end
+
+  def set_source(%__MODULE__{context: ctx} = this, %SurfacePattern{pattern: pattern} = gradient) do
+    with {:ok, _} <- N.context_set_source_surface_pattern(ctx, pattern) do
+      %{this | source: gradient}
+    end
+  end
+
+  def source(%__MODULE__{source: source}), do: source
 
   def arc(%__MODULE__{context: ctx} = this, cx, cy, r, angle1, angle2) do
     N.context_arc(ctx, cx / 1, cy / 1, r / 1, angle1 / 1, angle2 / 1)
