@@ -30,6 +30,18 @@ defmodule Xairo.ContextTest do
 
       assert_image(sfc, "set_source_rgb.png")
     end
+
+    test "sets the `source` field of the context to a SolidPattern`", %{
+      context: ctx
+    } do
+      ctx =
+        ctx
+        |> Context.set_source_rgb(0.3, 0.4, 0.5)
+
+      assert is_struct(ctx.source, SolidPattern)
+
+      assert SolidPattern.rgba(ctx.source) == {0.3, 0.4, 0.5, 1.0}
+    end
   end
 
   describe "set_source_rgba/5" do
@@ -39,6 +51,18 @@ defmodule Xairo.ContextTest do
       |> Context.paint()
 
       assert_image(sfc, "set_source_rgba.png")
+    end
+
+    test "sets the `source` field of the context to a SolidPattern`", %{
+      context: ctx
+    } do
+      ctx =
+        ctx
+        |> Context.set_source_rgba(0.3, 0.4, 0.5, 0.6)
+
+      assert is_struct(ctx.source, SolidPattern)
+
+      assert SolidPattern.rgba(ctx.source) == {0.3, 0.4, 0.5, 0.6}
     end
   end
 
