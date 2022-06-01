@@ -31,12 +31,12 @@ defmodule Xairo.Context do
 
   def set_source_rgb(%__MODULE__{context: ctx} = this, red, green, blue) do
     N.context_set_source_rgb(ctx, red / 1, green / 1, blue / 1)
-    this
+    %{this | source: SolidPattern.from_rgb(red, green, blue)}
   end
 
   def set_source_rgba(%__MODULE__{context: ctx} = this, red, green, blue, alpha) do
     N.context_set_source_rgba(ctx, red / 1, green / 1, blue / 1, alpha / 1)
-    this
+    %{this | source: SolidPattern.from_rgba(red, green, blue, alpha)}
   end
 
   def set_source(%__MODULE__{context: ctx} = this, %LinearGradient{pattern: pattern} = gradient) do
