@@ -2,6 +2,7 @@
 #[derive(rustler::NifUnitEnum)]
 pub enum Error {
     InvalidIndex,
+    InvalidMatrix,
     InvalidMeshConstruction,
     InvalidSize,
     SurfaceFinished,
@@ -14,6 +15,7 @@ impl From<cairo::Error> for Error {
     fn from(error: cairo::Error) -> Self {
         match error {
             cairo::Error::InvalidIndex => Error::InvalidIndex,
+            cairo::Error::InvalidMatrix => Error::InvalidMatrix,
             cairo::Error::InvalidMeshConstruction => Error::InvalidMeshConstruction,
             cairo::Error::InvalidSize => Error::InvalidSize,
             cairo::Error::SurfaceFinished => Error::SurfaceFinished,

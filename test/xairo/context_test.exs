@@ -5,6 +5,7 @@ defmodule Xairo.ContextTest do
   alias Xairo.{Context, ImageSurface, PdfSurface, PsSurface, SvgSurface}
   alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
   alias Xairo.FontFace
+  alias Xairo.Matrix
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -583,5 +584,215 @@ defmodule Xairo.ContextTest do
       assert FontFace.toy_get_slant(ff) == :oblique
       assert FontFace.toy_get_weight(ff) == :normal
     end
+  end
+
+  describe "translate/3" do
+    setup :transformation_setup
+
+    test "translates the context's CTM", %{surface: sfc, context: ctx} do
+      ctx
+      |> Context.translate(30, 50)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "matrix_translate.png")
+
+      assert_image(sfc, "matrix_translate.png")
+    end
+  end
+
+  describe "scale/3" do
+    setup :transformation_setup
+
+    test "scales the context's CTM", %{surface: sfc, context: ctx} do
+      ctx
+      |> Context.scale(3, 2)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "matrix_scale.png")
+
+      assert_image(sfc, "matrix_scale.png")
+    end
+  end
+
+  describe "rotate/3" do
+    setup :transformation_setup
+
+    test "rotates the context's CTM", %{surface: sfc, context: ctx} do
+      ctx
+      |> Context.rotate(:math.pi() / 5)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "matrix_rotate.png")
+
+      assert_image(sfc, "matrix_rotate.png")
+    end
+  end
+
+  describe "identity_matrix/3" do
+    setup :transformation_setup
+
+    test "resets the CTM to the identity matrix", %{surface: sfc, context: ctx} do
+      ctx
+      |> Context.rotate(:math.pi() / 5)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+      |> Context.identity_matrix()
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "matrix_identity.png")
+
+      assert_image(sfc, "matrix_identity.png")
+    end
+  end
+
+  describe "transform/2" do
+    setup :transformation_setup
+
+    test "applies the given matrix as an operation on top of the CTM", %{
+      surface: sfc,
+      context: ctx
+    } do
+      matrix =
+        Xairo.Matrix.identity()
+        |> Xairo.Matrix.translate(25, 3)
+
+      ctx
+      |> Context.rotate(:math.pi() / 5)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+      |> Context.transform(matrix)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "matrix_transform.png")
+
+      assert_image(sfc, "matrix_transform.png")
+    end
+  end
+
+  describe "set_matrix/2" do
+    setup :transformation_setup
+
+    test "replaces the context's CTM", %{
+      surface: sfc,
+      context: ctx
+    } do
+      matrix =
+        Xairo.Matrix.identity()
+        |> Xairo.Matrix.translate(25, -5)
+
+      ctx
+      |> Context.rotate(:math.pi() / 5)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+      |> Context.set_matrix(matrix)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "matrix_set_matrix.png")
+
+      assert_image(sfc, "matrix_set_matrix.png")
+    end
+  end
+
+  describe "matrix/1" do
+    test "returns the context's CTM", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.rotate(:math.pi() / 5)
+        |> Context.translate(25, -5)
+
+      matrix = Context.matrix(ctx)
+
+      {xx, yx, xy, yy, tx, ty} = Matrix.to_tuple(matrix)
+
+      assert_in_delta xx, 0.809, 0.0001
+      assert_in_delta yx, 0.5877, 0.0001
+      assert_in_delta xy, -0.5877, 0.0001
+      assert_in_delta yy, 0.809, 0.0001
+      assert_in_delta tx, 23.1643, 0.0001
+      assert_in_delta ty, 10.6495, 0.0001
+    end
+  end
+
+  describe "set_font_matrix/2" do
+    @tag :macos
+    test "affects just the font, not other drawing", %{surface: sfc, context: ctx} do
+      matrix =
+        Matrix.identity()
+        |> Matrix.translate(2, 2)
+        |> Matrix.scale(25, 50)
+        |> Matrix.rotate(:math.pi() / 6)
+
+      ctx
+      |> Context.set_source_rgb(1, 0, 0.5)
+      |> Context.set_font_size(25)
+      |> Context.move_to(0, 0)
+      |> Context.line_to(20, 20)
+      |> Context.show_text("hello")
+      |> Context.stroke()
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_font_matrix(matrix)
+      |> Context.move_to(0, 0)
+      |> Context.line_to(20, 20)
+      |> Context.show_text("hello")
+      |> Context.stroke()
+
+      ImageSurface.write_to_png(sfc, "font_matrix.png")
+
+      assert_image(sfc, "font_matrix.png")
+    end
+  end
+
+  describe "font_matrix/1" do
+    test "returns the font CTM for the context", %{context: ctx} do
+      matrix =
+        Matrix.identity()
+        |> Matrix.translate(2, 2)
+        |> Matrix.scale(25, 50)
+        |> Matrix.rotate(:math.pi() / 6)
+
+      ctx =
+        ctx
+        |> Context.set_font_matrix(matrix)
+
+      font_matrix = Context.font_matrix(ctx)
+
+      {xx, yx, xy, yy, tx, ty} = Matrix.to_tuple(font_matrix)
+
+      assert_in_delta xx, 21.6506, 0.0001
+      assert_in_delta yx, 25.0, 0.0001
+      assert_in_delta xy, -12.5, 0.0001
+      assert_in_delta yy, 43.3013, 0.0001
+      assert tx == 2.0
+      assert ty == 2.0
+    end
+  end
+
+  defp transformation_setup(test_context) do
+    surface = ImageSurface.create(:argb32, 100, 100)
+
+    context =
+      Context.new(surface)
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(30, 30)
+      |> Context.stroke()
+      |> Context.set_source_rgb(1, 0, 0)
+
+    {:ok, Map.merge(test_context, %{surface: surface, context: context})}
   end
 end

@@ -5,6 +5,7 @@ mod enums;
 mod font_face;
 mod image_surface;
 mod linear_gradient;
+mod matrix;
 mod mesh;
 mod path;
 mod pdf_surface;
@@ -76,6 +77,15 @@ rustler::init!(
         context::context_set_font_size,
         context::context_set_font_face,
         context::context_select_font_face,
+        context::context_translate,
+        context::context_scale,
+        context::context_rotate,
+        context::context_transform,
+        context::context_set_matrix,
+        context::context_identity_matrix,
+        context::context_matrix,
+        context::context_set_font_matrix,
+        context::context_font_matrix,
         // path
         path::path_iter,
         // linear gradient
@@ -120,6 +130,17 @@ rustler::init!(
         font_face::font_face_toy_get_family,
         font_face::font_face_toy_get_slant,
         font_face::font_face_toy_get_weight,
+        // matrix
+        matrix::matrix_new,
+        matrix::matrix_identity,
+        matrix::matrix_to_tuple,
+        matrix::matrix_transform_distance,
+        matrix::matrix_transform_point,
+        matrix::matrix_translate,
+        matrix::matrix_scale,
+        matrix::matrix_rotate,
+        matrix::matrix_invert,
+        matrix::matrix_multiply,
     ],
     load = on_load
 );
@@ -137,5 +158,6 @@ fn on_load(env: Env, _info: Term) -> bool {
     rustler::resource!(surface_pattern::SurfacePatternRaw, env);
     rustler::resource!(mesh::MeshRaw, env);
     rustler::resource!(font_face::FontFaceRaw, env);
+    rustler::resource!(matrix::MatrixRaw, env);
     true
 }

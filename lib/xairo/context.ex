@@ -5,6 +5,7 @@ defmodule Xairo.Context do
   alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
   alias Xairo.Path
   alias Xairo.FontFace
+  alias Xairo.Matrix
   alias Xairo.Native, as: N
 
   def new(%ImageSurface{} = surface) do
@@ -205,5 +206,48 @@ defmodule Xairo.Context do
   def select_font_face(%__MODULE__{context: ctx} = this, family, slant, weight) do
     with font_face <- N.context_select_font_face(ctx, family, slant, weight),
          do: %{this | font_face: %FontFace{font_face: font_face}}
+  end
+
+  def translate(%__MODULE__{context: ctx} = this, tx, ty) do
+    N.context_translate(ctx, tx / 1, ty / 1)
+    this
+  end
+
+  def scale(%__MODULE__{context: ctx} = this, sx, sy) do
+    N.context_scale(ctx, sx / 1, sy / 1)
+    this
+  end
+
+  def rotate(%__MODULE__{context: ctx} = this, radians) do
+    N.context_rotate(ctx, radians / 1)
+    this
+  end
+
+  def transform(%__MODULE__{context: ctx} = this, %Matrix{matrix: matrix}) do
+    N.context_transform(ctx, matrix)
+    this
+  end
+
+  def set_matrix(%__MODULE__{context: ctx} = this, %Matrix{matrix: matrix}) do
+    N.context_set_matrix(ctx, matrix)
+    this
+  end
+
+  def matrix(%__MODULE__{context: ctx}) do
+    %Matrix{matrix: N.context_matrix(ctx)}
+  end
+
+  def identity_matrix(%__MODULE__{context: ctx} = this) do
+    N.context_identity_matrix(ctx)
+    this
+  end
+
+  def set_font_matrix(%__MODULE__{context: ctx} = this, %Matrix{matrix: matrix}) do
+    N.context_set_font_matrix(ctx, matrix)
+    this
+  end
+
+  def font_matrix(%__MODULE__{context: ctx}) do
+    %Matrix{matrix: N.context_font_matrix(ctx)}
   end
 end
