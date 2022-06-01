@@ -3,6 +3,7 @@ use crate::{
     font_face::{FontFace, FontFaceRaw},
     image_surface::ImageSurface,
     linear_gradient::LinearGradient,
+    matrix::{Matrix, MatrixRaw},
     mesh::Mesh,
     path::Path,
     path::PathRaw,
@@ -298,5 +299,54 @@ fn context_select_font_face(
         .select_font_face(&family, slant.into(), weight.into());
     ResourceArc::new(FontFaceRaw {
         font_face: context.context.font_face(),
+    })
+}
+
+#[rustler::nif]
+fn context_translate(context: Context, tx: f64, ty: f64) {
+    context.context.translate(tx, ty);
+}
+
+#[rustler::nif]
+fn context_scale(context: Context, sx: f64, sy: f64) {
+    context.context.scale(sx, sy);
+}
+
+#[rustler::nif]
+fn context_rotate(context: Context, radians: f64) {
+    context.context.rotate(radians);
+}
+
+#[rustler::nif]
+fn context_transform(context: Context, matrix: Matrix) {
+    context.context.transform(matrix.matrix);
+}
+
+#[rustler::nif]
+fn context_set_matrix(context: Context, matrix: Matrix) {
+    context.context.set_matrix(matrix.matrix);
+}
+
+#[rustler::nif]
+fn context_identity_matrix(context: Context) {
+    context.context.identity_matrix();
+}
+
+#[rustler::nif]
+fn context_matrix(context: Context) -> Matrix {
+    ResourceArc::new(MatrixRaw {
+        matrix: context.context.matrix(),
+    })
+}
+
+#[rustler::nif]
+fn context_set_font_matrix(context: Context, matrix: Matrix) {
+    context.context.set_font_matrix(matrix.matrix);
+}
+
+#[rustler::nif]
+fn context_font_matrix(context: Context) -> Matrix {
+    ResourceArc::new(MatrixRaw {
+        matrix: context.context.font_matrix(),
     })
 }

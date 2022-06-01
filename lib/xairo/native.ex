@@ -66,6 +66,16 @@ defmodule Xairo.Native do
   def context_set_font_face(_context, _font_face), do: error()
   def context_select_font_face(_context, _family, _slant, _weight), do: error()
 
+  def context_translate(_context, _tx, _ty), do: error()
+  def context_scale(_context, _sx, _sy), do: error()
+  def context_rotate(_context, _radians), do: error()
+  def context_transform(_context, _matrix), do: error()
+  def context_set_matrix(_context, _matrix), do: error()
+  def context_identity_matrix(_context), do: error()
+  def context_matrix(_context), do: error()
+  def context_set_font_matrix(_context, _matrix), do: error()
+  def context_font_matrix(_context), do: error()
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()
@@ -115,6 +125,17 @@ defmodule Xairo.Native do
   def font_face_toy_get_family(_font), do: error()
   def font_face_toy_get_slant(_font), do: error()
   def font_face_toy_get_weight(_font), do: error()
+
+  def matrix_new(_xx, _yx, _xy_, _yy, _tx, _ty), do: error()
+  def matrix_identity, do: error()
+  def matrix_to_tuple(_matrix), do: error()
+  def matrix_transform_distance(_matrix, _x, _y), do: error()
+  def matrix_transform_point(_matrix, _x, _y), do: error()
+  def matrix_translate(_matrix, _dx, _dy), do: error()
+  def matrix_scale(_matrix, _dx, _dy), do: error()
+  def matrix_rotate(_matrix, _radians), do: error()
+  def matrix_invert(_matrix), do: error()
+  def matrix_multiply(_matrix1, _matrix2), do: error()
 
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end
