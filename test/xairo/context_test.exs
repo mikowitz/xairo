@@ -524,7 +524,7 @@ defmodule Xairo.ContextTest do
   end
 
   describe "show_text/2" do
-    @tag :macos
+    @tag macos: false
     test "displays the text on the image" do
       surface = ImageSurface.create(:argb32, 100, 100)
       context = Context.new(surface)
@@ -540,7 +540,7 @@ defmodule Xairo.ContextTest do
   end
 
   describe "text_path/2" do
-    @tag :macos
+    @tag macos: false
     test "adds closed segments of path to the current path that outline the text" do
       surface = ImageSurface.create(:argb32, 100, 100)
       context = Context.new(surface)
@@ -729,7 +729,7 @@ defmodule Xairo.ContextTest do
   end
 
   describe "set_font_matrix/2" do
-    @tag :macos
+    @tag macos: false
     test "affects just the font, not other drawing", %{surface: sfc, context: ctx} do
       matrix =
         Matrix.identity()
