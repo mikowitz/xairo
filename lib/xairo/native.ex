@@ -76,6 +76,13 @@ defmodule Xairo.Native do
   def context_set_font_matrix(_context, _matrix), do: error()
   def context_font_matrix(_context), do: error()
 
+  def context_mask_radial_gradient(_context, _pattern), do: error()
+  def context_mask_linear_gradient(_context, _pattern), do: error()
+  def context_mask_mesh(_context, _pattern), do: error()
+  def context_mask_solid_pattern(_context, _pattern), do: error()
+  def context_mask_surface_pattern(_context, _pattern), do: error()
+  def context_mask_surface(_context, _x, _y, _surface), do: error()
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()
