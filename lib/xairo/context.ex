@@ -250,4 +250,28 @@ defmodule Xairo.Context do
   def font_matrix(%__MODULE__{context: ctx}) do
     %Matrix{matrix: N.context_font_matrix(ctx)}
   end
+
+  def mask(%__MODULE__{context: ctx} = this, %RadialGradient{pattern: pattern}) do
+    with {:ok, _} <- N.context_mask_radial_gradient(ctx, pattern), do: this
+  end
+
+  def mask(%__MODULE__{context: ctx} = this, %LinearGradient{pattern: pattern}) do
+    with {:ok, _} <- N.context_mask_linear_gradient(ctx, pattern), do: this
+  end
+
+  def mask(%__MODULE__{context: ctx} = this, %Mesh{pattern: pattern}) do
+    with {:ok, _} <- N.context_mask_mesh(ctx, pattern), do: this
+  end
+
+  def mask(%__MODULE__{context: ctx} = this, %SolidPattern{pattern: pattern}) do
+    with {:ok, _} <- N.context_mask_solid_pattern(ctx, pattern), do: this
+  end
+
+  def mask(%__MODULE__{context: ctx} = this, %SurfacePattern{pattern: pattern}) do
+    with {:ok, _} <- N.context_mask_surface_pattern(ctx, pattern), do: this
+  end
+
+  def mask_surface(%__MODULE__{context: ctx} = this, %ImageSurface{surface: surface}, x, y) do
+    with {:ok, _} <- N.context_mask_surface(ctx, surface, x / 1, y / 1), do: this
+  end
 end

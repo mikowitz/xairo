@@ -751,8 +751,6 @@ defmodule Xairo.ContextTest do
       |> Context.show_text("hello")
       |> Context.stroke()
 
-      ImageSurface.write_to_png(sfc, "font_matrix.png")
-
       assert_image(sfc, "font_matrix.png")
     end
   end
@@ -779,6 +777,115 @@ defmodule Xairo.ContextTest do
       assert_in_delta yy, 43.3013, 0.0001
       assert tx == 2.0
       assert ty == 2.0
+    end
+  end
+
+  describe "mask/2" do
+    test "applies an alpha mask to the surface using the alpha vaules of the masking pattern", %{
+      surface: sfc,
+      context: ctx
+    } do
+      mask =
+        RadialGradient.new(50, 50, 1, 50, 50, 75)
+        |> RadialGradient.add_color_stop_rgba(0, 0, 0, 0, 1)
+        |> RadialGradient.add_color_stop_rgba(1, 0, 0, 0, 0)
+
+      ctx
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.mask(mask)
+
+      assert_image(sfc, "mask_radial.png")
+    end
+
+    test "works with a linear gradient", %{surface: sfc, context: ctx} do
+      mask =
+        LinearGradient.new(0, 0, 100, 100)
+        |> LinearGradient.add_color_stop_rgba(0, 0, 0, 0, 1)
+        |> LinearGradient.add_color_stop_rgba(1, 0, 0, 0, 0)
+
+      ctx
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.mask(mask)
+
+      assert_image(sfc, "mask_linear.png")
+    end
+
+    test "works with a mesh", %{surface: sfc, context: ctx} do
+      mesh =
+        Mesh.new()
+        |> Mesh.begin_patch()
+        |> Mesh.move_to(10, 10)
+        |> Mesh.curve_to(20, 20, 50, -10, 130, -30)
+        |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
+        |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
+        |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
+        |> Mesh.set_corner_color_rgba(0, 1, 0, 0, 1)
+        |> Mesh.set_corner_color_rgba(1, 1, 0.5, 0, 0.2)
+        |> Mesh.set_corner_color_rgba(2, 1, 1, 0, 0.5)
+        |> Mesh.set_corner_color_rgba(3, 0.5, 1, 0, 0.1)
+        |> Mesh.end_patch()
+
+      ctx
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.mask(mesh)
+
+      assert_image(sfc, "mask_mesh.png")
+    end
+
+    test "works with a solid pattern", %{surface: sfc, context: ctx} do
+      pattern = SolidPattern.from_rgba(1, 1, 1, 0.3)
+
+      ctx
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.mask(pattern)
+
+      assert_image(sfc, "mask_solid.png")
+    end
+
+    test "works with a surface pattern", %{surface: sfc, context: ctx} do
+      pattern_surface = ImageSurface.create(:argb32, 100, 100)
+      pattern_context = Context.new(pattern_surface)
+
+      pattern_context
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(80, 70)
+      |> Context.stroke()
+      |> Context.set_source_rgba(0, 0, 0, 0.4)
+      |> Context.rectangle(20, 20, 30, 40)
+      |> Context.fill()
+
+      pattern = SurfacePattern.create(pattern_surface)
+
+      ctx
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.mask(pattern)
+
+      assert_image(sfc, "mask_surface_pattern.png")
+    end
+  end
+
+  describe "mask_surface/2" do
+    test "applies an alpha mask to the surface using the alpha vaules of the masking surface", %{
+      surface: sfc,
+      context: ctx
+    } do
+      mask_surface = ImageSurface.create(:argb32, 100, 100)
+
+      Context.new(mask_surface)
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.move_to(10, 10)
+      |> Context.line_to(80, 70)
+      |> Context.stroke()
+      |> Context.set_source_rgba(0, 0, 0, 0.4)
+      |> Context.rectangle(20, 30, 40, 50)
+      |> Context.fill()
+
+      ctx
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.mask_surface(mask_surface, 10, 20)
+
+      assert_image(sfc, "mask_surface.png")
     end
   end
 

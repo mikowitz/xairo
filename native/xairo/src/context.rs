@@ -350,3 +350,56 @@ fn context_font_matrix(context: Context) -> Matrix {
         matrix: context.context.font_matrix(),
     })
 }
+
+#[rustler::nif]
+fn context_mask_radial_gradient(context: Context, gradient: RadialGradient) -> Result<(), Error> {
+    match context.context.mask(&gradient.gradient) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_mask_linear_gradient(context: Context, gradient: LinearGradient) -> Result<(), Error> {
+    match context.context.mask(&gradient.gradient) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_mask_mesh(context: Context, mesh: Mesh) -> Result<(), Error> {
+    match context.context.mask(&mesh.mesh) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_mask_solid_pattern(context: Context, pattern: SolidPattern) -> Result<(), Error> {
+    match context.context.mask(&pattern.pattern) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_mask_surface_pattern(context: Context, pattern: SurfacePattern) -> Result<(), Error> {
+    match context.context.mask(&pattern.pattern) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_mask_surface(
+    context: Context,
+    surface: ImageSurface,
+    x: f64,
+    y: f64,
+) -> Result<(), Error> {
+    match context.context.mask_surface(&surface.surface, x, y) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}

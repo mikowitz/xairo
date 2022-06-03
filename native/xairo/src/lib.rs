@@ -86,6 +86,12 @@ rustler::init!(
         context::context_matrix,
         context::context_set_font_matrix,
         context::context_font_matrix,
+        context::context_mask_radial_gradient,
+        context::context_mask_linear_gradient,
+        context::context_mask_mesh,
+        context::context_mask_solid_pattern,
+        context::context_mask_surface_pattern,
+        context::context_mask_surface,
         // path
         path::path_iter,
         // linear gradient
