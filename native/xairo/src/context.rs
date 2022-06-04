@@ -1,5 +1,8 @@
 use crate::{
-    enums::{error::Error, font_slant::FontSlant, font_weight::FontWeight},
+    enums::{
+        antialias::Antialias, error::Error, fill_rule::FillRule, font_slant::FontSlant,
+        font_weight::FontWeight, line_cap::LineCap, line_join::LineJoin,
+    },
     font_face::{FontFace, FontFaceRaw},
     image_surface::ImageSurface,
     linear_gradient::LinearGradient,
@@ -186,6 +189,14 @@ fn context_stroke_preserve(context: Context) -> Result<(), Error> {
 #[rustler::nif]
 fn context_fill(context: Context) -> Result<(), Error> {
     match context.context.fill() {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_fill_preserve(context: Context) -> Result<(), Error> {
+    match context.context.fill_preserve() {
         Ok(_) => Ok(()),
         Err(err) => Err(err.into()),
     }
@@ -402,4 +413,64 @@ fn context_mask_surface(
         Ok(_) => Ok(()),
         Err(err) => Err(err.into()),
     }
+}
+
+#[rustler::nif]
+fn context_set_line_width(context: Context, line_width: f64) {
+    context.context.set_line_width(line_width);
+}
+
+#[rustler::nif]
+fn context_line_width(context: Context) -> f64 {
+    context.context.line_width()
+}
+
+#[rustler::nif]
+fn context_set_antialias(context: Context, antialias: Antialias) {
+    context.context.set_antialias(antialias.into());
+}
+
+#[rustler::nif]
+fn context_antialias(context: Context) -> Antialias {
+    context.context.antialias().into()
+}
+
+#[rustler::nif]
+fn context_set_fill_rule(context: Context, fill_rule: FillRule) {
+    context.context.set_fill_rule(fill_rule.into());
+}
+
+#[rustler::nif]
+fn context_fill_rule(context: Context) -> FillRule {
+    context.context.fill_rule().into()
+}
+
+#[rustler::nif]
+fn context_set_line_cap(context: Context, line_cap: LineCap) {
+    context.context.set_line_cap(line_cap.into());
+}
+
+#[rustler::nif]
+fn context_line_cap(context: Context) -> LineCap {
+    context.context.line_cap().into()
+}
+
+#[rustler::nif]
+fn context_set_line_join(context: Context, line_join: LineJoin) {
+    context.context.set_line_join(line_join.into());
+}
+
+#[rustler::nif]
+fn context_line_join(context: Context) -> LineJoin {
+    context.context.line_join().into()
+}
+
+#[rustler::nif]
+fn context_set_miter_limit(context: Context, miter_limit: f64) {
+    context.context.set_miter_limit(miter_limit);
+}
+
+#[rustler::nif]
+fn context_miter_limit(context: Context) -> f64 {
+    context.context.miter_limit()
 }

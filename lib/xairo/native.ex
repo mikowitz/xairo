@@ -46,6 +46,7 @@ defmodule Xairo.Native do
   def context_stroke(_context), do: error()
   def context_stroke_preserve(_context), do: error()
   def context_fill(_context), do: error()
+  def context_fill_preserve(_context), do: error()
   def context_paint(_context), do: error()
   def context_paint_with_alpha(_context, _alpha), do: error()
 
@@ -82,6 +83,19 @@ defmodule Xairo.Native do
   def context_mask_solid_pattern(_context, _pattern), do: error()
   def context_mask_surface_pattern(_context, _pattern), do: error()
   def context_mask_surface(_context, _x, _y, _surface), do: error()
+
+  def context_set_line_width(_context, _line_width), do: error()
+  def context_line_width(_context), do: error()
+  def context_set_antialias(_context, _antialias), do: error()
+  def context_antialias(_context), do: error()
+  def context_set_fill_rule(_context, _fill_rule), do: error()
+  def context_fill_rule(_context), do: error()
+  def context_set_line_cap(_context, _line_cap), do: error()
+  def context_line_cap(_context), do: error()
+  def context_set_line_join(_context, _line_join), do: error()
+  def context_line_join(_context), do: error()
+  def context_set_miter_limit(_context, _miter_limit), do: error()
+  def context_miter_limit(_context), do: error()
 
   def path_iter(_path), do: error()
 
