@@ -103,6 +103,9 @@ defmodule Xairo.Native do
   def context_dash_dashes(_context), do: error()
   def context_dash_offset(_context), do: error()
 
+  def context_set_operator(_context, _operator), do: error()
+  def context_operator(_context), do: error()
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()

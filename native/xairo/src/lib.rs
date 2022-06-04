@@ -111,6 +111,8 @@ rustler::init!(
         context::context_dash,
         context::context_dash_dashes,
         context::context_dash_offset,
+        context::context_set_operator,
+        context::context_operator,
         // path
         path::path_iter,
         // linear gradient
