@@ -97,6 +97,12 @@ defmodule Xairo.Native do
   def context_set_miter_limit(_context, _miter_limit), do: error()
   def context_miter_limit(_context), do: error()
 
+  def context_set_dash(_context, _dashes, _offset), do: error()
+  def context_dash_count(_context), do: error()
+  def context_dash(_context), do: error()
+  def context_dash_dashes(_context), do: error()
+  def context_dash_offset(_context), do: error()
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()

@@ -332,4 +332,25 @@ defmodule Xairo.Context do
   def miter_limit(%__MODULE__{context: ctx}) do
     N.context_miter_limit(ctx)
   end
+
+  def set_dash(%__MODULE__{context: ctx} = this, dashes, offset) do
+    N.context_set_dash(ctx, Enum.map(dashes, &(&1 / 1)), offset / 1)
+    this
+  end
+
+  def dash_count(%__MODULE__{context: ctx}) do
+    N.context_dash_count(ctx)
+  end
+
+  def dash(%__MODULE__{context: ctx}) do
+    N.context_dash(ctx)
+  end
+
+  def dash_dashes(%__MODULE__{context: ctx}) do
+    N.context_dash_dashes(ctx)
+  end
+
+  def dash_offset(%__MODULE__{context: ctx}) do
+    N.context_dash_offset(ctx)
+  end
 end

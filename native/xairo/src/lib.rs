@@ -106,6 +106,11 @@ rustler::init!(
         context::context_line_join,
         context::context_set_miter_limit,
         context::context_miter_limit,
+        context::context_set_dash,
+        context::context_dash_count,
+        context::context_dash,
+        context::context_dash_dashes,
+        context::context_dash_offset,
         // path
         path::path_iter,
         // linear gradient
