@@ -474,3 +474,28 @@ fn context_set_miter_limit(context: Context, miter_limit: f64) {
 fn context_miter_limit(context: Context) -> f64 {
     context.context.miter_limit()
 }
+
+#[rustler::nif]
+fn context_set_dash(context: Context, dashes: Vec<f64>, offset: f64) {
+    context.context.set_dash(&dashes, offset);
+}
+
+#[rustler::nif]
+fn context_dash_count(context: Context) -> i32 {
+    context.context.dash_count()
+}
+
+#[rustler::nif]
+fn context_dash(context: Context) -> (Vec<f64>, f64) {
+    context.context.dash()
+}
+
+#[rustler::nif]
+fn context_dash_dashes(context: Context) -> Vec<f64> {
+    context.context.dash_dashes()
+}
+
+#[rustler::nif]
+fn context_dash_offset(context: Context) -> f64 {
+    context.context.dash_offset()
+}
