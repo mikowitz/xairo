@@ -61,6 +61,7 @@ rustler::init!(
         context::context_stroke,
         context::context_stroke_preserve,
         context::context_fill,
+        context::context_fill_preserve,
         context::context_paint,
         context::context_paint_with_alpha,
         context::context_copy_path,
@@ -92,6 +93,19 @@ rustler::init!(
         context::context_mask_solid_pattern,
         context::context_mask_surface_pattern,
         context::context_mask_surface,
+        // context settings
+        context::context_set_line_width,
+        context::context_line_width,
+        context::context_set_antialias,
+        context::context_antialias,
+        context::context_set_fill_rule,
+        context::context_fill_rule,
+        context::context_set_line_cap,
+        context::context_line_cap,
+        context::context_set_line_join,
+        context::context_line_join,
+        context::context_set_miter_limit,
+        context::context_miter_limit,
         // path
         path::path_iter,
         // linear gradient

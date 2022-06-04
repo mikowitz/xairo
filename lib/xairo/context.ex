@@ -134,6 +134,10 @@ defmodule Xairo.Context do
     with {:ok, _} <- N.context_fill(ctx), do: this
   end
 
+  def fill_preserve(%__MODULE__{context: ctx} = this) do
+    with {:ok, _} <- N.context_fill_preserve(ctx), do: this
+  end
+
   def paint(%__MODULE__{context: ctx} = this) do
     with {:ok, _} <- N.context_paint(ctx), do: this
   end
@@ -273,5 +277,59 @@ defmodule Xairo.Context do
 
   def mask_surface(%__MODULE__{context: ctx} = this, %ImageSurface{surface: surface}, x, y) do
     with {:ok, _} <- N.context_mask_surface(ctx, surface, x / 1, y / 1), do: this
+  end
+
+  def set_line_width(%__MODULE__{context: ctx} = this, line_width) do
+    N.context_set_line_width(ctx, line_width / 1)
+    this
+  end
+
+  def line_width(%__MODULE__{context: ctx}) do
+    N.context_line_width(ctx)
+  end
+
+  def set_antialias(%__MODULE__{context: ctx} = this, antialias) do
+    N.context_set_antialias(ctx, antialias)
+    this
+  end
+
+  def antialias(%__MODULE__{context: ctx}) do
+    N.context_antialias(ctx)
+  end
+
+  def set_fill_rule(%__MODULE__{context: ctx} = this, fill_rule) do
+    N.context_set_fill_rule(ctx, fill_rule)
+    this
+  end
+
+  def fill_rule(%__MODULE__{context: ctx}) do
+    N.context_fill_rule(ctx)
+  end
+
+  def set_line_cap(%__MODULE__{context: ctx} = this, line_cap) do
+    N.context_set_line_cap(ctx, line_cap)
+    this
+  end
+
+  def line_cap(%__MODULE__{context: ctx}) do
+    N.context_line_cap(ctx)
+  end
+
+  def set_line_join(%__MODULE__{context: ctx} = this, line_join) do
+    N.context_set_line_join(ctx, line_join)
+    this
+  end
+
+  def line_join(%__MODULE__{context: ctx}) do
+    N.context_line_join(ctx)
+  end
+
+  def set_miter_limit(%__MODULE__{context: ctx} = this, miter_limit) do
+    N.context_set_miter_limit(ctx, miter_limit / 1)
+    this
+  end
+
+  def miter_limit(%__MODULE__{context: ctx}) do
+    N.context_miter_limit(ctx)
   end
 end
