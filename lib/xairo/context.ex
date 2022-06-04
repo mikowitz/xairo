@@ -353,4 +353,13 @@ defmodule Xairo.Context do
   def dash_offset(%__MODULE__{context: ctx}) do
     N.context_dash_offset(ctx)
   end
+
+  def set_operator(%__MODULE__{context: ctx} = this, operator) do
+    N.context_set_operator(ctx, operator)
+    this
+  end
+
+  def operator(%__MODULE__{context: ctx}) do
+    N.context_operator(ctx)
+  end
 end

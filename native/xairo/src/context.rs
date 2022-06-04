@@ -1,7 +1,7 @@
 use crate::{
     enums::{
         antialias::Antialias, error::Error, fill_rule::FillRule, font_slant::FontSlant,
-        font_weight::FontWeight, line_cap::LineCap, line_join::LineJoin,
+        font_weight::FontWeight, line_cap::LineCap, line_join::LineJoin, operator::Operator,
     },
     font_face::{FontFace, FontFaceRaw},
     image_surface::ImageSurface,
@@ -498,4 +498,14 @@ fn context_dash_dashes(context: Context) -> Vec<f64> {
 #[rustler::nif]
 fn context_dash_offset(context: Context) -> f64 {
     context.context.dash_offset()
+}
+
+#[rustler::nif]
+fn context_set_operator(context: Context, operator: Operator) {
+    context.context.set_operator(operator.into());
+}
+
+#[rustler::nif]
+fn context_operator(context: Context) -> Operator {
+    context.context.operator().into()
 }
