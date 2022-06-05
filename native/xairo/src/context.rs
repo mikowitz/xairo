@@ -526,16 +526,16 @@ fn context_operator(context: Context) -> Operator {
 #[rustler::nif]
 fn context_in_stroke(context: Context, x: f64, y: f64) -> Result<bool, Error> {
     match context.context.in_stroke(x, y) {
-    Ok(bool) => Ok(bool),
-    Err(err) => Err(err.into())
+        Ok(bool) => Ok(bool),
+        Err(err) => Err(err.into()),
     }
 }
 
 #[rustler::nif]
 fn context_in_fill(context: Context, x: f64, y: f64) -> Result<bool, Error> {
     match context.context.in_fill(x, y) {
-    Ok(bool) => Ok(bool),
-    Err(err) => Err(err.into())
+        Ok(bool) => Ok(bool),
+        Err(err) => Err(err.into()),
     }
 }
 
@@ -545,10 +545,14 @@ fn context_user_to_device(context: Context, x: f64, y: f64) -> (f64, f64) {
 }
 
 #[rustler::nif]
-fn context_user_to_device_distance(context: Context, dx: f64, dy: f64) -> Result<(f64, f64), Error> {
+fn context_user_to_device_distance(
+    context: Context,
+    dx: f64,
+    dy: f64,
+) -> Result<(f64, f64), Error> {
     match context.context.user_to_device_distance(dx, dy) {
         Ok(distance) => Ok(distance),
-        Err(err) => Err(err.into())
+        Err(err) => Err(err.into()),
     }
 }
 
@@ -556,14 +560,64 @@ fn context_user_to_device_distance(context: Context, dx: f64, dy: f64) -> Result
 fn context_device_to_user(context: Context, x: f64, y: f64) -> Result<(f64, f64), Error> {
     match context.context.device_to_user(x, y) {
         Ok(distance) => Ok(distance),
-        Err(err) => Err(err.into())
+        Err(err) => Err(err.into()),
     }
 }
 
 #[rustler::nif]
-fn context_device_to_user_distance(context: Context, dx: f64, dy: f64) -> Result<(f64, f64), Error> {
+fn context_device_to_user_distance(
+    context: Context,
+    dx: f64,
+    dy: f64,
+) -> Result<(f64, f64), Error> {
     match context.context.device_to_user_distance(dx, dy) {
         Ok(distance) => Ok(distance),
-        Err(err) => Err(err.into())
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_clip(context: Context) {
+    context.context.clip();
+}
+
+#[rustler::nif]
+fn context_clip_preserve(context: Context) {
+    context.context.clip_preserve();
+}
+
+#[rustler::nif]
+fn context_reset_clip(context: Context) {
+    context.context.reset_clip();
+}
+
+#[rustler::nif]
+fn context_in_clip(context: Context, x: f64, y: f64) -> Result<bool, Error> {
+    match context.context.in_clip(x, y) {
+        Ok(bool) => Ok(bool),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_clip_extents(context: Context) -> Result<(f64, f64, f64, f64), Error> {
+    match context.context.clip_extents() {
+        Ok(extents) => Ok(extents),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_clip_rectangle_list(context: Context) -> Result<Vec<(f64, f64, f64, f64)>, Error> {
+    match context.context.copy_clip_rectangle_list() {
+        Ok(rectangle_list) => {
+            let rects = rectangle_list
+                .iter()
+                .map(|r| (r.x, r.y, r.width, r.height))
+                .collect::<Vec<(f64, f64, f64, f64)>>();
+
+            Ok(rects)
+        }
+        Err(err) => Err(err.into()),
     }
 }

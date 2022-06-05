@@ -115,6 +115,13 @@ defmodule Xairo.Native do
   def context_device_to_user(_context, _x, _y), do: error()
   def context_device_to_user_distance(_context, _dx, _dy), do: error()
 
+  def context_clip(_context), do: error()
+  def context_clip_preserve(_context), do: error()
+  def context_reset_clip(_context), do: error()
+  def context_in_clip(_context, _x, _y), do: error()
+  def context_clip_extents(_context), do: error()
+  def context_clip_rectangle_list(_context), do: error()
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()

@@ -120,6 +120,13 @@ rustler::init!(
         context::context_user_to_device_distance,
         context::context_device_to_user,
         context::context_device_to_user_distance,
+        // clip
+        context::context_clip,
+        context::context_clip_preserve,
+        context::context_reset_clip,
+        context::context_in_clip,
+        context::context_clip_extents,
+        context::context_clip_rectangle_list,
         // path
         path::path_iter,
         // linear gradient
