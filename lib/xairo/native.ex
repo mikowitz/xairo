@@ -31,6 +31,7 @@ defmodule Xairo.Native do
   def context_set_source_solid_pattern(_context, _pattern), do: error()
   def context_set_source_surface_pattern(_context, _pattern), do: error()
   def context_set_source_mesh(_context, _pattern), do: error()
+  def context_set_source_surface(_context, _surface, _x, _y), do: error()
 
   def context_arc(_context, _cx, _cy, _r, _angle1, _angle2), do: error()
   def context_arc_negative(_context, _cx, _cy, _r, _angle1, _angle2), do: error()

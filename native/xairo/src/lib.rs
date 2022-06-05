@@ -48,6 +48,7 @@ rustler::init!(
         context::context_set_source_solid_pattern,
         context::context_set_source_surface_pattern,
         context::context_set_source_mesh,
+        context::context_set_source_surface,
         context::context_arc,
         context::context_arc_negative,
         context::context_curve_to,
