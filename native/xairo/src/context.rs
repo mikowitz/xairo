@@ -121,6 +121,19 @@ fn context_set_source_mesh(context: Context, mesh: Mesh) -> Result<(), Error> {
 }
 
 #[rustler::nif]
+fn context_set_source_surface(
+    context: Context,
+    surface: ImageSurface,
+    x: f64,
+    y: f64,
+) -> Result<(), Error> {
+    match context.context.set_source_surface(&surface.surface, x, y) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
 fn context_arc(ctx: Context, cx: f64, cy: f64, r: f64, angle1: f64, angle2: f64) {
     ctx.context.arc(cx, cy, r, angle1, angle2);
 }

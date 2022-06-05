@@ -70,6 +70,17 @@ defmodule Xairo.Context do
     end
   end
 
+  def set_source_surface(
+        %__MODULE__{context: ctx} = this,
+        %ImageSurface{surface: surface} = sfc,
+        x,
+        y
+      ) do
+    with {:ok, _} <- N.context_set_source_surface(ctx, surface, x / 1, y / 1) do
+      %{this | source: SurfacePattern.create(sfc)}
+    end
+  end
+
   def source(%__MODULE__{source: source}), do: source
 
   def arc(%__MODULE__{context: ctx} = this, cx, cy, r, angle1, angle2) do

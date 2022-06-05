@@ -523,6 +523,39 @@ defmodule Xairo.ContextTest do
     end
   end
 
+  describe "set_source_surface/4" do
+    test "sets a surface as the color source at the given coordinates" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+      context = Context.new(surface)
+
+      source_surface = ImageSurface.create(:argb32, 100, 100)
+      source_context = Context.new(source_surface)
+
+      source_context
+      |> Context.set_source_rgb(1, 1, 1)
+      |> Context.paint()
+      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.rectangle(20, 30, 40, 50)
+      |> Context.fill_preserve()
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.stroke()
+      |> Context.move_to(80, 10)
+      |> Context.line_to(10, 70)
+      |> Context.stroke()
+
+      context
+      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.paint()
+      |> Context.set_source_surface(source_surface, 20, 10)
+      |> Context.set_line_width(20)
+      |> Context.move_to(0, 0)
+      |> Context.line_to(100, 100)
+      |> Context.stroke()
+
+      assert_image(surface, "set_source_surface.png")
+    end
+  end
+
   describe "show_text/2" do
     @tag macos: false
     test "displays the text on the image" do
