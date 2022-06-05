@@ -400,4 +400,32 @@ defmodule Xairo.Context do
     with {:ok, distance} <- N.context_device_to_user_distance(ctx, dx / 1, dy / 1),
          do: distance
   end
+
+  def clip(%__MODULE__{context: ctx} = this) do
+    N.context_clip(ctx)
+    this
+  end
+
+  def clip_preserve(%__MODULE__{context: ctx} = this) do
+    N.context_clip_preserve(ctx)
+    this
+  end
+
+  def reset_clip(%__MODULE__{context: ctx} = this) do
+    N.context_reset_clip(ctx)
+    this
+  end
+
+  def in_clip(%__MODULE__{context: ctx}, x, y) do
+    with {:ok, bool} <- N.context_in_clip(ctx, x / 1, y / 1), do: bool
+  end
+
+  def clip_extents(%__MODULE__{context: ctx}) do
+    with {:ok, extents} <- N.context_clip_extents(ctx), do: extents
+  end
+
+  def clip_rectangle_list(%__MODULE__{context: ctx}) do
+    with {:ok, rectangle_list} <- N.context_clip_rectangle_list(ctx),
+         do: rectangle_list
+  end
 end
