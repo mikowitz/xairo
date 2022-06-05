@@ -373,4 +373,31 @@ defmodule Xairo.Context do
   def operator(%__MODULE__{context: ctx}) do
     N.context_operator(ctx)
   end
+
+  def in_stroke(%__MODULE__{context: ctx}, x, y) do
+    with {:ok, bool} <- N.context_in_stroke(ctx, x / 1, y / 1), do: bool
+  end
+
+  def in_fill(%__MODULE__{context: ctx}, x, y) do
+    with {:ok, bool} <- N.context_in_fill(ctx, x / 1, y / 1), do: bool
+  end
+
+  def user_to_device(%__MODULE__{context: ctx}, x, y) do
+    N.context_user_to_device(ctx, x / 1, y / 1)
+  end
+
+  def user_to_device_distance(%__MODULE__{context: ctx}, dx, dy) do
+    with {:ok, distance} <- N.context_user_to_device_distance(ctx, dx / 1, dy / 1),
+         do: distance
+  end
+
+  def device_to_user(%__MODULE__{context: ctx}, x, y) do
+    with {:ok, distance} <- N.context_device_to_user(ctx, x / 1, y / 1),
+         do: distance
+  end
+
+  def device_to_user_distance(%__MODULE__{context: ctx}, dx, dy) do
+    with {:ok, distance} <- N.context_device_to_user_distance(ctx, dx / 1, dy / 1),
+         do: distance
+  end
 end

@@ -619,128 +619,6 @@ defmodule Xairo.ContextTest do
     end
   end
 
-  describe "translate/3" do
-    setup :transformation_setup
-
-    test "translates the context's CTM", %{surface: sfc, context: ctx} do
-      ctx
-      |> Context.translate(30, 50)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-
-      ImageSurface.write_to_png(sfc, "matrix_translate.png")
-
-      assert_image(sfc, "matrix_translate.png")
-    end
-  end
-
-  describe "scale/3" do
-    setup :transformation_setup
-
-    test "scales the context's CTM", %{surface: sfc, context: ctx} do
-      ctx
-      |> Context.scale(3, 2)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-
-      ImageSurface.write_to_png(sfc, "matrix_scale.png")
-
-      assert_image(sfc, "matrix_scale.png")
-    end
-  end
-
-  describe "rotate/3" do
-    setup :transformation_setup
-
-    test "rotates the context's CTM", %{surface: sfc, context: ctx} do
-      ctx
-      |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-
-      ImageSurface.write_to_png(sfc, "matrix_rotate.png")
-
-      assert_image(sfc, "matrix_rotate.png")
-    end
-  end
-
-  describe "identity_matrix/3" do
-    setup :transformation_setup
-
-    test "resets the CTM to the identity matrix", %{surface: sfc, context: ctx} do
-      ctx
-      |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-      |> Context.identity_matrix()
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-
-      ImageSurface.write_to_png(sfc, "matrix_identity.png")
-
-      assert_image(sfc, "matrix_identity.png")
-    end
-  end
-
-  describe "transform/2" do
-    setup :transformation_setup
-
-    test "applies the given matrix as an operation on top of the CTM", %{
-      surface: sfc,
-      context: ctx
-    } do
-      matrix =
-        Xairo.Matrix.identity()
-        |> Xairo.Matrix.translate(25, 3)
-
-      ctx
-      |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-      |> Context.transform(matrix)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-
-      ImageSurface.write_to_png(sfc, "matrix_transform.png")
-
-      assert_image(sfc, "matrix_transform.png")
-    end
-  end
-
-  describe "set_matrix/2" do
-    setup :transformation_setup
-
-    test "replaces the context's CTM", %{
-      surface: sfc,
-      context: ctx
-    } do
-      matrix =
-        Xairo.Matrix.identity()
-        |> Xairo.Matrix.translate(25, -5)
-
-      ctx
-      |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-      |> Context.set_matrix(matrix)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-
-      ImageSurface.write_to_png(sfc, "matrix_set_matrix.png")
-
-      assert_image(sfc, "matrix_set_matrix.png")
-    end
-  end
-
   describe "matrix/1" do
     test "returns the context's CTM", %{context: ctx} do
       ctx =
@@ -922,17 +800,126 @@ defmodule Xairo.ContextTest do
     end
   end
 
-  defp transformation_setup(test_context) do
-    surface = ImageSurface.create(:argb32, 100, 100)
+  describe "in_stroke/3" do
+    test "returns true if the given point falls in the region that would be inked by a call to `stroke`",
+         %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.rectangle(10, 10, 50, 50)
 
-    context =
-      Context.new(surface)
-      |> Context.set_source_rgb(0, 0, 0)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
-      |> Context.stroke()
-      |> Context.set_source_rgb(1, 0, 0)
+      assert Context.in_stroke(ctx, 10, 10)
+      assert Context.in_stroke(ctx, 60, 60)
+      refute Context.in_stroke(ctx, 30, 30)
+      refute Context.in_stroke(ctx, 5, 10)
+    end
 
-    {:ok, Map.merge(test_context, %{surface: surface, context: context})}
+    test "takes line width into account", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.rectangle(10, 10, 50, 50)
+        |> Context.set_line_width(10)
+
+      assert Context.in_stroke(ctx, 5, 10)
+    end
+  end
+
+  describe "in_fill/3" do
+    test "returns true if the given point falls in the region that would be inked by a call to `fill`",
+         %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.rectangle(10, 10, 50, 50)
+
+      assert Context.in_fill(ctx, 10, 10)
+      assert Context.in_fill(ctx, 50, 50)
+      assert Context.in_fill(ctx, 30, 30)
+      refute Context.in_fill(ctx, 5, 10)
+    end
+  end
+
+  describe "user_to_device/3" do
+    test "translates a coordinate from user space to device space using the CTM", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.scale(3, 4)
+        |> Context.translate(10, 20)
+
+      assert Context.user_to_device(ctx, 10, 10) == {60.0, 120.0}
+    end
+
+    test "transformation order affects the end result", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.translate(10, 20)
+        |> Context.scale(3, 4)
+
+      assert Context.user_to_device(ctx, 10, 10) == {40.0, 60.0}
+    end
+  end
+
+  describe "user_to_device_distance/3" do
+    test "translates a distance from user space to device space using the CTM", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.scale(3, 4)
+        |> Context.translate(10, 20)
+
+      assert Context.user_to_device_distance(ctx, 10, 10) == {30.0, 40.0}
+    end
+
+    test "transformation order affects the end result", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.translate(10, 20)
+        |> Context.scale(3, 4)
+
+      assert Context.user_to_device_distance(ctx, 10, 10) == {30.0, 40.0}
+    end
+  end
+
+  describe "device_to_user/3" do
+    test "translates a coordinate from user space to device space using the CTM", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.scale(3, 4)
+        |> Context.translate(10, 20)
+
+      {x, y} = Context.device_to_user(ctx, 10, 10)
+      assert_in_delta x, -6.66666, 0.0001
+      assert y == -17.5
+    end
+
+    test "transformation order affects the end result", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.translate(10, 20)
+        |> Context.scale(3, 4)
+
+      assert Context.device_to_user(ctx, 10, 10) == {0.0, -2.5}
+    end
+  end
+
+  describe "device_to_user_distance/3" do
+    test "translates a distance from user space to device space using the CTM", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.scale(3, 4)
+        |> Context.translate(10, 20)
+
+      {x, y} = Context.device_to_user_distance(ctx, 10, 10)
+      assert_in_delta x, 3.3333, 0.0001
+      assert y == 2.5
+    end
+
+    test "transformation order affects the end result", %{context: ctx} do
+      ctx =
+        ctx
+        |> Context.translate(10, 20)
+        |> Context.scale(3, 4)
+
+      {x, y} = Context.device_to_user_distance(ctx, 10, 10)
+      assert_in_delta x, 3.3333, 0.0001
+      assert y == 2.5
+    end
   end
 end
