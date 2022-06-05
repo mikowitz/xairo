@@ -522,3 +522,48 @@ fn context_set_operator(context: Context, operator: Operator) {
 fn context_operator(context: Context) -> Operator {
     context.context.operator().into()
 }
+
+#[rustler::nif]
+fn context_in_stroke(context: Context, x: f64, y: f64) -> Result<bool, Error> {
+    match context.context.in_stroke(x, y) {
+    Ok(bool) => Ok(bool),
+    Err(err) => Err(err.into())
+    }
+}
+
+#[rustler::nif]
+fn context_in_fill(context: Context, x: f64, y: f64) -> Result<bool, Error> {
+    match context.context.in_fill(x, y) {
+    Ok(bool) => Ok(bool),
+    Err(err) => Err(err.into())
+    }
+}
+
+#[rustler::nif]
+fn context_user_to_device(context: Context, x: f64, y: f64) -> (f64, f64) {
+    context.context.user_to_device(x, y)
+}
+
+#[rustler::nif]
+fn context_user_to_device_distance(context: Context, dx: f64, dy: f64) -> Result<(f64, f64), Error> {
+    match context.context.user_to_device_distance(dx, dy) {
+        Ok(distance) => Ok(distance),
+        Err(err) => Err(err.into())
+    }
+}
+
+#[rustler::nif]
+fn context_device_to_user(context: Context, x: f64, y: f64) -> Result<(f64, f64), Error> {
+    match context.context.device_to_user(x, y) {
+        Ok(distance) => Ok(distance),
+        Err(err) => Err(err.into())
+    }
+}
+
+#[rustler::nif]
+fn context_device_to_user_distance(context: Context, dx: f64, dy: f64) -> Result<(f64, f64), Error> {
+    match context.context.device_to_user_distance(dx, dy) {
+        Ok(distance) => Ok(distance),
+        Err(err) => Err(err.into())
+    }
+}

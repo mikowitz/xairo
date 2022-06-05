@@ -114,6 +114,12 @@ rustler::init!(
         context::context_dash_offset,
         context::context_set_operator,
         context::context_operator,
+        context::context_in_stroke,
+        context::context_in_fill,
+        context::context_user_to_device,
+        context::context_user_to_device_distance,
+        context::context_device_to_user,
+        context::context_device_to_user_distance,
         // path
         path::path_iter,
         // linear gradient
