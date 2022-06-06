@@ -1,4 +1,8 @@
 defmodule Xairo.Matrix do
+  @moduledoc """
+    Models an affine transformation matrix.
+  """
+
   defstruct [:matrix]
 
   alias Xairo.Native, as: N

@@ -1,11 +1,25 @@
 defmodule Xairo.Context do
+  @moduledoc """
+    Models a Cairo drawing context that can be instantiated from any
+    supported surface type.
+  """
   defstruct [:context, :surface, :source, :font_face]
 
-  alias Xairo.{ImageSurface, PdfSurface, PsSurface, SvgSurface}
-  alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
-  alias Xairo.Path
-  alias Xairo.FontFace
-  alias Xairo.Matrix
+  alias Xairo.{
+    FontFace,
+    ImageSurface,
+    LinearGradient,
+    Matrix,
+    Mesh,
+    Path,
+    PdfSurface,
+    PsSurface,
+    RadialGradient,
+    SolidPattern,
+    SurfacePattern,
+    SvgSurface
+  }
+
   alias Xairo.Native, as: N
 
   def new(%ImageSurface{} = surface) do

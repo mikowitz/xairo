@@ -1,4 +1,8 @@
 defmodule Xairo.PdfSurface do
+  @moduledoc """
+    Models a drawing surface that renders its contents to disk
+    in PDF format.
+  """
   defstruct [:surface]
 
   alias Xairo.Native, as: N

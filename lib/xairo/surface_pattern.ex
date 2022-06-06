@@ -1,4 +1,8 @@
 defmodule Xairo.SurfacePattern do
+  @moduledoc """
+    Models a color source for a drawing surface that draws its data
+    from an associated `Xairo.ImageSurface`
+  """
   defstruct [:pattern, :surface]
 
   def create(%Xairo.ImageSurface{surface: surface} = sfc) do

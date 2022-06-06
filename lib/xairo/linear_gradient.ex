@@ -1,4 +1,7 @@
 defmodule Xairo.LinearGradient do
+  @moduledoc """
+    Models a linear griadent that can be set as a surface's color source.
+  """
   defstruct [:pattern]
 
   alias Xairo.Native, as: N

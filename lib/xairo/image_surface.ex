@@ -1,4 +1,8 @@
 defmodule Xairo.ImageSurface do
+  @moduledoc """
+    Models a drawing surface that renders its contents to disk in PNG format.
+  """
+
   defstruct [:surface]
 
   alias Xairo.Native, as: N

@@ -1,4 +1,8 @@
 defmodule Xairo.RadialGradient do
+  @moduledoc """
+    Models a radial gradient that can be set as a drawing surface's
+    color source.
+  """
   defstruct [:pattern]
 
   alias Xairo.Native, as: N

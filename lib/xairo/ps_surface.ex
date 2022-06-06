@@ -1,4 +1,9 @@
 defmodule Xairo.PsSurface do
+  @moduledoc """
+    Models a drawing surface that renders its contents to disk
+    in Postscript format.
+  """
+
   defstruct [:surface]
 
   alias Xairo.Native, as: N

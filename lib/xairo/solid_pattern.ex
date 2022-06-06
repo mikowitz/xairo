@@ -1,4 +1,9 @@
 defmodule Xairo.SolidPattern do
+  @moduledoc """
+    Models a solid color in RGB(A) format that can be set as a drawing
+    surface's color source.
+  """
+
   defstruct [:pattern]
 
   alias Xairo.Native, as: N

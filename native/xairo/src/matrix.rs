@@ -36,21 +36,21 @@ fn matrix_transform_point(matrix: Matrix, x: f64, y: f64) -> (f64, f64) {
 
 #[rustler::nif]
 fn matrix_translate(matrix: Matrix, dx: f64, dy: f64) -> Matrix {
-    let mut m = matrix.matrix.clone();
+    let mut m = matrix.matrix;
     m.translate(dx, dy);
     ResourceArc::new(MatrixRaw { matrix: m })
 }
 
 #[rustler::nif]
 fn matrix_scale(matrix: Matrix, dx: f64, dy: f64) -> Matrix {
-    let mut m = matrix.matrix.clone();
+    let mut m = matrix.matrix;
     m.scale(dx, dy);
     ResourceArc::new(MatrixRaw { matrix: m })
 }
 
 #[rustler::nif]
 fn matrix_rotate(matrix: Matrix, radians: f64) -> Matrix {
-    let mut m = matrix.matrix.clone();
+    let mut m = matrix.matrix;
     m.rotate(radians);
     ResourceArc::new(MatrixRaw { matrix: m })
 }

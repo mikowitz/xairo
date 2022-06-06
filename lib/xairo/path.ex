@@ -1,4 +1,9 @@
 defmodule Xairo.Path do
+  @moduledoc """
+    Models a read-only representation of a path defined on a drawing surface
+    or mesh color source.
+  """
+
   defstruct [:path, :segments]
 
   def from(path) when is_reference(path) do

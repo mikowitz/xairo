@@ -1,4 +1,6 @@
 defmodule Xairo.Native do
+  @moduledoc false
+
   use Rustler, otp_app: :xairo, crate: "xairo"
 
   def image_surface_create(_format, _width, _height), do: error()
