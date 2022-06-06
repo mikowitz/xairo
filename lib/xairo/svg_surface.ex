@@ -1,4 +1,8 @@
 defmodule Xairo.SvgSurface do
+  @moduledoc """
+    Models a drawing surface that renders its contents to disk in SVG format.
+  """
+
   defstruct [:surface]
 
   alias Xairo.Native, as: N

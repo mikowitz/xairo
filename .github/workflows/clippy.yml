@@ -1,0 +1,39 @@
+name: "Clippy"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  clippy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: ["stable", "nightly"]
+    name: "Clippy ${{matrix.rust}}"
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{matrix.rust}}
+          components: clippy
+          override: true
+
+      - name: rust-cache
+        uses: Swatinem/rust-cache@v1
+        id: rust-cache
+        with:
+          working-directory: ./native/xairo
+          key: ${{ matrix.rust }}-clippy
+
+      - name: cargo build
+        run: cargo build
+        working-directory: ./native/xairo
+        if: steps.rust-cache.outputs.cache-hit != 'true'
+
+      - run: cargo clippy --all-features
+        working-directory: ./native/xairo
+

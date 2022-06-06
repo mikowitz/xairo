@@ -1,4 +1,10 @@
 defmodule Xairo.FontFace do
+  @moduledoc """
+    Models a font face, defined by a font family, slant, and weight.
+
+    `FontFace` currently supports creating "toy" font faces, as described
+    in the [Cairo documentation](https://www.cairographics.org/manual/cairo-text.html)
+  """
   defstruct [:font_face]
 
   alias Xairo.Native, as: N

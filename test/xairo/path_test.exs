@@ -10,11 +10,11 @@ defmodule Xairo.PathTest do
     {:ok, context: context}
   end
 
-  describe "Enum.count/1" do
-    test "returns 0 for an empty path", %{context: ctx} do
+  describe "Enum.empty?/1" do
+    test "returns true for an empty path", %{context: ctx} do
       path = Context.copy_path(ctx)
 
-      assert Enum.count(path) == 0
+      assert Enum.empty?(path)
     end
 
     test "returns the length for a non-empty path", %{context: ctx} do

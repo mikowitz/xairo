@@ -2,10 +2,20 @@ defmodule Xairo.ContextTest do
   use ExUnit.Case, async: true
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface, PdfSurface, PsSurface, SvgSurface}
-  alias Xairo.{LinearGradient, Mesh, RadialGradient, SolidPattern, SurfacePattern}
-  alias Xairo.FontFace
-  alias Xairo.Matrix
+  alias Xairo.{
+    Context,
+    FontFace,
+    ImageSurface,
+    LinearGradient,
+    Matrix,
+    Mesh,
+    PdfSurface,
+    PsSurface,
+    RadialGradient,
+    SolidPattern,
+    SurfacePattern,
+    SvgSurface
+  }
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)

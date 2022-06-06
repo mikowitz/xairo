@@ -1,4 +1,8 @@
 defmodule Xairo.Mesh do
+  @moduledoc """
+    Models a tensor-product patch mesh that can be set as a drawing surface's
+    color source.
+  """
   defstruct [:pattern]
 
   alias Xairo.Native, as: N
