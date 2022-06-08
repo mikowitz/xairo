@@ -13,6 +13,7 @@ defmodule Xairo.Context do
     Mesh,
     Path,
     PdfSurface,
+    Point,
     PsSurface,
     RadialGradient,
     Rgba,
@@ -83,28 +84,32 @@ defmodule Xairo.Context do
   def set_source_surface(
         %__MODULE__{context: ctx} = this,
         %ImageSurface{surface: surface} = sfc,
-        x,
-        y
+        %Point{} = origin
       ) do
-    with {:ok, _} <- N.context_set_source_surface(ctx, surface, x / 1, y / 1) do
+    with {:ok, _} <- N.context_set_source_surface(ctx, surface, origin) do
       %{this | source: SurfacePattern.create(sfc)}
     end
   end
 
   def source(%__MODULE__{source: source}), do: source
 
-  def arc(%__MODULE__{context: ctx} = this, cx, cy, r, angle1, angle2) do
-    N.context_arc(ctx, cx / 1, cy / 1, r / 1, angle1 / 1, angle2 / 1)
+  def arc(%__MODULE__{context: ctx} = this, %Point{} = center, r, angle1, angle2) do
+    N.context_arc(ctx, center, r / 1, angle1 / 1, angle2 / 1)
     this
   end
 
-  def arc_negative(%__MODULE__{context: ctx} = this, cx, cy, r, angle1, angle2) do
-    N.context_arc_negative(ctx, cx / 1, cy / 1, r / 1, angle1 / 1, angle2 / 1)
+  def arc_negative(%__MODULE__{context: ctx} = this, %Point{} = center, r, angle1, angle2) do
+    N.context_arc_negative(ctx, center, r / 1, angle1 / 1, angle2 / 1)
     this
   end
 
-  def curve_to(%__MODULE__{context: ctx} = this, x1, y1, x2, y2, x3, y3) do
-    N.context_curve_to(ctx, x1 / 1, y1 / 1, x2 / 1, y2 / 1, x3 / 1, y3 / 1)
+  def curve_to(
+        %__MODULE__{context: ctx} = this,
+        %Point{} = point1,
+        %Point{} = point2,
+        %Point{} = point3
+      ) do
+    N.context_curve_to(ctx, point1, point2, point3)
     this
   end
 
@@ -113,8 +118,8 @@ defmodule Xairo.Context do
     this
   end
 
-  def line_to(%__MODULE__{context: ctx} = this, x, y) do
-    N.context_line_to(ctx, x / 1, y / 1)
+  def line_to(%__MODULE__{context: ctx} = this, %Point{} = point) do
+    N.context_line_to(ctx, point)
     this
   end
 
@@ -123,13 +128,13 @@ defmodule Xairo.Context do
     this
   end
 
-  def rectangle(%__MODULE__{context: ctx} = this, x, y, width, height) do
-    N.context_rectangle(ctx, x / 1, y / 1, width / 1, height / 1)
+  def rectangle(%__MODULE__{context: ctx} = this, %Point{} = origin, width, height) do
+    N.context_rectangle(ctx, origin, width / 1, height / 1)
     this
   end
 
-  def move_to(%__MODULE__{context: ctx} = this, x, y) do
-    N.context_move_to(ctx, x / 1, y / 1)
+  def move_to(%__MODULE__{context: ctx} = this, %Point{} = point) do
+    N.context_move_to(ctx, point)
     this
   end
 
@@ -296,8 +301,12 @@ defmodule Xairo.Context do
     with {:ok, _} <- N.context_mask_surface_pattern(ctx, pattern), do: this
   end
 
-  def mask_surface(%__MODULE__{context: ctx} = this, %ImageSurface{surface: surface}, x, y) do
-    with {:ok, _} <- N.context_mask_surface(ctx, surface, x / 1, y / 1), do: this
+  def mask_surface(
+        %__MODULE__{context: ctx} = this,
+        %ImageSurface{surface: surface},
+        %Point{} = origin
+      ) do
+    with {:ok, _} <- N.context_mask_surface(ctx, surface, origin), do: this
   end
 
   def set_line_width(%__MODULE__{context: ctx} = this, line_width) do
@@ -384,16 +393,16 @@ defmodule Xairo.Context do
     N.context_operator(ctx)
   end
 
-  def in_stroke(%__MODULE__{context: ctx}, x, y) do
-    with {:ok, bool} <- N.context_in_stroke(ctx, x / 1, y / 1), do: bool
+  def in_stroke(%__MODULE__{context: ctx}, %Point{} = point) do
+    with {:ok, bool} <- N.context_in_stroke(ctx, point), do: bool
   end
 
-  def in_fill(%__MODULE__{context: ctx}, x, y) do
-    with {:ok, bool} <- N.context_in_fill(ctx, x / 1, y / 1), do: bool
+  def in_fill(%__MODULE__{context: ctx}, %Point{} = point) do
+    with {:ok, bool} <- N.context_in_fill(ctx, point), do: bool
   end
 
-  def user_to_device(%__MODULE__{context: ctx}, x, y) do
-    N.context_user_to_device(ctx, x / 1, y / 1)
+  def user_to_device(%__MODULE__{context: ctx}, %Point{} = point) do
+    N.context_user_to_device(ctx, point)
   end
 
   def user_to_device_distance(%__MODULE__{context: ctx}, dx, dy) do
@@ -401,8 +410,8 @@ defmodule Xairo.Context do
          do: distance
   end
 
-  def device_to_user(%__MODULE__{context: ctx}, x, y) do
-    with {:ok, distance} <- N.context_device_to_user(ctx, x / 1, y / 1),
+  def device_to_user(%__MODULE__{context: ctx}, %Point{} = point) do
+    with {:ok, distance} <- N.context_device_to_user(ctx, point),
          do: distance
   end
 
@@ -426,8 +435,8 @@ defmodule Xairo.Context do
     this
   end
 
-  def in_clip(%__MODULE__{context: ctx}, x, y) do
-    with {:ok, bool} <- N.context_in_clip(ctx, x / 1, y / 1), do: bool
+  def in_clip(%__MODULE__{context: ctx}, %Point{} = point) do
+    with {:ok, bool} <- N.context_in_clip(ctx, point), do: bool
   end
 
   def clip_extents(%__MODULE__{context: ctx}) do

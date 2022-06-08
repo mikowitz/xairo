@@ -6,6 +6,7 @@ defmodule Xairo.Matrix do
   defstruct [:matrix]
 
   alias Xairo.Native, as: N
+  alias Xairo.Point
 
   def new(xx, yx, xy, yy, tx, ty) do
     %__MODULE__{
@@ -33,8 +34,8 @@ defmodule Xairo.Matrix do
     N.matrix_transform_distance(matrix, x / 1, y / 1)
   end
 
-  def transform_point(%__MODULE__{matrix: matrix}, x, y) do
-    N.matrix_transform_point(matrix, x / 1, y / 1)
+  def transform_point(%__MODULE__{matrix: matrix}, %Point{} = point) do
+    N.matrix_transform_point(matrix, point)
   end
 
   def translate(%__MODULE__{matrix: matrix} = this, dx, dy) do

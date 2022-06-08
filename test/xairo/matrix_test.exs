@@ -1,7 +1,7 @@
 defmodule Xairo.MatrixTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.Matrix
+  alias Xairo.{Matrix, Point}
 
   describe "new/6" do
     test "returns a Matrix struct" do
@@ -43,19 +43,19 @@ defmodule Xairo.MatrixTest do
     test "the identity matrix returns the same point" do
       matrix = Matrix.identity()
 
-      assert Matrix.transform_point(matrix, 3, 4) == {3, 4}
+      assert Matrix.transform_point(matrix, Point.new(3, 4)) == Point.new(3, 4)
     end
 
     test "scales the point by the scaling factors" do
       matrix = Matrix.new(2, 0, 0, 3, 0, 0)
 
-      assert Matrix.transform_point(matrix, 3, 4) == {6, 12}
+      assert Matrix.transform_point(matrix, Point.new(3, 4)) == Point.new(6, 12)
     end
 
     test "adjusts the point by the translation factors" do
       matrix = Matrix.new(1, 0, 0, 1, 10, 20)
 
-      assert Matrix.transform_point(matrix, 3, 4) == {13, 24}
+      assert Matrix.transform_point(matrix, Point.new(3, 4)) == Point.new(13, 24)
     end
   end
 

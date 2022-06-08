@@ -6,7 +6,7 @@ defmodule Xairo.Mesh do
   defstruct [:pattern]
 
   alias Xairo.Native, as: N
-  alias Xairo.{Path, Rgba}
+  alias Xairo.{Path, Point, Rgba}
 
   def new do
     %__MODULE__{
@@ -28,23 +28,28 @@ defmodule Xairo.Mesh do
     this
   end
 
-  def move_to(%__MODULE__{pattern: mesh} = this, x, y) do
-    N.mesh_move_to(mesh, x / 1, y / 1)
+  def move_to(%__MODULE__{pattern: mesh} = this, %Point{} = point) do
+    N.mesh_move_to(mesh, point)
     this
   end
 
-  def line_to(%__MODULE__{pattern: mesh} = this, x, y) do
-    N.mesh_line_to(mesh, x / 1, y / 1)
+  def line_to(%__MODULE__{pattern: mesh} = this, %Point{} = point) do
+    N.mesh_line_to(mesh, point)
     this
   end
 
-  def curve_to(%__MODULE__{pattern: mesh} = this, x1, y1, x2, y2, x3, y3) do
-    N.mesh_curve_to(mesh, x1 / 1, y1 / 1, x2 / 1, y2 / 1, x3 / 1, y3 / 1)
+  def curve_to(
+        %__MODULE__{pattern: mesh} = this,
+        %Point{} = point1,
+        %Point{} = point2,
+        %Point{} = point3
+      ) do
+    N.mesh_curve_to(mesh, point1, point2, point3)
     this
   end
 
-  def set_control_point(%__MODULE__{pattern: mesh} = this, corner, x, y) do
-    with {:ok, _} <- N.mesh_set_control_point(mesh, corner, x / 1, y / 1), do: this
+  def set_control_point(%__MODULE__{pattern: mesh} = this, corner, %Point{} = point) do
+    with {:ok, _} <- N.mesh_set_control_point(mesh, corner, point), do: this
   end
 
   def control_point(%__MODULE__{pattern: mesh}, patch, corner) do

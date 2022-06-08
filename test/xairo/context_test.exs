@@ -10,6 +10,7 @@ defmodule Xairo.ContextTest do
     Matrix,
     Mesh,
     PdfSurface,
+    Point,
     PsSurface,
     RadialGradient,
     Rgba,
@@ -38,7 +39,7 @@ defmodule Xairo.ContextTest do
     test "draws a clockwise arc using the given coordinates", %{surface: sfc, context: ctx} do
       ctx
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.arc(50, 50, 25, 0, 1.5)
+      |> Context.arc(Point.new(50, 50), 25, 0, 1.5)
       |> Context.stroke()
 
       assert_image(sfc, "arc.png")
@@ -52,7 +53,7 @@ defmodule Xairo.ContextTest do
     } do
       ctx
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.arc_negative(50, 50, 25, 0, 1.5)
+      |> Context.arc_negative(Point.new(50, 50), 25, 0, 1.5)
       |> Context.stroke()
 
       assert_image(sfc, "arc_negative.png")
@@ -66,8 +67,8 @@ defmodule Xairo.ContextTest do
     } do
       ctx
       |> Context.set_source(Rgba.new(0, 0, 1))
-      |> Context.curve_to(10, 30, 50, 5, 80, 20)
-      |> Context.move_to(10, 50)
+      |> Context.curve_to(Point.new(10, 30), Point.new(50, 5), Point.new(80, 20))
+      |> Context.move_to(Point.new(10, 50))
       |> Context.rel_curve_to(15, -5, 40, 20, 60, -20)
       |> Context.stroke()
 
@@ -82,8 +83,8 @@ defmodule Xairo.ContextTest do
     } do
       ctx
       |> Context.set_source(Rgba.new(1, 1, 0))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(50, 60)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(50, 60))
       |> Context.rel_line_to(-20, -10)
       |> Context.stroke()
 
@@ -100,7 +101,7 @@ defmodule Xairo.ContextTest do
       |> Context.set_source(Rgba.new(0, 1, 1))
       |> Context.paint_with_alpha(0.2)
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.rectangle(10, 10, 60, 40)
+      |> Context.rectangle(Point.new(10, 10), 60, 40)
       |> Context.stroke_preserve()
       |> Context.set_source(Rgba.new(0, 0, 1, 0.4))
       |> Context.fill()
@@ -116,12 +117,12 @@ defmodule Xairo.ContextTest do
     } do
       ctx
       |> Context.set_source(Rgba.new(1, 0, 1))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(40, 15)
-      |> Context.line_to(60, 40)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(40, 15))
+      |> Context.line_to(Point.new(60, 40))
       |> Context.rel_move_to(-20, -10)
-      |> Context.line_to(5, 80)
-      |> Context.line_to(20, 90)
+      |> Context.line_to(Point.new(5, 80))
+      |> Context.line_to(Point.new(20, 90))
       |> Context.close_path()
       |> Context.stroke()
 
@@ -136,10 +137,10 @@ defmodule Xairo.ContextTest do
     } do
       ctx
       |> Context.set_source(Rgba.new(1, 0, 1))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(15, 80)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(15, 80))
       |> Context.new_path()
-      |> Context.arc(60, 40, 20, 0, 4)
+      |> Context.arc(Point.new(60, 40), 20, 0, 4)
       |> Context.stroke()
 
       assert_image(sfc, "new_path.png")
@@ -150,10 +151,10 @@ defmodule Xairo.ContextTest do
     test "begins a new path but retains existing path components", %{surface: sfc, context: ctx} do
       ctx
       |> Context.set_source(Rgba.new(1, 0, 1))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(15, 80)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(15, 80))
       |> Context.new_sub_path()
-      |> Context.arc(60, 40, 20, 0, 4)
+      |> Context.arc(Point.new(60, 40), 20, 0, 4)
       |> Context.stroke()
 
       assert_image(sfc, "new_sub_path.png")
@@ -230,9 +231,9 @@ defmodule Xairo.ContextTest do
       context =
         Context.new(surface)
         |> Context.set_source(Rgba.new(0, 1, 0))
-        |> Context.move_to(10, 10)
-        |> Context.line_to(50, 50)
-        |> Context.line_to(20, 70)
+        |> Context.move_to(Point.new(10, 10))
+        |> Context.line_to(Point.new(50, 50))
+        |> Context.line_to(Point.new(20, 70))
         |> Context.close_path()
 
       path = Context.copy_path(context)
@@ -256,7 +257,7 @@ defmodule Xairo.ContextTest do
         |> Context.set_source(Rgba.new(0, 0, 0))
         |> Context.paint()
         |> Context.set_source(Rgba.new(1, 1, 1))
-        |> Context.arc(50, 50, 40, 0, 3.5)
+        |> Context.arc(Point.new(50, 50), 40, 0, 3.5)
         |> Context.set_tolerance(10)
 
       path = Context.copy_path_flat(context)
@@ -306,7 +307,7 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.line_to(50, 50)
+        |> Context.line_to(Point.new(50, 50))
         |> Context.stroke()
 
       refute Context.has_current_point(context)
@@ -317,7 +318,7 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.line_to(50, 50)
+        |> Context.line_to(Point.new(50, 50))
 
       assert Context.has_current_point(context)
     end
@@ -327,7 +328,7 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.line_to(50, 50)
+        |> Context.line_to(Point.new(50, 50))
         |> Context.new_path()
 
       refute Context.has_current_point(context)
@@ -338,7 +339,7 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.line_to(50, 50)
+        |> Context.line_to(Point.new(50, 50))
         |> Context.new_sub_path()
 
       refute Context.has_current_point(context)
@@ -351,7 +352,7 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.line_to(50, 50)
+        |> Context.line_to(Point.new(50, 50))
 
       assert Context.current_point(context) == {50.0, 50.0}
     end
@@ -451,12 +452,12 @@ defmodule Xairo.ContextTest do
       |> Context.set_source(Rgba.new(1, 1, 1))
       |> Context.paint()
       |> Context.set_source(Rgba.new(1, 0.5, 0))
-      |> Context.move_to(0, 0)
-      |> Context.line_to(100, 100)
+      |> Context.move_to(Point.new(0, 0))
+      |> Context.line_to(Point.new(100, 100))
       |> Context.stroke()
       |> Context.set_source(Rgba.new(0, 1, 1, 0.5))
-      |> Context.move_to(100, 0)
-      |> Context.line_to(0, 100)
+      |> Context.move_to(Point.new(100, 0))
+      |> Context.line_to(Point.new(0, 100))
       |> Context.stroke()
 
       sp = SurfacePattern.create(pattern_surface)
@@ -464,7 +465,7 @@ defmodule Xairo.ContextTest do
       context =
         context
         |> Context.set_source(sp)
-        |> Context.rectangle(20, 20, 60, 70)
+        |> Context.rectangle(Point.new(20, 20), 60, 70)
         |> Context.fill()
 
       assert_image(surface, "surface_pattern.png")
@@ -479,21 +480,21 @@ defmodule Xairo.ContextTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(10, 10)
-        |> Mesh.curve_to(20, 20, 50, -10, 130, -30)
-        |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
-        |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
-        |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
+        |> Mesh.move_to(Point.new(10, 10))
+        |> Mesh.curve_to(Point.new(20, 20), Point.new(50, -10), Point.new(130, -30))
+        |> Mesh.curve_to(Point.new(80, 20), Point.new(90, 30), Point.new(100, 100))
+        |> Mesh.curve_to(Point.new(20, 100), Point.new(10, 130), Point.new(-10, 80))
+        |> Mesh.curve_to(Point.new(0, 70), Point.new(10, 50), Point.new(-10, -10))
         |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.set_corner_color(1, Rgba.new(1, 0.5, 0))
         |> Mesh.set_corner_color(2, Rgba.new(1, 1, 0))
         |> Mesh.set_corner_color(3, Rgba.new(0.5, 1, 0))
         |> Mesh.end_patch()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(90, 30)
-        |> Mesh.line_to(30, 90)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(90, 30))
+        |> Mesh.line_to(Point.new(30, 90))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.set_corner_color(0, Rgba.new(0, 1, 0, 0.5))
         |> Mesh.set_corner_color(1, Rgba.new(0, 1, 0.5, 0.5))
         |> Mesh.set_corner_color(2, Rgba.new(0, 0.5, 1, 0.5))
@@ -503,7 +504,7 @@ defmodule Xairo.ContextTest do
       |> Context.set_source(Rgba.new(1, 1, 1))
       |> Context.paint()
       |> Context.set_source(mesh)
-      |> Context.rectangle(10, 20, 70, 50)
+      |> Context.rectangle(Point.new(10, 20), 70, 50)
       |> Context.fill()
 
       assert_image(surface, "mesh.png")
@@ -522,21 +523,21 @@ defmodule Xairo.ContextTest do
       |> Context.set_source(Rgba.new(1, 1, 1))
       |> Context.paint()
       |> Context.set_source(Rgba.new(0.5, 0, 1))
-      |> Context.rectangle(20, 30, 40, 50)
+      |> Context.rectangle(Point.new(20, 30), 40, 50)
       |> Context.fill_preserve()
       |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.stroke()
-      |> Context.move_to(80, 10)
-      |> Context.line_to(10, 70)
+      |> Context.move_to(Point.new(80, 10))
+      |> Context.line_to(Point.new(10, 70))
       |> Context.stroke()
 
       context
       |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.paint()
-      |> Context.set_source_surface(source_surface, 20, 10)
+      |> Context.set_source_surface(source_surface, Point.new(20, 10))
       |> Context.set_line_width(20)
-      |> Context.move_to(0, 0)
-      |> Context.line_to(100, 100)
+      |> Context.move_to(Point.new(0, 0))
+      |> Context.line_to(Point.new(100, 100))
       |> Context.stroke()
 
       assert_image(surface, "set_source_surface.png")
@@ -551,7 +552,7 @@ defmodule Xairo.ContextTest do
 
       context
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.move_to(20, 20)
+      |> Context.move_to(Point.new(20, 20))
       |> Context.show_text("hello")
       |> Context.stroke()
 
@@ -567,7 +568,7 @@ defmodule Xairo.ContextTest do
 
       context
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.move_to(10, 80)
+      |> Context.move_to(Point.new(10, 80))
       |> Context.set_font_size(40)
       |> Context.text_path("hello")
       |> Context.stroke()
@@ -638,14 +639,14 @@ defmodule Xairo.ContextTest do
       ctx
       |> Context.set_source(Rgba.new(1, 0, 0.5))
       |> Context.set_font_size(25)
-      |> Context.move_to(0, 0)
-      |> Context.line_to(20, 20)
+      |> Context.move_to(Point.new(0, 0))
+      |> Context.line_to(Point.new(20, 20))
       |> Context.show_text("hello")
       |> Context.stroke()
       |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.set_font_matrix(matrix)
-      |> Context.move_to(0, 0)
-      |> Context.line_to(20, 20)
+      |> Context.move_to(Point.new(0, 0))
+      |> Context.line_to(Point.new(20, 20))
       |> Context.show_text("hello")
       |> Context.stroke()
 
@@ -712,11 +713,11 @@ defmodule Xairo.ContextTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(10, 10)
-        |> Mesh.curve_to(20, 20, 50, -10, 130, -30)
-        |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
-        |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
-        |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
+        |> Mesh.move_to(Point.new(10, 10))
+        |> Mesh.curve_to(Point.new(20, 20), Point.new(50, -10), Point.new(130, -30))
+        |> Mesh.curve_to(Point.new(80, 20), Point.new(90, 30), Point.new(100, 100))
+        |> Mesh.curve_to(Point.new(20, 100), Point.new(10, 130), Point.new(-10, 80))
+        |> Mesh.curve_to(Point.new(0, 70), Point.new(10, 50), Point.new(-10, -10))
         |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0, 1))
         |> Mesh.set_corner_color(1, Rgba.new(1, 0.5, 0, 0.2))
         |> Mesh.set_corner_color(2, Rgba.new(1, 1, 0, 0.5))
@@ -746,11 +747,11 @@ defmodule Xairo.ContextTest do
 
       pattern_context
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(80, 70)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(80, 70))
       |> Context.stroke()
       |> Context.set_source(Rgba.new(0, 0, 0, 0.4))
-      |> Context.rectangle(20, 20, 30, 40)
+      |> Context.rectangle(Point.new(20, 20), 30, 40)
       |> Context.fill()
 
       pattern = SurfacePattern.create(pattern_surface)
@@ -772,16 +773,16 @@ defmodule Xairo.ContextTest do
 
       Context.new(mask_surface)
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(80, 70)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(80, 70))
       |> Context.stroke()
       |> Context.set_source(Rgba.new(0, 0, 0, 0.4))
-      |> Context.rectangle(20, 30, 40, 50)
+      |> Context.rectangle(Point.new(20, 30), 40, 50)
       |> Context.fill()
 
       ctx
       |> Context.set_source(Rgba.new(0.5, 0, 1))
-      |> Context.mask_surface(mask_surface, 10, 20)
+      |> Context.mask_surface(mask_surface, Point.new(10, 20))
 
       assert_image(sfc, "mask_surface.png")
     end
@@ -792,21 +793,21 @@ defmodule Xairo.ContextTest do
          %{context: ctx} do
       ctx =
         ctx
-        |> Context.rectangle(10, 10, 50, 50)
+        |> Context.rectangle(Point.new(10, 10), 50, 50)
 
-      assert Context.in_stroke(ctx, 10, 10)
-      assert Context.in_stroke(ctx, 60, 60)
-      refute Context.in_stroke(ctx, 30, 30)
-      refute Context.in_stroke(ctx, 5, 10)
+      assert Context.in_stroke(ctx, Point.new(10, 10))
+      assert Context.in_stroke(ctx, Point.new(60, 60))
+      refute Context.in_stroke(ctx, Point.new(30, 30))
+      refute Context.in_stroke(ctx, Point.new(5, 10))
     end
 
     test "takes line width into account", %{context: ctx} do
       ctx =
         ctx
-        |> Context.rectangle(10, 10, 50, 50)
+        |> Context.rectangle(Point.new(10, 10), 50, 50)
         |> Context.set_line_width(10)
 
-      assert Context.in_stroke(ctx, 5, 10)
+      assert Context.in_stroke(ctx, Point.new(5, 10))
     end
   end
 
@@ -815,12 +816,12 @@ defmodule Xairo.ContextTest do
          %{context: ctx} do
       ctx =
         ctx
-        |> Context.rectangle(10, 10, 50, 50)
+        |> Context.rectangle(Point.new(10, 10), 50, 50)
 
-      assert Context.in_fill(ctx, 10, 10)
-      assert Context.in_fill(ctx, 50, 50)
-      assert Context.in_fill(ctx, 30, 30)
-      refute Context.in_fill(ctx, 5, 10)
+      assert Context.in_fill(ctx, Point.new(10, 10))
+      assert Context.in_fill(ctx, Point.new(50, 50))
+      assert Context.in_fill(ctx, Point.new(30, 30))
+      refute Context.in_fill(ctx, Point.new(5, 10))
     end
   end
 
@@ -831,7 +832,7 @@ defmodule Xairo.ContextTest do
         |> Context.scale(3, 4)
         |> Context.translate(10, 20)
 
-      assert Context.user_to_device(ctx, 10, 10) == {60.0, 120.0}
+      assert Context.user_to_device(ctx, Point.new(10, 10)) == Point.new(60.0, 120.0)
     end
 
     test "transformation order affects the end result", %{context: ctx} do
@@ -840,7 +841,7 @@ defmodule Xairo.ContextTest do
         |> Context.translate(10, 20)
         |> Context.scale(3, 4)
 
-      assert Context.user_to_device(ctx, 10, 10) == {40.0, 60.0}
+      assert Context.user_to_device(ctx, Point.new(10, 10)) == Point.new(40.0, 60.0)
     end
   end
 
@@ -871,7 +872,7 @@ defmodule Xairo.ContextTest do
         |> Context.scale(3, 4)
         |> Context.translate(10, 20)
 
-      {x, y} = Context.device_to_user(ctx, 10, 10)
+      %Point{x: x, y: y} = Context.device_to_user(ctx, Point.new(10, 10))
       assert_in_delta x, -6.66666, 0.0001
       assert y == -17.5
     end
@@ -882,7 +883,7 @@ defmodule Xairo.ContextTest do
         |> Context.translate(10, 20)
         |> Context.scale(3, 4)
 
-      assert Context.device_to_user(ctx, 10, 10) == {0.0, -2.5}
+      assert Context.device_to_user(ctx, Point.new(10, 10)) == Point.new(0.0, -2.5)
     end
   end
 

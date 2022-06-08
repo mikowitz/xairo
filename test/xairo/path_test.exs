@@ -1,7 +1,7 @@
 defmodule Xairo.PathTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, ImageSurface}
+  alias Xairo.{Context, ImageSurface, Point}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -20,8 +20,8 @@ defmodule Xairo.PathTest do
     test "returns the length for a non-empty path", %{context: ctx} do
       path =
         ctx
-        |> Context.move_to(10, 10)
-        |> Context.line_to(50, 50)
+        |> Context.move_to(Point.new(10, 10))
+        |> Context.line_to(Point.new(50, 50))
         |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
         |> Context.close_path()
         |> Context.copy_path()
@@ -41,14 +41,14 @@ defmodule Xairo.PathTest do
     test "returns the segment for a non-empty path", %{context: ctx} do
       path =
         ctx
-        |> Context.move_to(10, 10)
-        |> Context.line_to(50, 50)
+        |> Context.move_to(Point.new(10, 10))
+        |> Context.line_to(Point.new(50, 50))
         |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
         |> Context.close_path()
         |> Context.copy_path()
 
-      assert Enum.at(path, 0) == {:move_to, {10.0, 10.0}}
-      assert Enum.at(path, -1) == {:move_to, {10.0, 10.0}}
+      assert Enum.at(path, 0) == {:move_to, Point.new(10.0, 10.0)}
+      assert Enum.at(path, -1) == {:move_to, Point.new(10.0, 10.0)}
     end
   end
 
@@ -56,8 +56,8 @@ defmodule Xairo.PathTest do
     test "returns a list of the path segment commands", %{context: ctx} do
       path =
         ctx
-        |> Context.move_to(10, 10)
-        |> Context.line_to(50, 50)
+        |> Context.move_to(Point.new(10, 10))
+        |> Context.line_to(Point.new(50, 50))
         |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
         |> Context.close_path()
         |> Context.copy_path()
@@ -78,14 +78,21 @@ defmodule Xairo.PathTest do
     test "returns the correct result for whether a step is part of the path", %{context: ctx} do
       path =
         ctx
-        |> Context.move_to(10, 10)
-        |> Context.line_to(50, 50)
+        |> Context.move_to(Point.new(10, 10))
+        |> Context.line_to(Point.new(50, 50))
         |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
         |> Context.close_path()
         |> Context.copy_path()
 
-      refute Enum.member?(path, {:curve_to, {20.0, 20.0}, {30.0, 40.0}, {15.0, 45.0}})
-      assert Enum.member?(path, {:curve_to, {70.0, 70.0}, {80.0, 90.0}, {65.0, 95.0}})
+      refute Enum.member?(
+               path,
+               {:curve_to, Point.new(20.0, 20.0), Point.new(30.0, 40.0), Point.new(15.0, 45.0)}
+             )
+
+      assert Enum.member?(
+               path,
+               {:curve_to, Point.new(70.0, 70.0), Point.new(80.0, 90.0), Point.new(65.0, 95.0)}
+             )
     end
   end
 end

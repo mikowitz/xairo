@@ -3,7 +3,7 @@ defmodule Xairo.ContextTransformationsTest do
 
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface, Rgba}
+  alias Xairo.{Context, ImageSurface, Point, Rgba}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -11,8 +11,8 @@ defmodule Xairo.ContextTransformationsTest do
     context =
       Context.new(surface)
       |> Context.set_source(Rgba.new(0, 0, 0))
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
       |> Context.set_source(Rgba.new(1, 0, 0))
 
@@ -23,8 +23,8 @@ defmodule Xairo.ContextTransformationsTest do
     test "translates the context's CTM", %{surface: sfc, context: ctx} do
       ctx
       |> Context.translate(30, 50)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
 
       ImageSurface.write_to_png(sfc, "matrix_translate.png")
@@ -37,8 +37,8 @@ defmodule Xairo.ContextTransformationsTest do
     test "scales the context's CTM", %{surface: sfc, context: ctx} do
       ctx
       |> Context.scale(3, 2)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
 
       ImageSurface.write_to_png(sfc, "matrix_scale.png")
@@ -51,8 +51,8 @@ defmodule Xairo.ContextTransformationsTest do
     test "rotates the context's CTM", %{surface: sfc, context: ctx} do
       ctx
       |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
 
       ImageSurface.write_to_png(sfc, "matrix_rotate.png")
@@ -65,12 +65,12 @@ defmodule Xairo.ContextTransformationsTest do
     test "resets the CTM to the identity matrix", %{surface: sfc, context: ctx} do
       ctx
       |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
       |> Context.identity_matrix()
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
 
       ImageSurface.write_to_png(sfc, "matrix_identity.png")
@@ -90,12 +90,12 @@ defmodule Xairo.ContextTransformationsTest do
 
       ctx
       |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
       |> Context.transform(matrix)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
 
       ImageSurface.write_to_png(sfc, "matrix_transform.png")
@@ -115,12 +115,12 @@ defmodule Xairo.ContextTransformationsTest do
 
       ctx
       |> Context.rotate(:math.pi() / 5)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
       |> Context.set_matrix(matrix)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(30, 30)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(30, 30))
       |> Context.stroke()
 
       ImageSurface.write_to_png(sfc, "matrix_set_matrix.png")

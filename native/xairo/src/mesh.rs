@@ -1,4 +1,4 @@
-use crate::{enums::error::Error, path::Path, path::PathRaw, rgba::Rgba};
+use crate::{enums::error::Error, path::Path, path::PathRaw, point::Point, rgba::Rgba};
 use rustler::ResourceArc;
 
 pub struct MeshRaw {
@@ -36,24 +36,30 @@ fn mesh_end_patch(mesh: Mesh) {
 }
 
 #[rustler::nif]
-fn mesh_move_to(mesh: Mesh, x: f64, y: f64) {
+fn mesh_move_to(mesh: Mesh, point: Point) {
+    let (x, y) = point.to_tuple();
     mesh.mesh.move_to(x, y);
 }
 
 #[rustler::nif]
-fn mesh_line_to(mesh: Mesh, x: f64, y: f64) {
+fn mesh_line_to(mesh: Mesh, point: Point) {
+    let (x, y) = point.to_tuple();
     mesh.mesh.line_to(x, y);
 }
 
 #[rustler::nif]
-fn mesh_curve_to(mesh: Mesh, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64) {
+fn mesh_curve_to(mesh: Mesh, point1: Point, point2: Point, point3: Point) {
+    let (x1, y1) = point1.to_tuple();
+    let (x2, y2) = point2.to_tuple();
+    let (x3, y3) = point3.to_tuple();
     mesh.mesh.curve_to(x1, y1, x2, y2, x3, y3);
 }
 
 #[rustler::nif]
-fn mesh_set_control_point(mesh: Mesh, corner: u8, x: f64, y: f64) -> Result<(), Error> {
+fn mesh_set_control_point(mesh: Mesh, corner: u8, point: Point) -> Result<(), Error> {
     match mesh_corner(corner) {
         Ok(corner) => {
+            let (x, y) = point.to_tuple();
             mesh.mesh.set_control_point(corner, x, y);
             Ok(())
         }
@@ -62,10 +68,10 @@ fn mesh_set_control_point(mesh: Mesh, corner: u8, x: f64, y: f64) -> Result<(), 
 }
 
 #[rustler::nif]
-fn mesh_control_point(mesh: Mesh, patch: usize, corner: u8) -> Result<(f64, f64), Error> {
+fn mesh_control_point(mesh: Mesh, patch: usize, corner: u8) -> Result<Point, Error> {
     match mesh_corner(corner) {
         Ok(corner) => match mesh.mesh.control_point(patch, corner) {
-            Ok(point) => Ok(point),
+            Ok((x, y)) => Ok(Point { x, y }),
             Err(err) => Err(err.into()),
         },
         Err(err) => Err(err),
