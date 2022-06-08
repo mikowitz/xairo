@@ -7,16 +7,11 @@ defmodule Xairo.SolidPattern do
   defstruct [:pattern]
 
   alias Xairo.Native, as: N
+  alias Xairo.Rgba
 
-  def from_rgb(red, green, blue) do
+  def from_rgba(%Rgba{} = rgba) do
     %__MODULE__{
-      pattern: N.solid_pattern_from_rgb(red / 1, green / 1, blue / 1)
-    }
-  end
-
-  def from_rgba(red, green, blue, alpha) do
-    %__MODULE__{
-      pattern: N.solid_pattern_from_rgba(red / 1, green / 1, blue / 1, alpha / 1)
+      pattern: N.solid_pattern_from_rgba(rgba)
     }
   end
 

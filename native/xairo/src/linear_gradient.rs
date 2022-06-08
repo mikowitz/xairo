@@ -1,4 +1,4 @@
-use crate::enums::error::Error;
+use crate::{enums::error::Error, rgba::Rgba};
 use rustler::ResourceArc;
 
 pub struct LinearGradientRaw {
@@ -34,39 +34,18 @@ fn linear_gradient_color_stop_count(gradient: LinearGradient) -> Result<isize, E
 }
 
 #[rustler::nif]
-fn linear_gradient_add_color_stop_rgb(
-    gradient: LinearGradient,
-    offset: f64,
-    red: f64,
-    green: f64,
-    blue: f64,
-) {
-    gradient
-        .gradient
-        .add_color_stop_rgb(offset, red, green, blue);
-}
-
-#[rustler::nif]
-fn linear_gradient_add_color_stop_rgba(
-    gradient: LinearGradient,
-    offset: f64,
-    red: f64,
-    green: f64,
-    blue: f64,
-    alpha: f64,
-) {
-    gradient
-        .gradient
-        .add_color_stop_rgba(offset, red, green, blue, alpha);
+fn linear_gradient_add_color_stop(gradient: LinearGradient, offset: f64, rgba: Rgba) {
+    let (r, g, b, a) = rgba.to_tuple();
+    gradient.gradient.add_color_stop_rgba(offset, r, g, b, a);
 }
 
 #[rustler::nif]
 fn linear_gradient_color_stop_rgba(
     gradient: LinearGradient,
     index: isize,
-) -> Result<(f64, f64, f64, f64, f64), Error> {
+) -> Result<(f64, Rgba), Error> {
     match gradient.gradient.color_stop_rgba(index) {
-        Ok(rgba) => Ok(rgba),
+        Ok((o, r, g, b, a)) => Ok((o, Rgba::new(r, g, b, a))),
         Err(err) => Err(err.into()),
     }
 }

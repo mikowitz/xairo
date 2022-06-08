@@ -13,6 +13,7 @@ use crate::{
     pdf_surface::PdfSurface,
     ps_surface::PsSurface,
     radial_gradient::RadialGradient,
+    rgba::Rgba,
     solid_pattern::SolidPattern,
     surface_pattern::SurfacePattern,
     svg_surface::SvgSurface,
@@ -62,13 +63,9 @@ fn context_new_from_svg_surface(surface: SvgSurface) -> Result<Context, Error> {
 }
 
 #[rustler::nif]
-fn context_set_source_rgb(context: Context, red: f64, green: f64, blue: f64) {
-    context.context.set_source_rgb(red, green, blue);
-}
-
-#[rustler::nif]
-fn context_set_source_rgba(context: Context, red: f64, green: f64, blue: f64, alpha: f64) {
-    context.context.set_source_rgba(red, green, blue, alpha);
+fn context_set_source_rgba(context: Context, rgba: Rgba) {
+    let (r, g, b, a) = rgba.to_tuple();
+    context.context.set_source_rgba(r, g, b, a);
 }
 
 #[rustler::nif]

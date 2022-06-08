@@ -1,4 +1,4 @@
-use crate::enums::error::Error;
+use crate::{enums::error::Error, rgba::Rgba};
 use rustler::ResourceArc;
 
 pub struct SolidPatternRaw {
@@ -11,23 +11,17 @@ unsafe impl Sync for SolidPatternRaw {}
 pub type SolidPattern = ResourceArc<SolidPatternRaw>;
 
 #[rustler::nif]
-fn solid_pattern_from_rgb(red: f64, green: f64, blue: f64) -> SolidPattern {
+fn solid_pattern_from_rgba(rgba: Rgba) -> SolidPattern {
+    let (r, g, b, a) = rgba.to_tuple();
     ResourceArc::new(SolidPatternRaw {
-        pattern: cairo::SolidPattern::from_rgb(red, green, blue),
+        pattern: cairo::SolidPattern::from_rgba(r, g, b, a),
     })
 }
 
 #[rustler::nif]
-fn solid_pattern_from_rgba(red: f64, green: f64, blue: f64, alpha: f64) -> SolidPattern {
-    ResourceArc::new(SolidPatternRaw {
-        pattern: cairo::SolidPattern::from_rgba(red, green, blue, alpha),
-    })
-}
-
-#[rustler::nif]
-fn solid_pattern_rgba(pattern: SolidPattern) -> Result<(f64, f64, f64, f64), Error> {
+fn solid_pattern_rgba(pattern: SolidPattern) -> Result<Rgba, Error> {
     match pattern.pattern.rgba() {
-        Ok(rgba) => Ok(rgba),
+        Ok((r, g, b, a)) => Ok(Rgba::new(r, g, b, a)),
         Err(err) => Err(err.into()),
     }
 }

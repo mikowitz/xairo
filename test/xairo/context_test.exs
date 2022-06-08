@@ -12,6 +12,7 @@ defmodule Xairo.ContextTest do
     PdfSurface,
     PsSurface,
     RadialGradient,
+    Rgba,
     SolidPattern,
     SurfacePattern,
     SvgSurface
@@ -33,54 +34,10 @@ defmodule Xairo.ContextTest do
     end
   end
 
-  describe "set_source_rgb/4" do
-    test "sets the source color to an opaque RGB-defined color", %{surface: sfc, context: ctx} do
-      ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
-      |> Context.paint()
-
-      assert_image(sfc, "set_source_rgb.png")
-    end
-
-    test "sets the `source` field of the context to a SolidPattern`", %{
-      context: ctx
-    } do
-      ctx =
-        ctx
-        |> Context.set_source_rgb(0.3, 0.4, 0.5)
-
-      assert is_struct(ctx.source, SolidPattern)
-
-      assert SolidPattern.rgba(ctx.source) == {0.3, 0.4, 0.5, 1.0}
-    end
-  end
-
-  describe "set_source_rgba/5" do
-    test "sets the source color to an RGBA-defined color", %{surface: sfc, context: ctx} do
-      ctx
-      |> Context.set_source_rgba(0, 0.5, 1.0, 0.35)
-      |> Context.paint()
-
-      assert_image(sfc, "set_source_rgba.png")
-    end
-
-    test "sets the `source` field of the context to a SolidPattern`", %{
-      context: ctx
-    } do
-      ctx =
-        ctx
-        |> Context.set_source_rgba(0.3, 0.4, 0.5, 0.6)
-
-      assert is_struct(ctx.source, SolidPattern)
-
-      assert SolidPattern.rgba(ctx.source) == {0.3, 0.4, 0.5, 0.6}
-    end
-  end
-
   describe "arc/6" do
     test "draws a clockwise arc using the given coordinates", %{surface: sfc, context: ctx} do
       ctx
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.arc(50, 50, 25, 0, 1.5)
       |> Context.stroke()
 
@@ -94,7 +51,7 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       ctx
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.arc_negative(50, 50, 25, 0, 1.5)
       |> Context.stroke()
 
@@ -108,7 +65,7 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       ctx
-      |> Context.set_source_rgb(0, 0, 1)
+      |> Context.set_source(Rgba.new(0, 0, 1))
       |> Context.curve_to(10, 30, 50, 5, 80, 20)
       |> Context.move_to(10, 50)
       |> Context.rel_curve_to(15, -5, 40, 20, 60, -20)
@@ -124,7 +81,7 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       ctx
-      |> Context.set_source_rgb(1, 1, 0)
+      |> Context.set_source(Rgba.new(1, 1, 0))
       |> Context.move_to(10, 10)
       |> Context.line_to(50, 60)
       |> Context.rel_line_to(-20, -10)
@@ -140,12 +97,12 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       ctx
-      |> Context.set_source_rgb(0, 1, 1)
+      |> Context.set_source(Rgba.new(0, 1, 1))
       |> Context.paint_with_alpha(0.2)
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.rectangle(10, 10, 60, 40)
       |> Context.stroke_preserve()
-      |> Context.set_source_rgba(0, 0, 1, 0.4)
+      |> Context.set_source(Rgba.new(0, 0, 1, 0.4))
       |> Context.fill()
 
       assert_image(sfc, "rectangle.png")
@@ -158,7 +115,7 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       ctx
-      |> Context.set_source_rgb(1, 0, 1)
+      |> Context.set_source(Rgba.new(1, 0, 1))
       |> Context.move_to(10, 10)
       |> Context.line_to(40, 15)
       |> Context.line_to(60, 40)
@@ -178,7 +135,7 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       ctx
-      |> Context.set_source_rgb(1, 0, 1)
+      |> Context.set_source(Rgba.new(1, 0, 1))
       |> Context.move_to(10, 10)
       |> Context.line_to(15, 80)
       |> Context.new_path()
@@ -192,7 +149,7 @@ defmodule Xairo.ContextTest do
   describe "new_sub_path/1" do
     test "begins a new path but retains existing path components", %{surface: sfc, context: ctx} do
       ctx
-      |> Context.set_source_rgb(1, 0, 1)
+      |> Context.set_source(Rgba.new(1, 0, 1))
       |> Context.move_to(10, 10)
       |> Context.line_to(15, 80)
       |> Context.new_sub_path()
@@ -272,7 +229,7 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.set_source_rgb(0, 1, 0)
+        |> Context.set_source(Rgba.new(0, 1, 0))
         |> Context.move_to(10, 10)
         |> Context.line_to(50, 50)
         |> Context.line_to(20, 70)
@@ -296,9 +253,9 @@ defmodule Xairo.ContextTest do
 
       context =
         Context.new(surface)
-        |> Context.set_source_rgb(0, 0, 0)
+        |> Context.set_source(Rgba.new(0, 0, 0))
         |> Context.paint()
-        |> Context.set_source_rgb(1, 1, 1)
+        |> Context.set_source(Rgba.new(1, 1, 1))
         |> Context.arc(50, 50, 40, 0, 3.5)
         |> Context.set_tolerance(10)
 
@@ -409,14 +366,34 @@ defmodule Xairo.ContextTest do
   end
 
   describe "set_source/2" do
+    test "sets the source color to an RGBA-defined color", %{surface: sfc, context: ctx} do
+      ctx
+      |> Context.set_source(Rgba.new(0, 0.5, 1.0, 0.35))
+      |> Context.paint()
+
+      assert_image(sfc, "set_source_rgba.png")
+    end
+
+    test "sets the `source` field of the context to a SolidPattern`", %{
+      context: ctx
+    } do
+      ctx =
+        ctx
+        |> Context.set_source(Rgba.new(0.3, 0.4, 0.5, 0.6))
+
+      assert is_struct(ctx.source, SolidPattern)
+
+      assert SolidPattern.rgba(ctx.source) == Rgba.new(0.3, 0.4, 0.5, 0.6)
+    end
+
     test "sets a linear gradient as the color source for an image" do
       surface = ImageSurface.create(:argb32, 100, 100)
       context = Context.new(surface)
 
       lg =
         LinearGradient.new(0, 0, 100, 50)
-        |> LinearGradient.add_color_stop_rgb(0.2, 1, 0, 0)
-        |> LinearGradient.add_color_stop_rgb(0.8, 0.5, 0, 1)
+        |> LinearGradient.add_color_stop(0.2, Rgba.new(1, 0, 0))
+        |> LinearGradient.add_color_stop(0.8, Rgba.new(0.5, 0, 1))
 
       context =
         context
@@ -434,8 +411,8 @@ defmodule Xairo.ContextTest do
 
       rg =
         RadialGradient.new(50, 50, 10, 50, 50, 50)
-        |> RadialGradient.add_color_stop_rgb(0.2, 1, 0, 0)
-        |> RadialGradient.add_color_stop_rgb(1, 0.5, 0, 1)
+        |> RadialGradient.add_color_stop(0.2, Rgba.new(1, 0, 0))
+        |> RadialGradient.add_color_stop(1, Rgba.new(0.5, 0, 1))
 
       context =
         context
@@ -451,7 +428,7 @@ defmodule Xairo.ContextTest do
       surface = ImageSurface.create(:argb32, 100, 100)
       context = Context.new(surface)
 
-      sp = SolidPattern.from_rgb(0.3, 0.5, 1.0)
+      sp = SolidPattern.from_rgba(Rgba.new(0.3, 0.5, 1.0))
 
       context =
         context
@@ -471,13 +448,13 @@ defmodule Xairo.ContextTest do
       pattern_context = Context.new(pattern_surface)
 
       pattern_context
-      |> Context.set_source_rgb(1, 1, 1)
+      |> Context.set_source(Rgba.new(1, 1, 1))
       |> Context.paint()
-      |> Context.set_source_rgb(1, 0.5, 0)
+      |> Context.set_source(Rgba.new(1, 0.5, 0))
       |> Context.move_to(0, 0)
       |> Context.line_to(100, 100)
       |> Context.stroke()
-      |> Context.set_source_rgba(0, 1, 1, 0.5)
+      |> Context.set_source(Rgba.new(0, 1, 1, 0.5))
       |> Context.move_to(100, 0)
       |> Context.line_to(0, 100)
       |> Context.stroke()
@@ -507,23 +484,23 @@ defmodule Xairo.ContextTest do
         |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
         |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
         |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
-        |> Mesh.set_corner_color_rgb(0, 1, 0, 0)
-        |> Mesh.set_corner_color_rgb(1, 1, 0.5, 0)
-        |> Mesh.set_corner_color_rgb(2, 1, 1, 0)
-        |> Mesh.set_corner_color_rgb(3, 0.5, 1, 0)
+        |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
+        |> Mesh.set_corner_color(1, Rgba.new(1, 0.5, 0))
+        |> Mesh.set_corner_color(2, Rgba.new(1, 1, 0))
+        |> Mesh.set_corner_color(3, Rgba.new(0.5, 1, 0))
         |> Mesh.end_patch()
         |> Mesh.begin_patch()
         |> Mesh.move_to(0, 0)
         |> Mesh.line_to(90, 30)
         |> Mesh.line_to(30, 90)
         |> Mesh.line_to(0, 0)
-        |> Mesh.set_corner_color_rgba(0, 0, 1, 0, 0.5)
-        |> Mesh.set_corner_color_rgba(1, 0, 1, 0.5, 0.5)
-        |> Mesh.set_corner_color_rgba(2, 0, 0.5, 1, 0.5)
+        |> Mesh.set_corner_color(0, Rgba.new(0, 1, 0, 0.5))
+        |> Mesh.set_corner_color(1, Rgba.new(0, 1, 0.5, 0.5))
+        |> Mesh.set_corner_color(2, Rgba.new(0, 0.5, 1, 0.5))
         |> Mesh.end_patch()
 
       context
-      |> Context.set_source_rgb(1, 1, 1)
+      |> Context.set_source(Rgba.new(1, 1, 1))
       |> Context.paint()
       |> Context.set_source(mesh)
       |> Context.rectangle(10, 20, 70, 50)
@@ -542,19 +519,19 @@ defmodule Xairo.ContextTest do
       source_context = Context.new(source_surface)
 
       source_context
-      |> Context.set_source_rgb(1, 1, 1)
+      |> Context.set_source(Rgba.new(1, 1, 1))
       |> Context.paint()
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.rectangle(20, 30, 40, 50)
       |> Context.fill_preserve()
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.stroke()
       |> Context.move_to(80, 10)
       |> Context.line_to(10, 70)
       |> Context.stroke()
 
       context
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.paint()
       |> Context.set_source_surface(source_surface, 20, 10)
       |> Context.set_line_width(20)
@@ -573,7 +550,7 @@ defmodule Xairo.ContextTest do
       context = Context.new(surface)
 
       context
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.move_to(20, 20)
       |> Context.show_text("hello")
       |> Context.stroke()
@@ -589,7 +566,7 @@ defmodule Xairo.ContextTest do
       context = Context.new(surface)
 
       context
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.move_to(10, 80)
       |> Context.set_font_size(40)
       |> Context.text_path("hello")
@@ -659,13 +636,13 @@ defmodule Xairo.ContextTest do
         |> Matrix.rotate(:math.pi() / 6)
 
       ctx
-      |> Context.set_source_rgb(1, 0, 0.5)
+      |> Context.set_source(Rgba.new(1, 0, 0.5))
       |> Context.set_font_size(25)
       |> Context.move_to(0, 0)
       |> Context.line_to(20, 20)
       |> Context.show_text("hello")
       |> Context.stroke()
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.set_font_matrix(matrix)
       |> Context.move_to(0, 0)
       |> Context.line_to(20, 20)
@@ -708,11 +685,11 @@ defmodule Xairo.ContextTest do
     } do
       mask =
         RadialGradient.new(50, 50, 1, 50, 50, 75)
-        |> RadialGradient.add_color_stop_rgba(0, 0, 0, 0, 1)
-        |> RadialGradient.add_color_stop_rgba(1, 0, 0, 0, 0)
+        |> RadialGradient.add_color_stop(0, Rgba.new(0, 0, 0, 1))
+        |> RadialGradient.add_color_stop(1, Rgba.new(0, 0, 0, 0))
 
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.mask(mask)
 
       assert_image(sfc, "mask_radial.png")
@@ -721,11 +698,11 @@ defmodule Xairo.ContextTest do
     test "works with a linear gradient", %{surface: sfc, context: ctx} do
       mask =
         LinearGradient.new(0, 0, 100, 100)
-        |> LinearGradient.add_color_stop_rgba(0, 0, 0, 0, 1)
-        |> LinearGradient.add_color_stop_rgba(1, 0, 0, 0, 0)
+        |> LinearGradient.add_color_stop(0, Rgba.new(0, 0, 0, 1))
+        |> LinearGradient.add_color_stop(1, Rgba.new(0, 0, 0, 0))
 
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.mask(mask)
 
       assert_image(sfc, "mask_linear.png")
@@ -740,24 +717,24 @@ defmodule Xairo.ContextTest do
         |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
         |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
         |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
-        |> Mesh.set_corner_color_rgba(0, 1, 0, 0, 1)
-        |> Mesh.set_corner_color_rgba(1, 1, 0.5, 0, 0.2)
-        |> Mesh.set_corner_color_rgba(2, 1, 1, 0, 0.5)
-        |> Mesh.set_corner_color_rgba(3, 0.5, 1, 0, 0.1)
+        |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0, 1))
+        |> Mesh.set_corner_color(1, Rgba.new(1, 0.5, 0, 0.2))
+        |> Mesh.set_corner_color(2, Rgba.new(1, 1, 0, 0.5))
+        |> Mesh.set_corner_color(3, Rgba.new(0.5, 1, 0, 0.1))
         |> Mesh.end_patch()
 
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.mask(mesh)
 
       assert_image(sfc, "mask_mesh.png")
     end
 
     test "works with a solid pattern", %{surface: sfc, context: ctx} do
-      pattern = SolidPattern.from_rgba(1, 1, 1, 0.3)
+      pattern = SolidPattern.from_rgba(Rgba.new(1, 1, 1, 0.3))
 
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.mask(pattern)
 
       assert_image(sfc, "mask_solid.png")
@@ -768,18 +745,18 @@ defmodule Xairo.ContextTest do
       pattern_context = Context.new(pattern_surface)
 
       pattern_context
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.move_to(10, 10)
       |> Context.line_to(80, 70)
       |> Context.stroke()
-      |> Context.set_source_rgba(0, 0, 0, 0.4)
+      |> Context.set_source(Rgba.new(0, 0, 0, 0.4))
       |> Context.rectangle(20, 20, 30, 40)
       |> Context.fill()
 
       pattern = SurfacePattern.create(pattern_surface)
 
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.mask(pattern)
 
       assert_image(sfc, "mask_surface_pattern.png")
@@ -794,16 +771,16 @@ defmodule Xairo.ContextTest do
       mask_surface = ImageSurface.create(:argb32, 100, 100)
 
       Context.new(mask_surface)
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.move_to(10, 10)
       |> Context.line_to(80, 70)
       |> Context.stroke()
-      |> Context.set_source_rgba(0, 0, 0, 0.4)
+      |> Context.set_source(Rgba.new(0, 0, 0, 0.4))
       |> Context.rectangle(20, 30, 40, 50)
       |> Context.fill()
 
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.mask_surface(mask_surface, 10, 20)
 
       assert_image(sfc, "mask_surface.png")
