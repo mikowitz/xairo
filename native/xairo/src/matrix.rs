@@ -1,4 +1,4 @@
-use crate::enums::error::Error;
+use crate::{enums::error::Error, point::Point};
 use rustler::ResourceArc;
 
 pub struct MatrixRaw {
@@ -30,8 +30,10 @@ fn matrix_transform_distance(matrix: Matrix, x: f64, y: f64) -> (f64, f64) {
 }
 
 #[rustler::nif]
-fn matrix_transform_point(matrix: Matrix, x: f64, y: f64) -> (f64, f64) {
-    matrix.matrix.transform_point(x, y)
+fn matrix_transform_point(matrix: Matrix, point: Point) -> Point {
+    let (x, y) = point.to_tuple();
+    let (x, y) = matrix.matrix.transform_point(x, y);
+    Point { x, y }
 }
 
 #[rustler::nif]

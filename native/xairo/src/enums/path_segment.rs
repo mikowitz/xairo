@@ -1,4 +1,4 @@
-pub type Point = (f64, f64);
+use crate::point::Point;
 
 #[derive(rustler::NifTaggedEnum)]
 pub enum PathSegment {
@@ -11,11 +11,13 @@ pub enum PathSegment {
 impl From<cairo::PathSegment> for PathSegment {
     fn from(segment: cairo::PathSegment) -> PathSegment {
         match segment {
-            cairo::PathSegment::MoveTo(point) => PathSegment::MoveTo(point),
-            cairo::PathSegment::LineTo(point) => PathSegment::LineTo(point),
-            cairo::PathSegment::CurveTo(point1, point2, point3) => {
-                PathSegment::CurveTo(point1, point2, point3)
-            }
+            cairo::PathSegment::MoveTo((x, y)) => PathSegment::MoveTo(Point { x, y }),
+            cairo::PathSegment::LineTo((x, y)) => PathSegment::LineTo(Point { x, y }),
+            cairo::PathSegment::CurveTo((x1, y1), (x2, y2), (x3, y3)) => PathSegment::CurveTo(
+                Point { x: x1, y: y1 },
+                Point { x: x2, y: y2 },
+                Point { x: x3, y: y3 },
+            ),
             cairo::PathSegment::ClosePath => PathSegment::ClosePath,
         }
     }

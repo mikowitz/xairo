@@ -1,7 +1,7 @@
 defmodule Xairo.MeshTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Mesh, Rgba}
+  alias Xairo.{Mesh, Point, Rgba}
 
   describe "new/0" do
     test "returns a mesh struct" do
@@ -31,10 +31,10 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.end_patch()
 
       assert Mesh.patch_count(mesh) == 1
@@ -42,11 +42,11 @@ defmodule Xairo.MeshTest do
       mesh =
         mesh
         |> Mesh.begin_patch()
-        |> Mesh.move_to(10, 10)
-        |> Mesh.curve_to(20, 20, 50, -10, 80, 30)
-        |> Mesh.curve_to(80, 20, 90, 30, 100, 100)
-        |> Mesh.curve_to(20, 100, 10, 130, -10, 80)
-        |> Mesh.curve_to(0, 70, 10, 50, -10, -10)
+        |> Mesh.move_to(Point.new(10, 10))
+        |> Mesh.curve_to(Point.new(20, 20), Point.new(50, -10), Point.new(80, 30))
+        |> Mesh.curve_to(Point.new(80, 20), Point.new(90, 30), Point.new(100, 100))
+        |> Mesh.curve_to(Point.new(20, 100), Point.new(10, 130), Point.new(-10, 80))
+        |> Mesh.curve_to(Point.new(0, 70), Point.new(10, 50), Point.new(-10, -10))
         |> Mesh.end_patch()
 
       assert Mesh.patch_count(mesh) == 2
@@ -58,25 +58,25 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
-        |> Mesh.set_control_point(0, 50, 50)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
+        |> Mesh.set_control_point(0, Point.new(50, 50))
         |> Mesh.end_patch()
 
-      assert Mesh.control_point(mesh, 0, 0) == {50.0, 50.0}
+      assert Mesh.control_point(mesh, 0, 0) == Point.new(50.0, 50.0)
     end
 
     test "errors when the corner does not exist" do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
-        |> Mesh.set_control_point(0, 50, 50)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
+        |> Mesh.set_control_point(0, Point.new(50, 50))
         |> Mesh.end_patch()
 
       assert Mesh.control_point(mesh, 0, 4) == {:error, :invalid_index}
@@ -86,11 +86,11 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
-        |> Mesh.set_control_point(0, 50, 50)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
+        |> Mesh.set_control_point(0, Point.new(50, 50))
         |> Mesh.end_patch()
 
       assert Mesh.control_point(mesh, 1, 0) == {:error, :invalid_index}
@@ -102,10 +102,10 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0, 0.5))
         |> Mesh.end_patch()
 
@@ -118,10 +118,10 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.end_patch()
 
@@ -132,10 +132,10 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.end_patch()
 
@@ -146,10 +146,10 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.end_patch()
 
@@ -162,10 +162,10 @@ defmodule Xairo.MeshTest do
       mesh =
         Mesh.new()
         |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
+        |> Mesh.move_to(Point.new(0, 0))
+        |> Mesh.line_to(Point.new(100, 50))
+        |> Mesh.line_to(Point.new(50, 100))
+        |> Mesh.line_to(Point.new(0, 0))
         |> Mesh.end_patch()
 
       path = Mesh.path(mesh, 0)
@@ -188,10 +188,10 @@ defmodule Xairo.MeshTest do
     mesh =
       Mesh.new()
       |> Mesh.begin_patch()
-      |> Mesh.move_to(0, 0)
-      |> Mesh.line_to(100, 50)
-      |> Mesh.line_to(50, 100)
-      |> Mesh.line_to(0, 0)
+      |> Mesh.move_to(Point.new(0, 0))
+      |> Mesh.line_to(Point.new(100, 50))
+      |> Mesh.line_to(Point.new(50, 100))
+      |> Mesh.line_to(Point.new(0, 0))
       |> Mesh.end_patch()
 
     assert Mesh.path(mesh, 1) == {:error, :invalid_index}

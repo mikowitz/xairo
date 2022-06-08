@@ -2,7 +2,7 @@ defmodule Xairo.ContextSettingsTest do
   use ExUnit.Case, async: true
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface, Rgba}
+  alias Xairo.{Context, ImageSurface, Point, Rgba}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -25,7 +25,7 @@ defmodule Xairo.ContextSettingsTest do
     test "determines the antialiasing option for drawing", %{surface: sfc, context: ctx} do
       draw = fn ctx, radius ->
         ctx
-        |> Context.arc_negative(50, 50, radius, 0, 1.5)
+        |> Context.arc_negative(Point.new(50, 50), radius, 0, 1.5)
         |> Context.stroke()
       end
 
@@ -71,18 +71,18 @@ defmodule Xairo.ContextSettingsTest do
       context: ctx
     } do
       ctx
-      |> Context.rectangle(10, 10, 50, 20)
+      |> Context.rectangle(Point.new(10, 10), 50, 20)
       |> Context.new_sub_path()
-      |> Context.arc(20, 20, 15, 0, 2 * :math.pi())
+      |> Context.arc(Point.new(20, 20), 15, 0, 2 * :math.pi())
       |> Context.set_fill_rule(:even_odd)
       |> Context.set_source(Rgba.new(0, 0.5, 0))
       |> Context.fill_preserve()
       |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.stroke()
       |> Context.translate(25, 50)
-      |> Context.rectangle(10, 10, 50, 20)
+      |> Context.rectangle(Point.new(10, 10), 50, 20)
       |> Context.new_sub_path()
-      |> Context.arc(20, 20, 15, 0, 2 * :math.pi())
+      |> Context.arc(Point.new(20, 20), 15, 0, 2 * :math.pi())
       |> Context.set_fill_rule(:winding)
       |> Context.set_source(Rgba.new(0, 0, 1))
       |> Context.fill_preserve()
@@ -104,18 +104,18 @@ defmodule Xairo.ContextSettingsTest do
       ctx
       |> Context.set_line_width(10)
       |> Context.set_line_cap(:butt)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(90, 10)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(90, 10))
       |> Context.stroke()
       |> Context.translate(0, 30)
       |> Context.set_line_cap(:round)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(90, 10)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(90, 10))
       |> Context.stroke()
       |> Context.translate(0, 30)
       |> Context.set_line_cap(:square)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(90, 10)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(90, 10))
       |> Context.stroke()
 
       assert_image(sfc, "line_cap.png")
@@ -133,20 +133,20 @@ defmodule Xairo.ContextSettingsTest do
       ctx
       |> Context.set_line_width(10)
       |> Context.set_line_join(:miter)
-      |> Context.rectangle(10, 10, 30, 30)
+      |> Context.rectangle(Point.new(10, 10), 30, 30)
       |> Context.stroke()
       |> Context.translate(50, 0)
       |> Context.set_line_join(:round)
-      |> Context.rectangle(10, 10, 30, 30)
+      |> Context.rectangle(Point.new(10, 10), 30, 30)
       |> Context.stroke()
       |> Context.translate(0, 50)
       |> Context.set_line_join(:bevel)
-      |> Context.rectangle(10, 10, 30, 30)
+      |> Context.rectangle(Point.new(10, 10), 30, 30)
       |> Context.stroke()
       |> Context.translate(-50, 0)
       |> Context.set_miter_limit(1)
       |> Context.set_line_join(:miter)
-      |> Context.rectangle(10, 10, 30, 30)
+      |> Context.rectangle(Point.new(10, 10), 30, 30)
       |> Context.stroke()
 
       assert_image(sfc, "line_join.png")
@@ -172,13 +172,13 @@ defmodule Xairo.ContextSettingsTest do
       |> Context.paint()
       |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.set_dash([5, 2], 0)
-      |> Context.move_to(10, 10)
-      |> Context.line_to(90, 90)
-      |> Context.line_to(90, 10)
+      |> Context.move_to(Point.new(10, 10))
+      |> Context.line_to(Point.new(90, 90))
+      |> Context.line_to(Point.new(90, 10))
       |> Context.close_path()
       |> Context.stroke()
-      |> Context.move_to(10, 90)
-      |> Context.line_to(80, 90)
+      |> Context.move_to(Point.new(10, 90))
+      |> Context.line_to(Point.new(80, 90))
       |> Context.set_dash([5, 2, 3], 1)
       |> Context.stroke()
 

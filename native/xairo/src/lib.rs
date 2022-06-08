@@ -9,6 +9,7 @@ mod matrix;
 mod mesh;
 mod path;
 mod pdf_surface;
+mod point;
 mod ps_surface;
 mod radial_gradient;
 mod rgba;
