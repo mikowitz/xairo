@@ -1,7 +1,7 @@
 defmodule Xairo.PathTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, ImageSurface, Point}
+  alias Xairo.{Context, ImageSurface, Point, Vector}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -22,7 +22,7 @@ defmodule Xairo.PathTest do
         ctx
         |> Context.move_to(Point.new(10, 10))
         |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
+        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
         |> Context.close_path()
         |> Context.copy_path()
 
@@ -43,7 +43,8 @@ defmodule Xairo.PathTest do
         ctx
         |> Context.move_to(Point.new(10, 10))
         |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
+        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
+        |> Context.close_path()
         |> Context.close_path()
         |> Context.copy_path()
 
@@ -58,7 +59,7 @@ defmodule Xairo.PathTest do
         ctx
         |> Context.move_to(Point.new(10, 10))
         |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
+        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
         |> Context.close_path()
         |> Context.copy_path()
 
@@ -80,7 +81,7 @@ defmodule Xairo.PathTest do
         ctx
         |> Context.move_to(Point.new(10, 10))
         |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(20, 20, 30, 40, 15, 45)
+        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
         |> Context.close_path()
         |> Context.copy_path()
 

@@ -37,11 +37,11 @@ defmodule Xairo.Native do
   def context_arc(_context, _center, _r, _angle1, _angle2), do: error()
   def context_arc_negative(_context, _center, _r, _angle1, _angle2), do: error()
   def context_curve_to(_context, _point1, _point2, _point3), do: error()
-  def context_rel_curve_to(_context, _x1, _y1, _x2, _y2, _x3, _y3), do: error()
+  def context_rel_curve_to(_context, _vector1, _vector2, _vector3), do: error()
   def context_rectangle(_context, _origin, _width, _height), do: error()
   def context_line_to(_context, _point), do: error()
-  def context_rel_line_to(_context, _x, _y), do: error()
-  def context_rel_move_to(_context, _x, _y), do: error()
+  def context_rel_line_to(_context, _vector), do: error()
+  def context_rel_move_to(_context, _vector), do: error()
 
   def context_move_to(_context, _point), do: error()
 
@@ -114,9 +114,9 @@ defmodule Xairo.Native do
   def context_in_fill(_context, _point), do: error()
 
   def context_user_to_device(_context, _point), do: error()
-  def context_user_to_device_distance(_context, _dx, _dy), do: error()
+  def context_user_to_device_distance(_context, _vector), do: error()
   def context_device_to_user(_context, _point), do: error()
-  def context_device_to_user_distance(_context, _dx, _dy), do: error()
+  def context_device_to_user_distance(_context, _vector), do: error()
 
   def context_clip(_context), do: error()
   def context_clip_preserve(_context), do: error()
@@ -170,7 +170,7 @@ defmodule Xairo.Native do
   def matrix_new(_xx, _yx, _xy_, _yy, _tx, _ty), do: error()
   def matrix_identity, do: error()
   def matrix_to_tuple(_matrix), do: error()
-  def matrix_transform_distance(_matrix, _dx, _dy), do: error()
+  def matrix_transform_distance(_matrix, _vector), do: error()
   def matrix_transform_point(_matrix, _point), do: error()
   def matrix_translate(_matrix, _dx, _dy), do: error()
   def matrix_scale(_matrix, _dx, _dy), do: error()

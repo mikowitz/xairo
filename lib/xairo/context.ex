@@ -19,7 +19,8 @@ defmodule Xairo.Context do
     Rgba,
     SolidPattern,
     SurfacePattern,
-    SvgSurface
+    SvgSurface,
+    Vector
   }
 
   alias Xairo.Native, as: N
@@ -113,8 +114,13 @@ defmodule Xairo.Context do
     this
   end
 
-  def rel_curve_to(%__MODULE__{context: ctx} = this, x1, y1, x2, y2, x3, y3) do
-    N.context_rel_curve_to(ctx, x1 / 1, y1 / 1, x2 / 1, y2 / 1, x3 / 1, y3 / 1)
+  def rel_curve_to(
+        %__MODULE__{context: ctx} = this,
+        %Vector{} = vec1,
+        %Vector{} = vec2,
+        %Vector{} = vec3
+      ) do
+    N.context_rel_curve_to(ctx, vec1, vec2, vec3)
     this
   end
 
@@ -123,8 +129,8 @@ defmodule Xairo.Context do
     this
   end
 
-  def rel_line_to(%__MODULE__{context: ctx} = this, x, y) do
-    N.context_rel_line_to(ctx, x / 1, y / 1)
+  def rel_line_to(%__MODULE__{context: ctx} = this, %Vector{} = vec) do
+    N.context_rel_line_to(ctx, vec)
     this
   end
 
@@ -138,8 +144,8 @@ defmodule Xairo.Context do
     this
   end
 
-  def rel_move_to(%__MODULE__{context: ctx} = this, x, y) do
-    N.context_rel_move_to(ctx, x / 1, y / 1)
+  def rel_move_to(%__MODULE__{context: ctx} = this, %Vector{} = vec) do
+    N.context_rel_move_to(ctx, vec)
     this
   end
 
@@ -405,8 +411,8 @@ defmodule Xairo.Context do
     N.context_user_to_device(ctx, point)
   end
 
-  def user_to_device_distance(%__MODULE__{context: ctx}, dx, dy) do
-    with {:ok, distance} <- N.context_user_to_device_distance(ctx, dx / 1, dy / 1),
+  def user_to_device_distance(%__MODULE__{context: ctx}, %Vector{} = vec) do
+    with {:ok, distance} <- N.context_user_to_device_distance(ctx, vec),
          do: distance
   end
 
@@ -415,8 +421,8 @@ defmodule Xairo.Context do
          do: distance
   end
 
-  def device_to_user_distance(%__MODULE__{context: ctx}, dx, dy) do
-    with {:ok, distance} <- N.context_device_to_user_distance(ctx, dx / 1, dy / 1),
+  def device_to_user_distance(%__MODULE__{context: ctx}, %Vector{} = vec) do
+    with {:ok, distance} <- N.context_device_to_user_distance(ctx, vec),
          do: distance
   end
 
