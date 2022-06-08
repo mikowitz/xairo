@@ -3,7 +3,7 @@ defmodule Xairo.ContextClipTest do
 
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface}
+  alias Xairo.{Context, ImageSurface, Rgba}
 
   import Context
 
@@ -15,20 +15,20 @@ defmodule Xairo.ContextClipTest do
       context
       |> rectangle(20, 20, 60, 70)
       |> clip_preserve()
-      |> set_source_rgb(0, 0, 0)
+      |> set_source(Rgba.new(0, 0, 0))
       |> stroke()
       |> move_to(10, 10)
       |> line_to(90, 90)
       |> stroke()
       |> rectangle(50, 0, 30, 30)
       |> clip()
-      |> set_source_rgb(0.5, 0, 0)
+      |> set_source(Rgba.new(0.5, 0, 0))
       |> stroke()
       |> move_to(30, 0)
       |> line_to(100, 70)
       |> stroke()
       |> reset_clip()
-      |> set_source_rgb(0, 0, 0.8)
+      |> set_source(Rgba.new(0, 0, 0.8))
       |> move_to(0, 30)
       |> line_to(70, 100)
       |> stroke()

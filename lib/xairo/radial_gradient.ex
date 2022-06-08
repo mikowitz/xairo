@@ -6,6 +6,7 @@ defmodule Xairo.RadialGradient do
   defstruct [:pattern]
 
   alias Xairo.Native, as: N
+  alias Xairo.Rgba
 
   def new(x1, y1, r1, x2, y2, r2) do
     %__MODULE__{
@@ -21,21 +22,8 @@ defmodule Xairo.RadialGradient do
     with {:ok, count} <- N.radial_gradient_color_stop_count(pattern), do: count
   end
 
-  def add_color_stop_rgb(%__MODULE__{pattern: pattern} = this, offset, red, green, blue) do
-    N.radial_gradient_add_color_stop_rgb(pattern, offset / 1, red / 1, green / 1, blue / 1)
-    this
-  end
-
-  def add_color_stop_rgba(%__MODULE__{pattern: pattern} = this, offset, red, green, blue, alpha) do
-    N.radial_gradient_add_color_stop_rgba(
-      pattern,
-      offset / 1,
-      red / 1,
-      green / 1,
-      blue / 1,
-      alpha / 1
-    )
-
+  def add_color_stop(%__MODULE__{pattern: pattern} = this, offset, %Rgba{} = rgba) do
+    N.radial_gradient_add_color_stop(pattern, offset / 1, rgba)
     this
   end
 

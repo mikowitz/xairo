@@ -11,6 +11,7 @@ mod path;
 mod pdf_surface;
 mod ps_surface;
 mod radial_gradient;
+mod rgba;
 mod solid_pattern;
 mod surface_pattern;
 mod svg_surface;
@@ -41,7 +42,6 @@ rustler::init!(
         context::context_new_from_pdf_surface,
         context::context_new_from_ps_surface,
         context::context_new_from_svg_surface,
-        context::context_set_source_rgb,
         context::context_set_source_rgba,
         context::context_set_source_linear_gradient,
         context::context_set_source_radial_gradient,
@@ -133,18 +133,15 @@ rustler::init!(
         linear_gradient::linear_gradient_new,
         linear_gradient::linear_gradient_linear_points,
         linear_gradient::linear_gradient_color_stop_count,
-        linear_gradient::linear_gradient_add_color_stop_rgb,
-        linear_gradient::linear_gradient_add_color_stop_rgba,
+        linear_gradient::linear_gradient_add_color_stop,
         linear_gradient::linear_gradient_color_stop_rgba,
         // radial gradient
         radial_gradient::radial_gradient_new,
         radial_gradient::radial_gradient_radial_circles,
         radial_gradient::radial_gradient_color_stop_count,
-        radial_gradient::radial_gradient_add_color_stop_rgb,
-        radial_gradient::radial_gradient_add_color_stop_rgba,
+        radial_gradient::radial_gradient_add_color_stop,
         radial_gradient::radial_gradient_color_stop_rgba,
         // solid pattern
-        solid_pattern::solid_pattern_from_rgb,
         solid_pattern::solid_pattern_from_rgba,
         solid_pattern::solid_pattern_rgba,
         // surface pattern
@@ -162,8 +159,7 @@ rustler::init!(
         mesh::mesh_curve_to,
         mesh::mesh_set_control_point,
         mesh::mesh_control_point,
-        mesh::mesh_set_corner_color_rgb,
-        mesh::mesh_set_corner_color_rgba,
+        mesh::mesh_set_corner_color,
         mesh::mesh_corner_color_rgba,
         mesh::mesh_path,
         // font face

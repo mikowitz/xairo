@@ -26,8 +26,7 @@ defmodule Xairo.Native do
   def context_new_from_ps_surface(_surface), do: error()
   def context_new_from_svg_surface(_surface), do: error()
 
-  def context_set_source_rgb(_context, _red, _green, _blue), do: error()
-  def context_set_source_rgba(_context, _red, _green, _blue, _alpha), do: error()
+  def context_set_source_rgba(_context, _rgba), do: error()
   def context_set_source_linear_gradient(_context, _pattern), do: error()
   def context_set_source_radial_gradient(_context, _pattern), do: error()
   def context_set_source_solid_pattern(_context, _pattern), do: error()
@@ -129,25 +128,18 @@ defmodule Xairo.Native do
   def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()
   def linear_gradient_linear_points(_gradient), do: error()
   def linear_gradient_color_stop_count(_gradient), do: error()
-  def linear_gradient_add_color_stop_rgb(_gradient, _offset, _red, _green, _blue), do: error()
-
-  def linear_gradient_add_color_stop_rgba(_gradient, _offset, _red, _green, _blue, _alpha),
-    do: error()
+  def linear_gradient_add_color_stop(_gradient, _offset, _rgba), do: error()
 
   def linear_gradient_color_stop_rgba(_gradient, _index), do: error()
 
   def radial_gradient_new(_x1, _y1, _r1, _x2, _y2, _r2), do: error()
   def radial_gradient_radial_circles(_gradient), do: error()
   def radial_gradient_color_stop_count(_gradient), do: error()
-  def radial_gradient_add_color_stop_rgb(_gradient, _offset, _red, _green, _blue), do: error()
-
-  def radial_gradient_add_color_stop_rgba(_gradient, _offset, _red, _green, _blue, _alpha),
-    do: error()
+  def radial_gradient_add_color_stop(_gradient, _offset, _rgba), do: error()
 
   def radial_gradient_color_stop_rgba(_gradient, _index), do: error()
 
-  def solid_pattern_from_rgb(_red, _green, _blue), do: error()
-  def solid_pattern_from_rgba(_red, _green, _blue, _alpha), do: error()
+  def solid_pattern_from_rgba(_rgba), do: error()
   def solid_pattern_rgba(_pattern), do: error()
 
   def surface_pattern_create_from_image_surface(_surface), do: error()
@@ -164,8 +156,7 @@ defmodule Xairo.Native do
   def mesh_curve_to(_mesh, _x1, _y1, _x2, _y2, _x3, _y3), do: error()
   def mesh_set_control_point(_mesh, _corner, _x, _y), do: error()
   def mesh_control_point(_mesh, _patch, _corner), do: error()
-  def mesh_set_corner_color_rgb(_mesh, _corner, _red, _green, _blue), do: error()
-  def mesh_set_corner_color_rgba(_mesh, _corner, _red, _green, _blue, _alpha), do: error()
+  def mesh_set_corner_color(_mesh, _corner, _rgba), do: error()
   def mesh_corner_color_rgba(_mesh, _patch, _corner), do: error()
   def mesh_path(_mesh, _patch), do: error()
 

@@ -1,7 +1,7 @@
 defmodule Xairo.RadialGradientTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.RadialGradient
+  alias Xairo.{RadialGradient, Rgba}
 
   describe "new/4" do
     test "returns a RadialGradient struct" do
@@ -19,28 +19,17 @@ defmodule Xairo.RadialGradientTest do
     end
   end
 
-  describe "add_color_stop_rgb" do
+  describe "add_color_stop" do
     test "sets a color stop at the given offset with the given RGB color" do
       gradient =
         RadialGradient.new(10, 10, 20, 75, 80, 30)
-        |> RadialGradient.add_color_stop_rgb(0.8, 0.5, 0, 1)
-        |> RadialGradient.add_color_stop_rgb(0.2, 1, 0, 0)
+        |> RadialGradient.add_color_stop(0.8, Rgba.new(0.5, 0, 1))
+        |> RadialGradient.add_color_stop(0.2, Rgba.new(1, 0, 0, 0.3))
 
       assert RadialGradient.color_stop_count(gradient) == 2
 
-      assert RadialGradient.color_stop_rgba(gradient, 0) == {0.2, 1.0, 0.0, 0.0, 1.0}
-      assert RadialGradient.color_stop_rgba(gradient, 1) == {0.8, 0.5, 0.0, 1.0, 1.0}
+      assert RadialGradient.color_stop_rgba(gradient, 0) == {0.2, Rgba.new(1.0, 0.0, 0.0, 0.3)}
+      assert RadialGradient.color_stop_rgba(gradient, 1) == {0.8, Rgba.new(0.5, 0.0, 1.0, 1.0)}
     end
-  end
-
-  describe "add_color_stop_rgba" do
-    gradient =
-      RadialGradient.new(10, 10, 20, 75, 80, 30)
-      |> RadialGradient.add_color_stop_rgba(0.5, 0.5, 0, 1, 0.3)
-
-    assert RadialGradient.color_stop_count(gradient) == 1
-
-    assert RadialGradient.color_stop_rgba(gradient, 0) == {0.5, 0.5, 0.0, 1.0, 0.3}
-    assert RadialGradient.color_stop_rgba(gradient, 1) == {:error, :invalid_index}
   end
 end

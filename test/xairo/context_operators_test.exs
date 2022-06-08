@@ -7,14 +7,14 @@ defmodule Xairo.ContextOperatorsTest do
 
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface}
+  alias Xairo.{Context, ImageSurface, Rgba}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
 
     context =
       Context.new(surface)
-      |> Context.set_source_rgba(0.7, 0, 0, 0.8)
+      |> Context.set_source(Rgba.new(0.7, 0, 0, 0.8))
       |> Context.rectangle(0, 0, 60, 45)
       |> Context.fill()
 
@@ -206,7 +206,7 @@ defmodule Xairo.ContextOperatorsTest do
   defp test_operator(context, surface, operator) do
     context
     |> Context.set_operator(operator)
-    |> Context.set_source_rgba(0, 0, 0.9, 0.4)
+    |> Context.set_source(Rgba.new(0, 0, 0.9, 0.4))
     |> Context.rectangle(25, 15, 60, 45)
     |> Context.fill()
 

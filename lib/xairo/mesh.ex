@@ -6,7 +6,7 @@ defmodule Xairo.Mesh do
   defstruct [:pattern]
 
   alias Xairo.Native, as: N
-  alias Xairo.Path
+  alias Xairo.{Path, Rgba}
 
   def new do
     %__MODULE__{
@@ -51,15 +51,8 @@ defmodule Xairo.Mesh do
     with {:ok, point} <- N.mesh_control_point(mesh, patch, corner), do: point
   end
 
-  def set_corner_color_rgb(%__MODULE__{pattern: mesh} = this, corner, red, green, blue) do
-    with {:ok, _} <- N.mesh_set_corner_color_rgb(mesh, corner, red / 1, green / 1, blue / 1),
-         do: this
-  end
-
-  def set_corner_color_rgba(%__MODULE__{pattern: mesh} = this, corner, red, green, blue, alpha) do
-    with {:ok, _} <-
-           N.mesh_set_corner_color_rgba(mesh, corner, red / 1, green / 1, blue / 1, alpha / 1),
-         do: this
+  def set_corner_color(%__MODULE__{pattern: mesh} = this, corner, %Rgba{} = rgba) do
+    with {:ok, _} <- N.mesh_set_corner_color(mesh, corner, rgba), do: this
   end
 
   def corner_color_rgba(%__MODULE__{pattern: mesh}, path, corner) do

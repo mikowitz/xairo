@@ -1,4 +1,4 @@
-use crate::{enums::error::Error, path::Path, path::PathRaw};
+use crate::{enums::error::Error, path::Path, path::PathRaw, rgba::Rgba};
 use rustler::ResourceArc;
 
 pub struct MeshRaw {
@@ -73,16 +73,11 @@ fn mesh_control_point(mesh: Mesh, patch: usize, corner: u8) -> Result<(f64, f64)
 }
 
 #[rustler::nif]
-fn mesh_set_corner_color_rgb(
-    mesh: Mesh,
-    corner: u8,
-    red: f64,
-    green: f64,
-    blue: f64,
-) -> Result<(), Error> {
+fn mesh_set_corner_color(mesh: Mesh, corner: u8, rgba: Rgba) -> Result<(), Error> {
     match mesh_corner(corner) {
         Ok(corner) => {
-            mesh.mesh.set_corner_color_rgb(corner, red, green, blue);
+            let (r, g, b, a) = rgba.to_tuple();
+            mesh.mesh.set_corner_color_rgba(corner, r, g, b, a);
             Ok(())
         }
         Err(err) => Err(err),
@@ -90,33 +85,10 @@ fn mesh_set_corner_color_rgb(
 }
 
 #[rustler::nif]
-fn mesh_set_corner_color_rgba(
-    mesh: Mesh,
-    corner: u8,
-    red: f64,
-    green: f64,
-    blue: f64,
-    alpha: f64,
-) -> Result<(), Error> {
-    match mesh_corner(corner) {
-        Ok(corner) => {
-            mesh.mesh
-                .set_corner_color_rgba(corner, red, green, blue, alpha);
-            Ok(())
-        }
-        Err(err) => Err(err),
-    }
-}
-
-#[rustler::nif]
-fn mesh_corner_color_rgba(
-    mesh: Mesh,
-    patch: usize,
-    corner: u8,
-) -> Result<(f64, f64, f64, f64), Error> {
+fn mesh_corner_color_rgba(mesh: Mesh, patch: usize, corner: u8) -> Result<Rgba, Error> {
     match mesh_corner(corner) {
         Ok(corner) => match mesh.mesh.corner_color_rgba(patch, corner) {
-            Ok(rgba) => Ok(rgba),
+            Ok((r, g, b, a)) => Ok(Rgba::new(r, g, b, a)),
             Err(err) => Err(err.into()),
         },
         Err(err) => Err(err),

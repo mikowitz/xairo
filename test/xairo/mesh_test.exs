@@ -1,7 +1,7 @@
 defmodule Xairo.MeshTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.Mesh
+  alias Xairo.{Mesh, Rgba}
 
   describe "new/0" do
     test "returns a mesh struct" do
@@ -97,7 +97,7 @@ defmodule Xairo.MeshTest do
     end
   end
 
-  describe "set_corner_color_rgb/4" do
+  describe "set_corner_color/5" do
     test "sets a color at the given corner for the current patch" do
       mesh =
         Mesh.new()
@@ -106,26 +106,10 @@ defmodule Xairo.MeshTest do
         |> Mesh.line_to(100, 50)
         |> Mesh.line_to(50, 100)
         |> Mesh.line_to(0, 0)
-        |> Mesh.set_corner_color_rgb(0, 1, 0, 0)
+        |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0, 0.5))
         |> Mesh.end_patch()
 
-      assert Mesh.corner_color_rgba(mesh, 0, 0) == {1.0, 0.0, 0.0, 1.0}
-    end
-  end
-
-  describe "set_corner_color_rgba/5" do
-    test "sets a color at the given corner for the current patch" do
-      mesh =
-        Mesh.new()
-        |> Mesh.begin_patch()
-        |> Mesh.move_to(0, 0)
-        |> Mesh.line_to(100, 50)
-        |> Mesh.line_to(50, 100)
-        |> Mesh.line_to(0, 0)
-        |> Mesh.set_corner_color_rgba(0, 1, 0, 0, 0.5)
-        |> Mesh.end_patch()
-
-      assert Mesh.corner_color_rgba(mesh, 0, 0) == {1.0, 0.0, 0.0, 0.5}
+      assert Mesh.corner_color_rgba(mesh, 0, 0) == Rgba.new(1.0, 0.0, 0.0, 0.5)
     end
   end
 
@@ -138,10 +122,10 @@ defmodule Xairo.MeshTest do
         |> Mesh.line_to(100, 50)
         |> Mesh.line_to(50, 100)
         |> Mesh.line_to(0, 0)
-        |> Mesh.set_corner_color_rgb(0, 1, 0, 0)
+        |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.end_patch()
 
-      assert Mesh.corner_color_rgba(mesh, 0, 3) == {0.0, 0.0, 0.0, 0.0}
+      assert Mesh.corner_color_rgba(mesh, 0, 3) == Rgba.new(0.0, 0.0, 0.0, 0.0)
     end
 
     test "returns an error if an invalid corner is given" do
@@ -152,7 +136,7 @@ defmodule Xairo.MeshTest do
         |> Mesh.line_to(100, 50)
         |> Mesh.line_to(50, 100)
         |> Mesh.line_to(0, 0)
-        |> Mesh.set_corner_color_rgb(0, 1, 0, 0)
+        |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.end_patch()
 
       assert Mesh.corner_color_rgba(mesh, 0, 4) == {:error, :invalid_index}
@@ -166,7 +150,7 @@ defmodule Xairo.MeshTest do
         |> Mesh.line_to(100, 50)
         |> Mesh.line_to(50, 100)
         |> Mesh.line_to(0, 0)
-        |> Mesh.set_corner_color_rgb(0, 1, 0, 0)
+        |> Mesh.set_corner_color(0, Rgba.new(1, 0, 0))
         |> Mesh.end_patch()
 
       assert Mesh.corner_color_rgba(mesh, 1, 0) == {:error, :invalid_index}

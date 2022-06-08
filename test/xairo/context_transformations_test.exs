@@ -3,18 +3,18 @@ defmodule Xairo.ContextTransformationsTest do
 
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface}
+  alias Xairo.{Context, ImageSurface, Rgba}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
 
     context =
       Context.new(surface)
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.move_to(10, 10)
       |> Context.line_to(30, 30)
       |> Context.stroke()
-      |> Context.set_source_rgb(1, 0, 0)
+      |> Context.set_source(Rgba.new(1, 0, 0))
 
     {:ok, surface: surface, context: context}
   end

@@ -2,7 +2,7 @@ defmodule Xairo.ContextSettingsTest do
   use ExUnit.Case, async: true
   import Xairo.Test.Support.ImageHelpers
 
-  alias Xairo.{Context, ImageSurface}
+  alias Xairo.{Context, ImageSurface, Rgba}
 
   setup do
     surface = ImageSurface.create(:argb32, 100, 100)
@@ -30,7 +30,7 @@ defmodule Xairo.ContextSettingsTest do
       end
 
       ctx
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> draw.(25)
       |> Context.set_antialias(:none)
       |> draw.(20)
@@ -75,18 +75,18 @@ defmodule Xairo.ContextSettingsTest do
       |> Context.new_sub_path()
       |> Context.arc(20, 20, 15, 0, 2 * :math.pi())
       |> Context.set_fill_rule(:even_odd)
-      |> Context.set_source_rgb(0, 0.5, 0)
+      |> Context.set_source(Rgba.new(0, 0.5, 0))
       |> Context.fill_preserve()
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.stroke()
       |> Context.translate(25, 50)
       |> Context.rectangle(10, 10, 50, 20)
       |> Context.new_sub_path()
       |> Context.arc(20, 20, 15, 0, 2 * :math.pi())
       |> Context.set_fill_rule(:winding)
-      |> Context.set_source_rgb(0, 0, 1)
+      |> Context.set_source(Rgba.new(0, 0, 1))
       |> Context.fill_preserve()
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.stroke()
 
       assert_image(sfc, "fill_rule.png")
@@ -168,9 +168,9 @@ defmodule Xairo.ContextSettingsTest do
   describe "dashes/3" do
     test "sets the dash pattern for the context", %{surface: sfc, context: ctx} do
       ctx
-      |> Context.set_source_rgb(0.5, 0, 1)
+      |> Context.set_source(Rgba.new(0.5, 0, 1))
       |> Context.paint()
-      |> Context.set_source_rgb(0, 0, 0)
+      |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.set_dash([5, 2], 0)
       |> Context.move_to(10, 10)
       |> Context.line_to(90, 90)
