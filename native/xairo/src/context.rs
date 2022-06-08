@@ -18,6 +18,7 @@ use crate::{
     solid_pattern::SolidPattern,
     surface_pattern::SurfacePattern,
     svg_surface::SvgSurface,
+    vector::Vector,
 };
 
 use rustler::ResourceArc;
@@ -152,7 +153,10 @@ fn context_curve_to(ctx: Context, point1: Point, point2: Point, point3: Point) {
 }
 
 #[rustler::nif]
-fn context_rel_curve_to(ctx: Context, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64) {
+fn context_rel_curve_to(ctx: Context, vec1: Vector, vec2: Vector, vec3: Vector) {
+    let (x1, y1) = vec1.to_tuple();
+    let (x2, y2) = vec2.to_tuple();
+    let (x3, y3) = vec3.to_tuple();
     ctx.context.rel_curve_to(x1, y1, x2, y2, x3, y3);
 }
 
@@ -163,7 +167,8 @@ fn context_line_to(ctx: Context, point: Point) {
 }
 
 #[rustler::nif]
-fn context_rel_line_to(ctx: Context, x: f64, y: f64) {
+fn context_rel_line_to(ctx: Context, vec: Vector) {
+    let (x, y) = vec.to_tuple();
     ctx.context.rel_line_to(x, y);
 }
 
@@ -180,7 +185,8 @@ fn context_move_to(ctx: Context, point: Point) {
 }
 
 #[rustler::nif]
-fn context_rel_move_to(ctx: Context, x: f64, y: f64) {
+fn context_rel_move_to(ctx: Context, vec: Vector) {
+    let (x, y) = vec.to_tuple();
     ctx.context.rel_move_to(x, y);
 }
 
@@ -555,13 +561,10 @@ fn context_user_to_device(context: Context, point: Point) -> Point {
 }
 
 #[rustler::nif]
-fn context_user_to_device_distance(
-    context: Context,
-    dx: f64,
-    dy: f64,
-) -> Result<(f64, f64), Error> {
-    match context.context.user_to_device_distance(dx, dy) {
-        Ok(distance) => Ok(distance),
+fn context_user_to_device_distance(context: Context, vector: Vector) -> Result<Vector, Error> {
+    let (x, y) = vector.to_tuple();
+    match context.context.user_to_device_distance(x, y) {
+        Ok((x, y)) => Ok(Vector { x, y }),
         Err(err) => Err(err.into()),
     }
 }
@@ -576,13 +579,10 @@ fn context_device_to_user(context: Context, point: Point) -> Result<Point, Error
 }
 
 #[rustler::nif]
-fn context_device_to_user_distance(
-    context: Context,
-    dx: f64,
-    dy: f64,
-) -> Result<(f64, f64), Error> {
-    match context.context.device_to_user_distance(dx, dy) {
-        Ok(distance) => Ok(distance),
+fn context_device_to_user_distance(context: Context, vector: Vector) -> Result<Vector, Error> {
+    let (x, y) = vector.to_tuple();
+    match context.context.device_to_user_distance(x, y) {
+        Ok((x, y)) => Ok(Vector { x, y }),
         Err(err) => Err(err.into()),
     }
 }

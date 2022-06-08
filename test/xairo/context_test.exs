@@ -16,7 +16,8 @@ defmodule Xairo.ContextTest do
     Rgba,
     SolidPattern,
     SurfacePattern,
-    SvgSurface
+    SvgSurface,
+    Vector
   }
 
   setup do
@@ -69,7 +70,7 @@ defmodule Xairo.ContextTest do
       |> Context.set_source(Rgba.new(0, 0, 1))
       |> Context.curve_to(Point.new(10, 30), Point.new(50, 5), Point.new(80, 20))
       |> Context.move_to(Point.new(10, 50))
-      |> Context.rel_curve_to(15, -5, 40, 20, 60, -20)
+      |> Context.rel_curve_to(Vector.new(15, -5), Vector.new(40, 20), Vector.new(60, -20))
       |> Context.stroke()
 
       assert_image(sfc, "curve_to.png")
@@ -85,7 +86,7 @@ defmodule Xairo.ContextTest do
       |> Context.set_source(Rgba.new(1, 1, 0))
       |> Context.move_to(Point.new(10, 10))
       |> Context.line_to(Point.new(50, 60))
-      |> Context.rel_line_to(-20, -10)
+      |> Context.rel_line_to(Vector.new(-20, -10))
       |> Context.stroke()
 
       assert_image(sfc, "line_to.png")
@@ -120,7 +121,7 @@ defmodule Xairo.ContextTest do
       |> Context.move_to(Point.new(10, 10))
       |> Context.line_to(Point.new(40, 15))
       |> Context.line_to(Point.new(60, 40))
-      |> Context.rel_move_to(-20, -10)
+      |> Context.rel_move_to(Vector.new(-20, -10))
       |> Context.line_to(Point.new(5, 80))
       |> Context.line_to(Point.new(20, 90))
       |> Context.close_path()
@@ -852,7 +853,7 @@ defmodule Xairo.ContextTest do
         |> Context.scale(3, 4)
         |> Context.translate(10, 20)
 
-      assert Context.user_to_device_distance(ctx, 10, 10) == {30.0, 40.0}
+      assert Context.user_to_device_distance(ctx, Vector.new(10, 10)) == Vector.new(30.0, 40.0)
     end
 
     test "transformation order affects the end result", %{context: ctx} do
@@ -861,7 +862,7 @@ defmodule Xairo.ContextTest do
         |> Context.translate(10, 20)
         |> Context.scale(3, 4)
 
-      assert Context.user_to_device_distance(ctx, 10, 10) == {30.0, 40.0}
+      assert Context.user_to_device_distance(ctx, Vector.new(10, 10)) == Vector.new(30.0, 40.0)
     end
   end
 
@@ -894,7 +895,7 @@ defmodule Xairo.ContextTest do
         |> Context.scale(3, 4)
         |> Context.translate(10, 20)
 
-      {x, y} = Context.device_to_user_distance(ctx, 10, 10)
+      %Vector{x: x, y: y} = Context.device_to_user_distance(ctx, Vector.new(10, 10))
       assert_in_delta x, 3.3333, 0.0001
       assert y == 2.5
     end
@@ -905,7 +906,7 @@ defmodule Xairo.ContextTest do
         |> Context.translate(10, 20)
         |> Context.scale(3, 4)
 
-      {x, y} = Context.device_to_user_distance(ctx, 10, 10)
+      %Vector{x: x, y: y} = Context.device_to_user_distance(ctx, Vector.new(10, 10))
       assert_in_delta x, 3.3333, 0.0001
       assert y == 2.5
     end

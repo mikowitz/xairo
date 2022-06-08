@@ -1,7 +1,7 @@
 defmodule Xairo.MatrixTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Matrix, Point}
+  alias Xairo.{Matrix, Point, Vector}
 
   describe "new/6" do
     test "returns a Matrix struct" do
@@ -23,19 +23,19 @@ defmodule Xairo.MatrixTest do
     test "the identity matrix returns the same distance" do
       matrix = Matrix.identity()
 
-      assert Matrix.transform_distance(matrix, 3, 4) == {3, 4}
+      assert Matrix.transform_distance(matrix, Vector.new(3, 4)) == Vector.new(3, 4)
     end
 
     test "scales the distance by the scaling factors" do
       matrix = Matrix.new(2, 0, 0, 3, 0, 0)
 
-      assert Matrix.transform_distance(matrix, 3, 4) == {6, 12}
+      assert Matrix.transform_distance(matrix, Vector.new(3, 4)) == Vector.new(6, 12)
     end
 
     test "ignores the translation factors" do
       matrix = Matrix.new(1, 0, 0, 1, 10, 20)
 
-      assert Matrix.transform_distance(matrix, 3, 4) == {3, 4}
+      assert Matrix.transform_distance(matrix, Vector.new(3, 4)) == Vector.new(3, 4)
     end
   end
 

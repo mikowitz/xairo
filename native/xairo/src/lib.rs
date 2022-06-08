@@ -16,6 +16,7 @@ mod rgba;
 mod solid_pattern;
 mod surface_pattern;
 mod svg_surface;
+mod vector;
 
 rustler::init!(
     "Elixir.Xairo.Native",
