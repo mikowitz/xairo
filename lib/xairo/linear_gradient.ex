@@ -5,11 +5,11 @@ defmodule Xairo.LinearGradient do
   defstruct [:pattern]
 
   alias Xairo.Native, as: N
-  alias Xairo.Rgba
+  alias Xairo.{Point, Rgba}
 
-  def new(x1, y1, x2, y2) do
+  def new(%Point{} = start, %Point{} = stop) do
     %__MODULE__{
-      pattern: N.linear_gradient_new(x1 / 1, y1 / 1, x2 / 1, y2 / 1)
+      pattern: N.linear_gradient_new(start, stop)
     }
   end
 

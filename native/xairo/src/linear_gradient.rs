@@ -1,4 +1,4 @@
-use crate::{enums::error::Error, rgba::Rgba};
+use crate::{enums::error::Error, point::Point, rgba::Rgba};
 use rustler::ResourceArc;
 
 pub struct LinearGradientRaw {
@@ -11,16 +11,18 @@ unsafe impl Sync for LinearGradientRaw {}
 pub type LinearGradient = ResourceArc<LinearGradientRaw>;
 
 #[rustler::nif]
-fn linear_gradient_new(x1: f64, y1: f64, x2: f64, y2: f64) -> LinearGradient {
+fn linear_gradient_new(start: Point, stop: Point) -> LinearGradient {
+    let (x1, y1) = start.to_tuple();
+    let (x2, y2) = stop.to_tuple();
     ResourceArc::new(LinearGradientRaw {
         gradient: cairo::LinearGradient::new(x1, y1, x2, y2),
     })
 }
 
 #[rustler::nif]
-fn linear_gradient_linear_points(gradient: LinearGradient) -> Result<(f64, f64, f64, f64), Error> {
+fn linear_gradient_linear_points(gradient: LinearGradient) -> Result<(Point, Point), Error> {
     match gradient.gradient.linear_points() {
-        Ok(points) => Ok(points),
+        Ok((x1, y1, x2, y2)) => Ok((Point { x: x1, y: y1 }, Point { x: x2, y: y2 })),
         Err(err) => Err(err.into()),
     }
 }

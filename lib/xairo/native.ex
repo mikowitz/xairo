@@ -127,14 +127,13 @@ defmodule Xairo.Native do
 
   def path_iter(_path), do: error()
 
-  def linear_gradient_new(_x1, _y1, _x2, _y2), do: error()
+  def linear_gradient_new(_start, _stop), do: error()
   def linear_gradient_linear_points(_gradient), do: error()
   def linear_gradient_color_stop_count(_gradient), do: error()
   def linear_gradient_add_color_stop(_gradient, _offset, _rgba), do: error()
-
   def linear_gradient_color_stop_rgba(_gradient, _index), do: error()
 
-  def radial_gradient_new(_x1, _y1, _r1, _x2, _y2, _r2), do: error()
+  def radial_gradient_new(_start, _r1, _stop, _r2), do: error()
   def radial_gradient_radial_circles(_gradient), do: error()
   def radial_gradient_color_stop_count(_gradient), do: error()
   def radial_gradient_add_color_stop(_gradient, _offset, _rgba), do: error()

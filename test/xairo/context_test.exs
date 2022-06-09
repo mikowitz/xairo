@@ -393,7 +393,7 @@ defmodule Xairo.ContextTest do
       context = Context.new(surface)
 
       lg =
-        LinearGradient.new(0, 0, 100, 50)
+        LinearGradient.new(Point.new(0, 0), Point.new(100, 50))
         |> LinearGradient.add_color_stop(0.2, Rgba.new(1, 0, 0))
         |> LinearGradient.add_color_stop(0.8, Rgba.new(0.5, 0, 1))
 
@@ -412,7 +412,7 @@ defmodule Xairo.ContextTest do
       context = Context.new(surface)
 
       rg =
-        RadialGradient.new(50, 50, 10, 50, 50, 50)
+        RadialGradient.new(Point.new(50, 50), 10, Point.new(50, 50), 50)
         |> RadialGradient.add_color_stop(0.2, Rgba.new(1, 0, 0))
         |> RadialGradient.add_color_stop(1, Rgba.new(0.5, 0, 1))
 
@@ -686,7 +686,7 @@ defmodule Xairo.ContextTest do
       context: ctx
     } do
       mask =
-        RadialGradient.new(50, 50, 1, 50, 50, 75)
+        RadialGradient.new(Point.new(50, 50), 1, Point.new(50, 50), 75)
         |> RadialGradient.add_color_stop(0, Rgba.new(0, 0, 0, 1))
         |> RadialGradient.add_color_stop(1, Rgba.new(0, 0, 0, 0))
 
@@ -699,7 +699,7 @@ defmodule Xairo.ContextTest do
 
     test "works with a linear gradient", %{surface: sfc, context: ctx} do
       mask =
-        LinearGradient.new(0, 0, 100, 100)
+        LinearGradient.new(Point.new(0, 0), Point.new(100, 100))
         |> LinearGradient.add_color_stop(0, Rgba.new(0, 0, 0, 1))
         |> LinearGradient.add_color_stop(1, Rgba.new(0, 0, 0, 0))
 

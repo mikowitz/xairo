@@ -1,4 +1,4 @@
-use crate::{enums::error::Error, rgba::Rgba};
+use crate::{enums::error::Error, point::Point, rgba::Rgba};
 use rustler::ResourceArc;
 
 pub struct RadialGradientRaw {
@@ -11,7 +11,9 @@ unsafe impl Sync for RadialGradientRaw {}
 pub type RadialGradient = ResourceArc<RadialGradientRaw>;
 
 #[rustler::nif]
-fn radial_gradient_new(x1: f64, y1: f64, r1: f64, x2: f64, y2: f64, r2: f64) -> RadialGradient {
+fn radial_gradient_new(start: Point, r1: f64, stop: Point, r2: f64) -> RadialGradient {
+    let (x1, y1) = start.to_tuple();
+    let (x2, y2) = stop.to_tuple();
     ResourceArc::new(RadialGradientRaw {
         gradient: cairo::RadialGradient::new(x1, y1, r1, x2, y2, r2),
     })
@@ -20,9 +22,11 @@ fn radial_gradient_new(x1: f64, y1: f64, r1: f64, x2: f64, y2: f64, r2: f64) -> 
 #[rustler::nif]
 fn radial_gradient_radial_circles(
     gradient: RadialGradient,
-) -> Result<(f64, f64, f64, f64, f64, f64), Error> {
+) -> Result<((Point, f64), (Point, f64)), Error> {
     match gradient.gradient.radial_circles() {
-        Ok(circles) => Ok(circles),
+        Ok((x1, y1, r1, x2, y2, r2)) => {
+            Ok(((Point { x: x1, y: y1 }, r1), (Point { x: x2, y: y2 }, r2)))
+        }
         Err(err) => Err(err.into()),
     }
 }
