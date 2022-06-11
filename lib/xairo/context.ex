@@ -124,8 +124,8 @@ defmodule Xairo.Context do
     this
   end
 
-  def line_to(%__MODULE__{context: ctx} = this, %Point{} = point) do
-    N.context_line_to(ctx, point)
+  def line_to(%__MODULE__{context: ctx} = this, point) do
+    N.context_line_to(ctx, Point.from(point))
     this
   end
 
@@ -139,8 +139,8 @@ defmodule Xairo.Context do
     this
   end
 
-  def move_to(%__MODULE__{context: ctx} = this, %Point{} = point) do
-    N.context_move_to(ctx, point)
+  def move_to(%__MODULE__{context: ctx} = this, point) do
+    N.context_move_to(ctx, Point.from(point))
     this
   end
 
@@ -453,4 +453,19 @@ defmodule Xairo.Context do
     with {:ok, rectangle_list} <- N.context_clip_rectangle_list(ctx),
          do: rectangle_list
   end
+
+  def path_extents(%__MODULE__{context: ctx}) do
+    with {:ok, extents} <- N.context_path_extents(ctx), do: extents
+  end
+
+  def fill_extents(%__MODULE__{context: ctx}) do
+    with {:ok, extents} <- N.context_fill_extents(ctx), do: extents
+  end
+
+  def stroke_extents(%__MODULE__{context: ctx}) do
+    with {:ok, extents} <- N.context_stroke_extents(ctx), do: extents
+  end
+
+  defdelegate font_extents(context), to: Xairo.FontExtents, as: :for
+  defdelegate text_extents(context, text), to: Xairo.TextExtents, as: :for
 end

@@ -612,9 +612,9 @@ fn context_in_clip(context: Context, point: Point) -> Result<bool, Error> {
 }
 
 #[rustler::nif]
-fn context_clip_extents(context: Context) -> Result<(f64, f64, f64, f64), Error> {
+fn context_clip_extents(context: Context) -> Result<(Point, Point), Error> {
     match context.context.clip_extents() {
-        Ok(extents) => Ok(extents),
+        Ok((x1, y1, x2, y2)) => Ok((Point { x: x1, y: y1 }, Point { x: x2, y: y2 })),
         Err(err) => Err(err.into()),
     }
 }
@@ -630,6 +630,30 @@ fn context_clip_rectangle_list(context: Context) -> Result<Vec<(Point, f64, f64)
 
             Ok(rects)
         }
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_path_extents(context: Context) -> Result<(Point, Point), Error> {
+    match context.context.path_extents() {
+        Ok((x1, y1, x2, y2)) => Ok((Point { x: x1, y: y1 }, Point { x: x2, y: y2 })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_fill_extents(context: Context) -> Result<(Point, Point), Error> {
+    match context.context.fill_extents() {
+        Ok((x1, y1, x2, y2)) => Ok((Point { x: x1, y: y1 }, Point { x: x2, y: y2 })),
+        Err(err) => Err(err.into()),
+    }
+}
+
+#[rustler::nif]
+fn context_stroke_extents(context: Context) -> Result<(Point, Point), Error> {
+    match context.context.stroke_extents() {
+        Ok((x1, y1, x2, y2)) => Ok((Point { x: x1, y: y1 }, Point { x: x2, y: y2 })),
         Err(err) => Err(err.into()),
     }
 }

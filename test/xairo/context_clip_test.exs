@@ -77,25 +77,25 @@ defmodule Xairo.ContextClipTest do
       surface = ImageSurface.create(:argb32, 100, 100)
       context = Context.new(surface)
 
-      assert clip_extents(context) == {0.0, 0.0, 100.0, 100.0}
+      assert clip_extents(context) == {Point.new(0, 0), Point.new(100, 100)}
 
       context =
         context
         |> rectangle(Point.new(20, 20), 60, 70)
         |> clip()
 
-      assert clip_extents(context) == {20.0, 20.0, 80.0, 90.0}
+      assert clip_extents(context) == {Point.new(20, 20), Point.new(80, 90)}
 
       context =
         context
         |> rectangle(Point.new(50, 0), 30, 30)
         |> clip()
 
-      assert clip_extents(context) == {50.0, 20.0, 80.0, 30.0}
+      assert clip_extents(context) == {Point.new(50, 20), Point.new(80, 30)}
 
       context = reset_clip(context)
 
-      assert clip_extents(context) == {0.0, 0.0, 100.0, 100.0}
+      assert clip_extents(context) == {Point.new(0, 0), Point.new(100, 100)}
     end
   end
 
@@ -126,7 +126,7 @@ defmodule Xairo.ContextClipTest do
       |> arc(Point.new(50, 50), 25, 0, :math.pi() * 2)
       |> clip()
 
-      assert clip_extents(context) == {25.0, 25.0, 75.0, 75.0}
+      assert clip_extents(context) == {Point.new(25, 25), Point.new(75, 75)}
 
       assert clip_rectangle_list(context) == {:error, :clip_not_representable}
     end

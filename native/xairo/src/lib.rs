@@ -2,6 +2,7 @@ use rustler::{Env, Term};
 
 mod context;
 mod enums;
+mod font_extents;
 mod font_face;
 mod image_surface;
 mod linear_gradient;
@@ -16,6 +17,7 @@ mod rgba;
 mod solid_pattern;
 mod surface_pattern;
 mod svg_surface;
+mod text_extents;
 mod vector;
 
 rustler::init!(
@@ -129,6 +131,11 @@ rustler::init!(
         context::context_in_clip,
         context::context_clip_extents,
         context::context_clip_rectangle_list,
+        // extents
+        context::context_path_extents,
+        context::context_fill_extents,
+        context::context_stroke_extents,
+        // CONTEXT END
         // path
         path::path_iter,
         // linear gradient
@@ -180,6 +187,10 @@ rustler::init!(
         matrix::matrix_rotate,
         matrix::matrix_invert,
         matrix::matrix_multiply,
+        // font extents
+        font_extents::font_extents_font_extents,
+        // text extents
+        text_extents::text_extents_text_extents,
     ],
     load = on_load
 );
