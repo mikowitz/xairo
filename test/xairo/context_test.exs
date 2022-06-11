@@ -510,9 +510,7 @@ defmodule Xairo.ContextTest do
 
       assert_image(surface, "mesh.png")
     end
-  end
 
-  describe "set_source_surface/4" do
     test "sets a surface as the color source at the given coordinates" do
       surface = ImageSurface.create(:argb32, 100, 100)
       context = Context.new(surface)
@@ -535,7 +533,7 @@ defmodule Xairo.ContextTest do
       context
       |> Context.set_source(Rgba.new(0, 0, 0))
       |> Context.paint()
-      |> Context.set_source_surface(source_surface, Point.new(20, 10))
+      |> Context.set_source(source_surface, Point.new(20, 10))
       |> Context.set_line_width(20)
       |> Context.move_to(Point.new(0, 0))
       |> Context.line_to(Point.new(100, 100))
@@ -826,7 +824,7 @@ defmodule Xairo.ContextTest do
     end
   end
 
-  describe "user_to_device/3" do
+  describe "user_to_device/2 passing a point" do
     test "translates a coordinate from user space to device space using the CTM", %{context: ctx} do
       ctx =
         ctx
@@ -846,14 +844,14 @@ defmodule Xairo.ContextTest do
     end
   end
 
-  describe "user_to_device_distance/3" do
+  describe "user_to_device/2 passing a vector" do
     test "translates a distance from user space to device space using the CTM", %{context: ctx} do
       ctx =
         ctx
         |> Context.scale(3, 4)
         |> Context.translate(10, 20)
 
-      assert Context.user_to_device_distance(ctx, Vector.new(10, 10)) == Vector.new(30.0, 40.0)
+      assert Context.user_to_device(ctx, Vector.new(10, 10)) == Vector.new(30.0, 40.0)
     end
 
     test "transformation order affects the end result", %{context: ctx} do
@@ -862,11 +860,11 @@ defmodule Xairo.ContextTest do
         |> Context.translate(10, 20)
         |> Context.scale(3, 4)
 
-      assert Context.user_to_device_distance(ctx, Vector.new(10, 10)) == Vector.new(30.0, 40.0)
+      assert Context.user_to_device(ctx, Vector.new(10, 10)) == Vector.new(30.0, 40.0)
     end
   end
 
-  describe "device_to_user/3" do
+  describe "device_to_user/2 passing a point" do
     test "translates a coordinate from user space to device space using the CTM", %{context: ctx} do
       ctx =
         ctx
@@ -888,14 +886,14 @@ defmodule Xairo.ContextTest do
     end
   end
 
-  describe "device_to_user_distance/3" do
+  describe "device_to_user/2 passing a vector" do
     test "translates a distance from user space to device space using the CTM", %{context: ctx} do
       ctx =
         ctx
         |> Context.scale(3, 4)
         |> Context.translate(10, 20)
 
-      %Vector{x: x, y: y} = Context.device_to_user_distance(ctx, Vector.new(10, 10))
+      %Vector{x: x, y: y} = Context.device_to_user(ctx, Vector.new(10, 10))
       assert_in_delta x, 3.3333, 0.0001
       assert y == 2.5
     end
@@ -906,7 +904,7 @@ defmodule Xairo.ContextTest do
         |> Context.translate(10, 20)
         |> Context.scale(3, 4)
 
-      %Vector{x: x, y: y} = Context.device_to_user_distance(ctx, Vector.new(10, 10))
+      %Vector{x: x, y: y} = Context.device_to_user(ctx, Vector.new(10, 10))
       assert_in_delta x, 3.3333, 0.0001
       assert y == 2.5
     end

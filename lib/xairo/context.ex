@@ -82,7 +82,7 @@ defmodule Xairo.Context do
     end
   end
 
-  def set_source_surface(
+  def set_source(
         %__MODULE__{context: ctx} = this,
         %ImageSurface{surface: surface} = sfc,
         %Point{} = origin
@@ -411,7 +411,7 @@ defmodule Xairo.Context do
     N.context_user_to_device(ctx, point)
   end
 
-  def user_to_device_distance(%__MODULE__{context: ctx}, %Vector{} = vec) do
+  def user_to_device(%__MODULE__{context: ctx}, %Vector{} = vec) do
     with {:ok, distance} <- N.context_user_to_device_distance(ctx, vec),
          do: distance
   end
@@ -421,7 +421,7 @@ defmodule Xairo.Context do
          do: distance
   end
 
-  def device_to_user_distance(%__MODULE__{context: ctx}, %Vector{} = vec) do
+  def device_to_user(%__MODULE__{context: ctx}, %Vector{} = vec) do
     with {:ok, distance} <- N.context_device_to_user_distance(ctx, vec),
          do: distance
   end
