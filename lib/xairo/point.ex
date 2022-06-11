@@ -13,4 +13,7 @@ defmodule Xairo.Point do
   def new(x, y) do
     %__MODULE__{x: x / 1, y: y / 1}
   end
+
+  def from(%__MODULE__{} = point), do: point
+  def from({x, y}), do: new(x, y)
 end

@@ -125,6 +125,12 @@ defmodule Xairo.Native do
   def context_clip_extents(_context), do: error()
   def context_clip_rectangle_list(_context), do: error()
 
+  def context_path_extents(_context), do: error()
+  def context_fill_extents(_context), do: error()
+  def context_stroke_extents(_context), do: error()
+
+  ## CONTEXT END
+
   def path_iter(_path), do: error()
 
   def linear_gradient_new(_start, _stop), do: error()
@@ -176,6 +182,10 @@ defmodule Xairo.Native do
   def matrix_rotate(_matrix, _radians), do: error()
   def matrix_invert(_matrix), do: error()
   def matrix_multiply(_matrix1, _matrix2), do: error()
+
+  def font_extents_font_extents(_context), do: error()
+
+  def text_extents_text_extents(_text, _context), do: error()
 
   defp error, do: :erlang.nif_error(:nif_not_loaded)
 end
