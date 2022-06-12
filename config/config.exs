@@ -5,5 +5,6 @@ config :mix_test_watch,
   tasks: [
     "test",
     "format",
-    "credo --strict --all"
+    "credo --strict --all",
+    "docs"
   ]

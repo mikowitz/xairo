@@ -3,6 +3,8 @@ defmodule Xairo.SurfacePatternTest do
 
   alias Xairo.{ImageSurface, PdfSurface, PsSurface, SurfacePattern, SvgSurface}
 
+  doctest SurfacePattern
+
   describe "create/1" do
     test "returns a SurfacePattern struct" do
       surface = ImageSurface.create(:argb32, 100, 100)

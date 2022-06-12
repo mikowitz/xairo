@@ -4,6 +4,8 @@ defmodule Xairo.ImageSurfaceTest do
 
   alias Xairo.ImageSurface
 
+  doctest ImageSurface
+
   describe "create/3" do
     test "returns an ImageSurface struct when successful" do
       surface = ImageSurface.create(:argb32, 100, 100)

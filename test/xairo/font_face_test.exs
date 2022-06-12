@@ -3,6 +3,8 @@ defmodule Xairo.FontFaceTest do
 
   alias Xairo.FontFace
 
+  doctest FontFace
+
   describe "toy_create/3" do
     test "returns a FontFace struct" do
       face = FontFace.toy_create("serif", :italic, :normal)

@@ -26,13 +26,21 @@ fn mesh_patch_count(mesh: Mesh) -> Result<usize, Error> {
 }
 
 #[rustler::nif]
-fn mesh_begin_patch(mesh: Mesh) {
+fn mesh_begin_patch(mesh: Mesh) -> Result<(), Error> {
     mesh.mesh.begin_patch();
+    match mesh.mesh.status() {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
 }
 
 #[rustler::nif]
-fn mesh_end_patch(mesh: Mesh) {
+fn mesh_end_patch(mesh: Mesh) -> Result<(), Error> {
     mesh.mesh.end_patch();
+    match mesh.mesh.status() {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
 }
 
 #[rustler::nif]

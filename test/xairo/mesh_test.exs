@@ -3,6 +3,8 @@ defmodule Xairo.MeshTest do
 
   alias Xairo.{Mesh, Point, Rgba}
 
+  doctest Mesh
+
   describe "new/0" do
     test "returns a mesh struct" do
       mesh = Mesh.new()
@@ -16,15 +18,6 @@ defmodule Xairo.MeshTest do
       mesh = Mesh.new()
 
       assert Mesh.patch_count(mesh) == 0
-    end
-
-    test "returns an error if a patch contains no edges" do
-      mesh =
-        Mesh.new()
-        |> Mesh.begin_patch()
-        |> Mesh.end_patch()
-
-      assert Mesh.patch_count(mesh) == {:error, :invalid_mesh_construction}
     end
 
     test "returns the number of patches" do
@@ -50,6 +43,36 @@ defmodule Xairo.MeshTest do
         |> Mesh.end_patch()
 
       assert Mesh.patch_count(mesh) == 2
+    end
+  end
+
+  describe "begin_patch/1" do
+    test "returns an error if it is called twice before ending a patch" do
+      mesh =
+        Mesh.new()
+        |> Mesh.begin_patch()
+        |> Mesh.begin_patch()
+
+      assert mesh == {:error, :invalid_mesh_construction}
+    end
+  end
+
+  describe "end_patch/1" do
+    test "returns an errer if it is called without drawing any patch" do
+      mesh =
+        Mesh.new()
+        |> Mesh.begin_patch()
+        |> Mesh.end_patch()
+
+      assert mesh == {:error, :invalid_mesh_construction}
+    end
+
+    test "returns an errer if there is no patch in progress" do
+      mesh =
+        Mesh.new()
+        |> Mesh.end_patch()
+
+      assert mesh == {:error, :invalid_mesh_construction}
     end
   end
 
