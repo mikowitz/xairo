@@ -3,6 +3,8 @@ defmodule Xairo.MatrixTest do
 
   alias Xairo.{Matrix, Point, Vector}
 
+  doctest Matrix
+
   describe "new/6" do
     test "returns a Matrix struct" do
       matrix = Matrix.new(2, 0, 0, 2, 0, 0)

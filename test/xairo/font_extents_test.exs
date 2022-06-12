@@ -21,7 +21,7 @@ defmodule Xairo.FontExtentsTest do
       assert_in_delta extents.max_y_advance, 0, 0.0001
     end
 
-    test "takes font transformations into account" do
+    test "takes font size into account" do
       surface = ImageSurface.create(:argb32, 100, 100)
 
       context =
@@ -35,6 +35,24 @@ defmodule Xairo.FontExtentsTest do
       assert_in_delta extents.descent, 2, 0.0001
       assert_in_delta extents.height, 6, 0.0001
       assert_in_delta extents.max_x_advance, 6, 0.0001
+      assert_in_delta extents.max_y_advance, 0, 0.0001
+    end
+
+    test "does not take the context's CTM into account" do
+      surface = ImageSurface.create(:argb32, 100, 100)
+
+      context =
+        Context.new(surface)
+        |> Context.rotate(1.5)
+
+      extents = FontExtents.for(context)
+
+      assert is_struct(extents, FontExtents)
+
+      assert_in_delta extents.ascent, 10, 0.0001
+      assert_in_delta extents.descent, 3, 0.0001
+      assert_in_delta extents.height, 12, 0.0001
+      assert_in_delta extents.max_x_advance, 19, 0.0001
       assert_in_delta extents.max_y_advance, 0, 0.0001
     end
   end

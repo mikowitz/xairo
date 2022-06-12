@@ -3,6 +3,8 @@ defmodule Xairo.RgbaTest do
 
   alias Xairo.Rgba
 
+  doctest Rgba
+
   describe "new/3" do
     test "sets the color to fully opaque" do
       assert Rgba.new(0, 1, 0.5) == %Rgba{

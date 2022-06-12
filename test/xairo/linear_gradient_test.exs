@@ -3,6 +3,8 @@ defmodule Xairo.LinearGradientTest do
 
   alias Xairo.{LinearGradient, Point, Rgba}
 
+  doctest LinearGradient
+
   describe "new/4" do
     test "returns a LinearGradient struct" do
       gradient = LinearGradient.new(Point.new(10, 10), Point.new(75, 80))

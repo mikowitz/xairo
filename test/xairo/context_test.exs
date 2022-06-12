@@ -355,7 +355,7 @@ defmodule Xairo.ContextTest do
         Context.new(surface)
         |> Context.line_to(Point.new(50, 50))
 
-      assert Context.current_point(context) == {50.0, 50.0}
+      assert Context.current_point(context) == Point.new(50, 50)
     end
 
     test "returns {0.0, 0.0} when there is no current point" do
@@ -363,7 +363,7 @@ defmodule Xairo.ContextTest do
 
       context = Context.new(surface)
 
-      assert Context.current_point(context) == {0.0, 0.0}
+      assert Context.current_point(context) == Point.new(0, 0)
     end
   end
 

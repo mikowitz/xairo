@@ -283,9 +283,9 @@ fn context_has_current_point(context: Context) -> Result<bool, Error> {
 }
 
 #[rustler::nif]
-fn context_current_point(context: Context) -> Result<(f64, f64), Error> {
+fn context_current_point(context: Context) -> Result<Point, Error> {
     match context.context.current_point() {
-        Ok(point) => Ok(point),
+        Ok((x, y)) => Ok(Point { x, y }),
         Err(err) => Err(err.into()),
     }
 }
