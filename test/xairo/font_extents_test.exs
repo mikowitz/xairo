@@ -1,16 +1,16 @@
 defmodule Xairo.FontExtentsTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, FontExtents, ImageSurface}
+  alias Xairo.{FontExtents, Image}
+  import Xairo
 
   describe "for/1" do
     @describetag macos: false
 
     test "returns the font extents for the context's current font settings" do
-      surface = ImageSurface.create(:argb32, 100, 100)
-      context = Context.new(surface)
-
-      extents = FontExtents.for(context)
+      extents =
+        Image.new("test.png", 100, 100)
+        |> FontExtents.for()
 
       assert is_struct(extents, FontExtents)
 
@@ -21,15 +21,13 @@ defmodule Xairo.FontExtentsTest do
       assert_in_delta extents.max_y_advance, 0, 0.0001
     end
 
+    @tag ci_only: true
     test "takes font size into account" do
-      surface = ImageSurface.create(:argb32, 100, 100)
-
-      context =
-        Context.new(surface)
-        |> Context.set_font_size(5)
-        |> Context.select_font_face("Times New Roman", :italic, :bold)
-
-      extents = FontExtents.for(context)
+      extents =
+        Image.new("test.png", 100, 100)
+        |> set_font_size(5)
+        |> select_font_face("Times New Roman", :italic, :bold)
+        |> FontExtents.for()
 
       assert_in_delta extents.ascent, 5, 0.0001
       assert_in_delta extents.descent, 2, 0.0001
@@ -39,13 +37,10 @@ defmodule Xairo.FontExtentsTest do
     end
 
     test "does not take the context's CTM into account" do
-      surface = ImageSurface.create(:argb32, 100, 100)
-
-      context =
-        Context.new(surface)
-        |> Context.rotate(1.5)
-
-      extents = FontExtents.for(context)
+      extents =
+        Image.new("test.png", 100, 100)
+        |> rotate(1.5)
+        |> FontExtents.for()
 
       assert is_struct(extents, FontExtents)
 

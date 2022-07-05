@@ -1,16 +1,17 @@
 defmodule Xairo.TextExtentsTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, ImageSurface, TextExtents}
+  alias Xairo.{Image, TextExtents}
+
+  import Xairo
 
   describe "for/2" do
     @describetag macos: false
 
     test "returns the text extents for the given string in the context's current font settings" do
-      surface = ImageSurface.create(:argb32, 100, 100)
-      context = Context.new(surface)
-
-      extents = TextExtents.for(context, "hello")
+      extents =
+        Image.new("test.png", 100, 100)
+        |> TextExtents.for("hello")
 
       assert is_struct(extents, TextExtents)
 
@@ -24,14 +25,11 @@ defmodule Xairo.TextExtentsTest do
     end
 
     test "takes font transformations into account" do
-      surface = ImageSurface.create(:argb32, 100, 100)
-
-      context =
-        Context.new(surface)
-        |> Context.set_font_size(5)
-        |> Context.select_font_face("Times New Roman", :italic, :bold)
-
-      extents = TextExtents.for(context, "hello")
+      extents =
+        Image.new("test.png", 100, 100)
+        |> set_font_size(5)
+        |> select_font_face("Times New Roman", :italic, :bold)
+        |> TextExtents.for("hello")
 
       assert is_struct(extents, TextExtents)
 

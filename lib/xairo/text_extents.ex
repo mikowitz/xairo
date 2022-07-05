@@ -30,16 +30,16 @@ defmodule Xairo.TextExtents do
           text: String.t()
         }
 
-  alias Xairo.Context
+  alias Xairo.Image
   alias Xairo.Native, as: N
 
   @doc """
   Returns the extents for the text string using the context's current
   font settings.
   """
-  @spec for(Context.t(), String.t()) :: Xairo.or_error(t())
-  def for(%Context{context: ctx}, text) do
-    with {:ok, %__MODULE__{} = extents} <- N.text_extents_text_extents(text, ctx),
+  @spec for(Image.t(), String.t()) :: Xairo.or_error(t())
+  def for(%Image{context: ctx}, text) do
+    with {:ok, %__MODULE__{} = extents} <- N.text_extents_text_extents(text, ctx.context),
          do: extents
   end
 end

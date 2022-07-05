@@ -1,23 +1,17 @@
 defmodule Xairo.SvgSurface do
   @moduledoc """
   Models a drawing surface that renders its contents to disk in SVG format.
-    #
+
   ## Creating the surface
 
   Once `Xairo.SvgSurface.new/3` is called, cairo will immediately create the named image
   on the filesystem. If the filepath contains diretories that do not exist, this
   function will return an error tuple instead.
 
-  ## Modifying the surface
-
-  Once a surface is created, it is passed into a `Xairo.Context` via
-  `Xairo.Context.new/1`. After that all commands that render content on to
-  the surface are called via the API in the `Xairo.Context` module.
-
   ### Scaling
 
   While the translation from userspace to imagespace can be scaled via
-  `Xairo.Context.scale/3`, the final size of the SVG image can be scaled by
+  `Xairo.scale/3`, the final size of the SVG image can be scaled by
   changing its document unit via `Xairo.SvgSurface.set_document_unit/2` at
   any point during its creation. It can be called at any time, and even multiple
   times, but only the unit set most recently before calling `Xairo.SvgSurface.finish/1`

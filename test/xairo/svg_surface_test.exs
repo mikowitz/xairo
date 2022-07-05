@@ -1,7 +1,7 @@
 defmodule Xairo.SvgSurfaceTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, SvgSurface}
+  alias Xairo.{Image, SvgSurface}
 
   setup do
     on_exit(fn -> File.rm("svg.svg") end)
@@ -27,12 +27,11 @@ defmodule Xairo.SvgSurfaceTest do
 
   describe "finish/1" do
     test "finishes the surface and prevents further drawing" do
-      surface = SvgSurface.new(100, 100, "svg.svg")
-      context = Context.new(surface)
+      image =
+        Image.new("svg.svg", 100, 100)
+        |> Image.save()
 
-      SvgSurface.finish(surface)
-
-      assert Context.stroke(context) == {:error, :surface_finished}
+      assert Xairo.stroke(image) == {:error, :surface_finished}
     end
   end
 
