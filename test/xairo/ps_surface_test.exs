@@ -1,7 +1,7 @@
 defmodule Xairo.PsSurfaceTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, PsSurface}
+  alias Xairo.{Image, PsSurface}
 
   setup do
     on_exit(fn -> File.rm("ps.ps") end)
@@ -27,12 +27,11 @@ defmodule Xairo.PsSurfaceTest do
 
   describe "finish/1" do
     test "finishes the surface and prevents further drawing" do
-      surface = PsSurface.new(100, 100, "ps.ps")
-      context = Context.new(surface)
+      image =
+        Image.new("ps.ps", 100, 100)
+        |> Image.save()
 
-      PsSurface.finish(surface)
-
-      assert Context.stroke(context) == {:error, :surface_finished}
+      assert Xairo.stroke(image) == {:error, :surface_finished}
     end
   end
 end

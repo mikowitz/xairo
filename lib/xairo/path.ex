@@ -50,7 +50,7 @@ defmodule Xairo.Path do
   Calls into Rust to calculate the path segments and cache them in the struct
   to avoid having to recalculate the segments on each call to access them.
 
-  The path reference is stored for use with the `Xairo.Context.append_path/2`
+  The path reference is stored for use with the `Xairo.append_path/2`
   function, so that the Rust representation of the path does not need to be
   recalculated from the Elixir segments when this function is called. Because
   a `Xairo.Path` represents a read-only version of the path, we don't have

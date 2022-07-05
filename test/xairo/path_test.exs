@@ -1,52 +1,50 @@
 defmodule Xairo.PathTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, ImageSurface, Point, Vector}
+  alias Xairo.{Image, Point, Vector}
 
-  setup do
-    surface = ImageSurface.create(:argb32, 100, 100)
-    context = Context.new(surface)
-
-    {:ok, context: context}
-  end
+  import Xairo
 
   describe "Enum.empty?/1" do
-    test "returns true for an empty path", %{context: ctx} do
-      path = Context.copy_path(ctx)
+    test "returns true for an empty path" do
+      image = Image.new("test.png", 100, 100)
+
+      path = copy_path(image)
 
       assert Enum.empty?(path)
     end
 
-    test "returns the length for a non-empty path", %{context: ctx} do
+    test "returns the length for a non-empty path" do
       path =
-        ctx
-        |> Context.move_to(Point.new(10, 10))
-        |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
-        |> Context.close_path()
-        |> Context.copy_path()
+        Image.new("test.png", 100, 100)
+        |> move_to(Point.new(10, 10))
+        |> line_to(Point.new(50, 50))
+        |> rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
+        |> close_path()
+        |> copy_path()
 
       assert Enum.count(path) == 5
     end
   end
 
   describe "Enum.at/2" do
-    test "returns nil for an empty path", %{context: ctx} do
-      path = Context.copy_path(ctx)
+    test "returns nil for an empty path" do
+      image = Image.new("test.png", 100, 100)
+      path = copy_path(image)
 
       refute Enum.at(path, 0)
       refute Enum.at(path, 3)
     end
 
-    test "returns the segment for a non-empty path", %{context: ctx} do
+    test "returns the segment for a non-empty path" do
       path =
-        ctx
-        |> Context.move_to(Point.new(10, 10))
-        |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
-        |> Context.close_path()
-        |> Context.close_path()
-        |> Context.copy_path()
+        Image.new("test.png", 100, 100)
+        |> move_to(Point.new(10, 10))
+        |> line_to(Point.new(50, 50))
+        |> rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
+        |> close_path()
+        |> close_path()
+        |> copy_path()
 
       assert Enum.at(path, 0) == {:move_to, Point.new(10.0, 10.0)}
       assert Enum.at(path, -1) == {:move_to, Point.new(10.0, 10.0)}
@@ -54,14 +52,14 @@ defmodule Xairo.PathTest do
   end
 
   describe "Enum.reduce/3" do
-    test "returns a list of the path segment commands", %{context: ctx} do
+    test "returns a list of the path segment commands" do
       path =
-        ctx
-        |> Context.move_to(Point.new(10, 10))
-        |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
-        |> Context.close_path()
-        |> Context.copy_path()
+        Image.new("test.png", 100, 100)
+        |> move_to(Point.new(10, 10))
+        |> line_to(Point.new(50, 50))
+        |> rel_curve_to(Vector.new(20, 20), Vector.new(30, 40), Vector.new(15, 45))
+        |> close_path()
+        |> copy_path()
 
       assert Enum.reduce(path, [], fn segment, acc ->
                command =
@@ -76,14 +74,14 @@ defmodule Xairo.PathTest do
   end
 
   describe "Enum.member?/2" do
-    test "returns the correct result for whether a step is part of the path", %{context: ctx} do
+    test "returns the correct result for whether a step is part of the path" do
       path =
-        ctx
-        |> Context.move_to(Point.new(10, 10))
-        |> Context.line_to(Point.new(50, 50))
-        |> Context.rel_curve_to({20, 20}, {30, 40}, {15, 45})
-        |> Context.close_path()
-        |> Context.copy_path()
+        Image.new("test.png", 100, 100)
+        |> move_to(Point.new(10, 10))
+        |> line_to(Point.new(50, 50))
+        |> rel_curve_to({20, 20}, {30, 40}, {15, 45})
+        |> close_path()
+        |> copy_path()
 
       refute Enum.member?(
                path,

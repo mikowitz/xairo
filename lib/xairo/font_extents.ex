@@ -33,15 +33,15 @@ defmodule Xairo.FontExtents do
           max_y_advance: number()
         }
 
-  alias Xairo.Context
+  alias Xairo.Image
   alias Xairo.Native, as: N
 
   @doc """
   Returns the extents for the context's current font.
   """
-  @spec for(Context.t()) :: Xairo.or_error(t())
-  def for(%Context{context: ctx}) do
-    with {:ok, %__MODULE__{} = extents} <- N.font_extents_font_extents(ctx),
+  @spec for(Image.t()) :: Xairo.or_error(t())
+  def for(%Image{context: ctx}) do
+    with {:ok, %__MODULE__{} = extents} <- N.font_extents_font_extents(ctx.context),
          do: extents
   end
 end

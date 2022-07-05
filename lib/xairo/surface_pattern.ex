@@ -80,6 +80,7 @@ defmodule Xairo.SurfacePattern do
         }
 
   @spec create(Xairo.surface()) :: t()
+
   def create(%Xairo.ImageSurface{surface: s} = surface) do
     %__MODULE__{
       pattern: Xairo.Native.surface_pattern_create_from_image_surface(s),

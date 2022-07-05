@@ -1,7 +1,7 @@
 defmodule Xairo.PdfSurfaceTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, PdfSurface}
+  alias Xairo.{Image, PdfSurface}
 
   setup do
     on_exit(fn -> File.rm("pdf.pdf") end)
@@ -27,12 +27,11 @@ defmodule Xairo.PdfSurfaceTest do
 
   describe "finish/1" do
     test "finishes the surface and prevents further drawing" do
-      surface = PdfSurface.new(100, 100, "pdf.pdf")
-      context = Context.new(surface)
+      image =
+        Image.new("pdf.pdf", 100, 100)
+        |> Image.save()
 
-      PdfSurface.finish(surface)
-
-      assert Context.stroke(context) == {:error, :surface_finished}
+      assert Xairo.stroke(image) == {:error, :surface_finished}
     end
   end
 end
