@@ -1,19 +1,19 @@
-use crate::{enums::error::Error, rgba::Rgba};
+use crate::{enums::Error, rgba::Rgba};
 use rustler::ResourceArc;
 
-pub struct SolidPatternRaw {
+pub struct Raw {
     pub pattern: cairo::SolidPattern,
 }
 
-unsafe impl Send for SolidPatternRaw {}
-unsafe impl Sync for SolidPatternRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type SolidPattern = ResourceArc<SolidPatternRaw>;
+pub type SolidPattern = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn solid_pattern_from_rgba(rgba: Rgba) -> SolidPattern {
     let (r, g, b, a) = rgba.to_tuple();
-    ResourceArc::new(SolidPatternRaw {
+    ResourceArc::new(Raw {
         pattern: cairo::SolidPattern::from_rgba(r, g, b, a),
     })
 }

@@ -15,17 +15,17 @@ pub enum Error {
 impl From<cairo::Error> for Error {
     fn from(error: cairo::Error) -> Self {
         match error {
-            cairo::Error::ClipNotRepresentable => Error::ClipNotRepresentable,
-            cairo::Error::InvalidIndex => Error::InvalidIndex,
-            cairo::Error::InvalidMatrix => Error::InvalidMatrix,
-            cairo::Error::InvalidMeshConstruction => Error::InvalidMeshConstruction,
-            cairo::Error::InvalidSize => Error::InvalidSize,
-            cairo::Error::SurfaceFinished => Error::SurfaceFinished,
-            cairo::Error::SurfaceTypeMismatch => Error::SurfaceTypeMismatch,
-            cairo::Error::WriteError => Error::WriteError,
+            cairo::Error::ClipNotRepresentable => Self::ClipNotRepresentable,
+            cairo::Error::InvalidIndex => Self::InvalidIndex,
+            cairo::Error::InvalidMatrix => Self::InvalidMatrix,
+            cairo::Error::InvalidMeshConstruction => Self::InvalidMeshConstruction,
+            cairo::Error::InvalidSize => Self::InvalidSize,
+            cairo::Error::SurfaceFinished => Self::SurfaceFinished,
+            cairo::Error::SurfaceTypeMismatch => Self::SurfaceTypeMismatch,
+            cairo::Error::WriteError => Self::WriteError,
             _ => {
                 println!("Unmapped Error type: {:#?}", error);
-                Error::Error
+                Self::Error
             }
         }
     }

@@ -1,15 +1,11 @@
 use crate::{
-    enums::{
-        antialias::Antialias, error::Error, fill_rule::FillRule, font_slant::FontSlant,
-        font_weight::FontWeight, line_cap::LineCap, line_join::LineJoin, operator::Operator,
-    },
-    font_face::{FontFace, FontFaceRaw},
+    enums::{Antialias, Error, FillRule, FontSlant, FontWeight, LineCap, LineJoin, Operator},
+    font_face::{FontFace, Raw as FontFaceRaw},
     image_surface::ImageSurface,
     linear_gradient::LinearGradient,
-    matrix::{Matrix, MatrixRaw},
+    matrix::{Matrix, Raw as MatrixRaw},
     mesh::Mesh,
-    path::Path,
-    path::PathRaw,
+    path::{Path, Raw as PathRaw},
     pdf_surface::PdfSurface,
     point::Point,
     ps_surface::PsSurface,
@@ -23,19 +19,19 @@ use crate::{
 
 use rustler::ResourceArc;
 
-pub struct ContextRaw {
+pub struct Raw {
     pub context: cairo::Context,
 }
 
-unsafe impl Send for ContextRaw {}
-unsafe impl Sync for ContextRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type Context = ResourceArc<ContextRaw>;
+pub type Context = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn context_new(surface: ImageSurface) -> Result<Context, Error> {
     match cairo::Context::new(&surface.surface) {
-        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Ok(context) => Ok(ResourceArc::new(Raw { context })),
         Err(err) => Err(err.into()),
     }
 }
@@ -43,7 +39,7 @@ fn context_new(surface: ImageSurface) -> Result<Context, Error> {
 #[rustler::nif]
 fn context_new_from_pdf_surface(surface: PdfSurface) -> Result<Context, Error> {
     match cairo::Context::new(&surface.surface) {
-        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Ok(context) => Ok(ResourceArc::new(Raw { context })),
         Err(err) => Err(err.into()),
     }
 }
@@ -51,7 +47,7 @@ fn context_new_from_pdf_surface(surface: PdfSurface) -> Result<Context, Error> {
 #[rustler::nif]
 fn context_new_from_ps_surface(surface: PsSurface) -> Result<Context, Error> {
     match cairo::Context::new(&surface.surface) {
-        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Ok(context) => Ok(ResourceArc::new(Raw { context })),
         Err(err) => Err(err.into()),
     }
 }
@@ -59,7 +55,7 @@ fn context_new_from_ps_surface(surface: PsSurface) -> Result<Context, Error> {
 #[rustler::nif]
 fn context_new_from_svg_surface(surface: SvgSurface) -> Result<Context, Error> {
     match cairo::Context::new(&surface.surface) {
-        Ok(context) => Ok(ResourceArc::new(ContextRaw { context })),
+        Ok(context) => Ok(ResourceArc::new(Raw { context })),
         Err(err) => Err(err.into()),
     }
 }

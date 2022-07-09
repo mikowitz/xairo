@@ -178,4 +178,50 @@ defmodule Xairo.Api.ConfigTest do
       assert miter_limit(image) == 10.0
     end
   end
+
+  describe "document_unit/1" do
+    test "returns the correct value for an SVG image" do
+      image = Image.new("test.svg", 100, 100)
+
+      assert document_unit(image) == :pt
+
+      :ok = File.rm("test.svg")
+    end
+
+    test "raises an error for a non-SVG image" do
+      image = Image.new("test.png", 100, 100)
+
+      assert document_unit(image) ==
+               {:error, :cannot_get_document_unit_for_non_svg_image}
+    end
+  end
+
+  describe "set_document_unit/1" do
+    test "returns the correct value for an SVG image" do
+      image =
+        Image.new("test.svg", 100, 100)
+        |> set_document_unit(:mm)
+
+      assert document_unit(image) == :mm
+
+      :ok = File.rm("test.svg")
+    end
+
+    test "raises an error for an invalid variant" do
+      image = Image.new("test.svg", 100, 100)
+
+      assert_raise ErlangError, ~r/:invalid_variant/, fn ->
+        set_document_unit(image, :hello)
+      end
+
+      :ok = File.rm("test.svg")
+    end
+
+    test "returns an error for a non-SVG image" do
+      image = Image.new("test.png", 100, 100)
+
+      assert set_document_unit(image, :mm) ==
+               {:error, :cannot_set_document_unit_for_non_svg_image}
+    end
+  end
 end

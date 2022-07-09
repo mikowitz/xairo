@@ -9,34 +9,34 @@ pub enum Antialias {
     Best,
 }
 
-impl From<Antialias> for cairo::Antialias {
-    fn from(antialias: Antialias) -> Self {
+impl From<cairo::Antialias> for Antialias {
+    fn from(antialias: cairo::Antialias) -> Self {
         match antialias {
-            Antialias::Default => cairo::Antialias::Default,
-            Antialias::None => cairo::Antialias::None,
-            Antialias::Gray => cairo::Antialias::Gray,
-            Antialias::Subpixel => cairo::Antialias::Subpixel,
-            Antialias::Fast => cairo::Antialias::Fast,
-            Antialias::Good => cairo::Antialias::Good,
-            Antialias::Best => cairo::Antialias::Best,
+            cairo::Antialias::Default => Self::Default,
+            cairo::Antialias::None => Self::None,
+            cairo::Antialias::Gray => Self::Gray,
+            cairo::Antialias::Subpixel => Self::Subpixel,
+            cairo::Antialias::Fast => Self::Fast,
+            cairo::Antialias::Good => Self::Good,
+            cairo::Antialias::Best => Self::Best,
+            _ => {
+                println!("unknown antialias: {:?}", antialias);
+                Self::Default
+            }
         }
     }
 }
 
-impl From<cairo::Antialias> for Antialias {
-    fn from(antialias: cairo::Antialias) -> Self {
+impl From<Antialias> for cairo::Antialias {
+    fn from(antialias: Antialias) -> Self {
         match antialias {
-            cairo::Antialias::Default => Antialias::Default,
-            cairo::Antialias::None => Antialias::None,
-            cairo::Antialias::Gray => Antialias::Gray,
-            cairo::Antialias::Subpixel => Antialias::Subpixel,
-            cairo::Antialias::Fast => Antialias::Fast,
-            cairo::Antialias::Good => Antialias::Good,
-            cairo::Antialias::Best => Antialias::Best,
-            _ => {
-                println!("unknown antialias: {:?}", antialias);
-                Antialias::Default
-            }
+            Antialias::Default => Self::Default,
+            Antialias::None => Self::None,
+            Antialias::Gray => Self::Gray,
+            Antialias::Subpixel => Self::Subpixel,
+            Antialias::Fast => Self::Fast,
+            Antialias::Good => Self::Good,
+            Antialias::Best => Self::Best,
         }
     }
 }

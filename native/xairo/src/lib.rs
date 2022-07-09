@@ -196,18 +196,18 @@ rustler::init!(
 );
 
 fn on_load(env: Env, _info: Term) -> bool {
-    rustler::resource!(image_surface::ImageSurfaceRaw, env);
-    rustler::resource!(pdf_surface::PdfSurfaceRaw, env);
-    rustler::resource!(ps_surface::PsSurfaceRaw, env);
-    rustler::resource!(svg_surface::SvgSurfaceRaw, env);
-    rustler::resource!(context::ContextRaw, env);
-    rustler::resource!(path::PathRaw, env);
-    rustler::resource!(linear_gradient::LinearGradientRaw, env);
-    rustler::resource!(radial_gradient::RadialGradientRaw, env);
-    rustler::resource!(solid_pattern::SolidPatternRaw, env);
-    rustler::resource!(surface_pattern::SurfacePatternRaw, env);
-    rustler::resource!(mesh::MeshRaw, env);
-    rustler::resource!(font_face::FontFaceRaw, env);
-    rustler::resource!(matrix::MatrixRaw, env);
+    rustler::resource!(image_surface::Raw, env);
+    rustler::resource!(pdf_surface::Raw, env);
+    rustler::resource!(ps_surface::Raw, env);
+    rustler::resource!(svg_surface::Raw, env);
+    rustler::resource!(context::Raw, env);
+    rustler::resource!(path::Raw, env);
+    rustler::resource!(linear_gradient::Raw, env);
+    rustler::resource!(radial_gradient::Raw, env);
+    rustler::resource!(solid_pattern::Raw, env);
+    rustler::resource!(surface_pattern::Raw, env);
+    rustler::resource!(mesh::Raw, env);
+    rustler::resource!(font_face::Raw, env);
+    rustler::resource!(matrix::Raw, env);
     true
 }

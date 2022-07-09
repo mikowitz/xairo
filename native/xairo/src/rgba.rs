@@ -8,7 +8,7 @@ pub struct Rgba {
 }
 
 impl Rgba {
-    pub fn new(red: f64, green: f64, blue: f64, alpha: f64) -> Self {
+    pub const fn new(red: f64, green: f64, blue: f64, alpha: f64) -> Self {
         Self {
             red,
             green,
@@ -17,7 +17,7 @@ impl Rgba {
         }
     }
 
-    pub fn to_tuple(&self) -> (f64, f64, f64, f64) {
+    pub const fn to_tuple(&self) -> (f64, f64, f64, f64) {
         (self.red, self.green, self.blue, self.alpha)
     }
 }

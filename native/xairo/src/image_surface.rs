@@ -1,20 +1,20 @@
-use crate::enums::{error::Error, format::Format};
+use crate::enums::{Error, Format};
 use rustler::ResourceArc;
 use std::fs::File;
 
-pub struct ImageSurfaceRaw {
+pub struct Raw {
     pub surface: cairo::ImageSurface,
 }
 
-unsafe impl Send for ImageSurfaceRaw {}
-unsafe impl Sync for ImageSurfaceRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type ImageSurface = ResourceArc<ImageSurfaceRaw>;
+pub type ImageSurface = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn image_surface_create(format: Format, width: i32, height: i32) -> Result<ImageSurface, Error> {
     match cairo::ImageSurface::create(format.into(), width, height) {
-        Ok(surface) => Ok(ResourceArc::new(ImageSurfaceRaw { surface })),
+        Ok(surface) => Ok(ResourceArc::new(Raw { surface })),
         Err(err) => Err(err.into()),
     }
 }

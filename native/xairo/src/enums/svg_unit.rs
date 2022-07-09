@@ -13,39 +13,39 @@ pub enum SvgUnit {
 }
 
 impl From<cairo::SvgUnit> for SvgUnit {
-    fn from(unit: cairo::SvgUnit) -> SvgUnit {
+    fn from(unit: cairo::SvgUnit) -> Self {
         match unit {
-            cairo::SvgUnit::User => SvgUnit::User,
-            cairo::SvgUnit::Em => SvgUnit::Em,
-            cairo::SvgUnit::Ex => SvgUnit::Ex,
-            cairo::SvgUnit::Px => SvgUnit::Px,
-            cairo::SvgUnit::In => SvgUnit::In,
-            cairo::SvgUnit::Cm => SvgUnit::Cm,
-            cairo::SvgUnit::Mm => SvgUnit::Mm,
-            cairo::SvgUnit::Pt => SvgUnit::Pt,
-            cairo::SvgUnit::Pc => SvgUnit::Pc,
-            cairo::SvgUnit::Percent => SvgUnit::Percent,
+            cairo::SvgUnit::User => Self::User,
+            cairo::SvgUnit::Em => Self::Em,
+            cairo::SvgUnit::Ex => Self::Ex,
+            cairo::SvgUnit::Px => Self::Px,
+            cairo::SvgUnit::In => Self::In,
+            cairo::SvgUnit::Cm => Self::Cm,
+            cairo::SvgUnit::Mm => Self::Mm,
+            cairo::SvgUnit::Pt => Self::Pt,
+            cairo::SvgUnit::Pc => Self::Pc,
+            cairo::SvgUnit::Percent => Self::Percent,
             unit => {
                 println!("{:#?}", unit);
-                SvgUnit::User
+                Self::User
             }
         }
     }
 }
 
 impl From<SvgUnit> for cairo::SvgUnit {
-    fn from(unit: SvgUnit) -> cairo::SvgUnit {
+    fn from(unit: SvgUnit) -> Self {
         match unit {
-            SvgUnit::User => cairo::SvgUnit::User,
-            SvgUnit::Em => cairo::SvgUnit::Em,
-            SvgUnit::Ex => cairo::SvgUnit::Ex,
-            SvgUnit::Px => cairo::SvgUnit::Px,
-            SvgUnit::In => cairo::SvgUnit::In,
-            SvgUnit::Cm => cairo::SvgUnit::Cm,
-            SvgUnit::Mm => cairo::SvgUnit::Mm,
-            SvgUnit::Pt => cairo::SvgUnit::Pt,
-            SvgUnit::Pc => cairo::SvgUnit::Pc,
-            SvgUnit::Percent => cairo::SvgUnit::Percent,
+            SvgUnit::User => Self::User,
+            SvgUnit::Em => Self::Em,
+            SvgUnit::Ex => Self::Ex,
+            SvgUnit::Px => Self::Px,
+            SvgUnit::In => Self::In,
+            SvgUnit::Cm => Self::Cm,
+            SvgUnit::Mm => Self::Mm,
+            SvgUnit::Pt => Self::Pt,
+            SvgUnit::Pc => Self::Pc,
+            SvgUnit::Percent => Self::Percent,
         }
     }
 }
