@@ -1,19 +1,19 @@
-use crate::enums::{error::Error, svg_unit::SvgUnit};
+use crate::enums::{Error, SvgUnit};
 use rustler::ResourceArc;
 
-pub struct SvgSurfaceRaw {
+pub struct Raw {
     pub surface: cairo::SvgSurface,
 }
 
-unsafe impl Send for SvgSurfaceRaw {}
-unsafe impl Sync for SvgSurfaceRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type SvgSurface = ResourceArc<SvgSurfaceRaw>;
+pub type SvgSurface = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn svg_surface_new(width: f64, height: f64, path: String) -> Result<SvgSurface, Error> {
     match cairo::SvgSurface::new(width, height, Some(path)) {
-        Ok(surface) => Ok(ResourceArc::new(SvgSurfaceRaw { surface })),
+        Ok(surface) => Ok(ResourceArc::new(Raw { surface })),
         Err(err) => Err(err.into()),
     }
 }

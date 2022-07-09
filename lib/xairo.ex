@@ -308,6 +308,7 @@ defmodule Xairo do
     Rgba,
     SolidPattern,
     SurfacePattern,
+    SvgSurface,
     Vector
   }
 
@@ -731,6 +732,35 @@ defmodule Xairo do
   #############
   ## CONFIG ##
   #############
+
+  @doc """
+  Returns the current document unit for an SVG image.
+  """
+  @doc section: :config
+  @spec document_unit(image()) :: or_error(SvgSurface.document_unit())
+  def document_unit(%Image{surface: %SvgSurface{} = surface}) do
+    SvgSurface.document_unit(surface)
+  end
+
+  def document_unit(%Image{}), do: {:error, :cannot_get_document_unit_for_non_svg_image}
+
+  @doc """
+  Sets the document unit for an SVG image.
+
+  This function can be called any number of times during the image's
+  creation, but only the most recent setting before `Xairo.Image.save/1`
+  is called on the image will be taken into account.
+  """
+  @doc section: :config
+
+  @spec set_document_unit(image(), SvgSurface.document_unit()) :: or_error(image())
+  def set_document_unit(%Image{surface: %SvgSurface{} = surface} = image, unit) do
+    SvgSurface.set_document_unit(surface, unit)
+    image
+  end
+
+  def set_document_unit(%Image{}, _unit),
+    do: {:error, :cannot_set_document_unit_for_non_svg_image}
 
   @doc """
   Returns the current line width

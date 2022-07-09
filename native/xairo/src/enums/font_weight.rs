@@ -4,24 +4,24 @@ pub enum FontWeight {
     Bold,
 }
 
-impl From<FontWeight> for cairo::FontWeight {
-    fn from(weight: FontWeight) -> Self {
+impl From<cairo::FontWeight> for FontWeight {
+    fn from(weight: cairo::FontWeight) -> Self {
         match weight {
-            FontWeight::Normal => cairo::FontWeight::Normal,
-            FontWeight::Bold => cairo::FontWeight::Bold,
+            cairo::FontWeight::Normal => Self::Normal,
+            cairo::FontWeight::Bold => Self::Bold,
+            _ => {
+                println!("{:?}", weight);
+                Self::Normal
+            }
         }
     }
 }
 
-impl From<cairo::FontWeight> for FontWeight {
-    fn from(weight: cairo::FontWeight) -> Self {
+impl From<FontWeight> for cairo::FontWeight {
+    fn from(weight: FontWeight) -> Self {
         match weight {
-            cairo::FontWeight::Normal => FontWeight::Normal,
-            cairo::FontWeight::Bold => FontWeight::Bold,
-            _ => {
-                println!("{:?}", weight);
-                FontWeight::Normal
-            }
+            FontWeight::Normal => Self::Normal,
+            FontWeight::Bold => Self::Bold,
         }
     }
 }

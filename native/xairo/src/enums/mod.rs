@@ -10,3 +10,16 @@ pub mod operator;
 pub mod path_segment;
 pub mod surface_type;
 pub mod svg_unit;
+
+pub use antialias::Antialias;
+pub use error::Error;
+pub use fill_rule::FillRule;
+pub use font_slant::FontSlant;
+pub use font_weight::FontWeight;
+pub use format::Format;
+pub use line_cap::LineCap;
+pub use line_join::LineJoin;
+pub use operator::Operator;
+pub use path_segment::PathSegment;
+pub use surface_type::SurfaceType;
+pub use svg_unit::SvgUnit;

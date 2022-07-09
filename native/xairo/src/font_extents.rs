@@ -1,4 +1,4 @@
-use crate::{context::Context, enums::error::Error};
+use crate::{context::Context, enums::Error};
 
 #[derive(rustler::NifStruct)]
 #[module = "Xairo.FontExtents"]
@@ -12,7 +12,7 @@ pub struct FontExtents {
 
 impl From<cairo::FontExtents> for FontExtents {
     fn from(extents: cairo::FontExtents) -> Self {
-        FontExtents {
+        Self {
             ascent: extents.ascent,
             descent: extents.descent,
             height: extents.height,

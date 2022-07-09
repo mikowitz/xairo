@@ -5,26 +5,26 @@ pub enum FontSlant {
     Oblique,
 }
 
-impl From<FontSlant> for cairo::FontSlant {
-    fn from(slant: FontSlant) -> Self {
+impl From<cairo::FontSlant> for FontSlant {
+    fn from(slant: cairo::FontSlant) -> Self {
         match slant {
-            FontSlant::Normal => cairo::FontSlant::Normal,
-            FontSlant::Italic => cairo::FontSlant::Italic,
-            FontSlant::Oblique => cairo::FontSlant::Oblique,
+            cairo::FontSlant::Normal => Self::Normal,
+            cairo::FontSlant::Italic => Self::Italic,
+            cairo::FontSlant::Oblique => Self::Oblique,
+            _ => {
+                println!("{:?}", slant);
+                Self::Normal
+            }
         }
     }
 }
 
-impl From<cairo::FontSlant> for FontSlant {
-    fn from(slant: cairo::FontSlant) -> Self {
+impl From<FontSlant> for cairo::FontSlant {
+    fn from(slant: FontSlant) -> Self {
         match slant {
-            cairo::FontSlant::Normal => FontSlant::Normal,
-            cairo::FontSlant::Italic => FontSlant::Italic,
-            cairo::FontSlant::Oblique => FontSlant::Oblique,
-            _ => {
-                println!("{:?}", slant);
-                FontSlant::Normal
-            }
+            FontSlant::Normal => Self::Normal,
+            FontSlant::Italic => Self::Italic,
+            FontSlant::Oblique => Self::Oblique,
         }
     }
 }

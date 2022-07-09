@@ -25,6 +25,7 @@ defmodule Xairo.MixProject do
     [
       {:benchee, "~> 1.0", only: :dev},
       {:credo, "~> 1.6.0", only: [:dev, :test]},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.27", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:rustler, "~> 0.25.0"}

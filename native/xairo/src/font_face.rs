@@ -1,14 +1,14 @@
-use crate::enums::{error::Error, font_slant::FontSlant, font_weight::FontWeight};
+use crate::enums::{Error, FontSlant, FontWeight};
 use rustler::ResourceArc;
 
-pub struct FontFaceRaw {
+pub struct Raw {
     pub font_face: cairo::FontFace,
 }
 
-unsafe impl Send for FontFaceRaw {}
-unsafe impl Sync for FontFaceRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type FontFace = ResourceArc<FontFaceRaw>;
+pub type FontFace = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn font_face_toy_create(
@@ -17,7 +17,7 @@ fn font_face_toy_create(
     weight: FontWeight,
 ) -> Result<FontFace, Error> {
     match cairo::FontFace::toy_create(&family, slant.into(), weight.into()) {
-        Ok(font_face) => Ok(ResourceArc::new(FontFaceRaw { font_face })),
+        Ok(font_face) => Ok(ResourceArc::new(Raw { font_face })),
         Err(err) => Err(err.into()),
     }
 }

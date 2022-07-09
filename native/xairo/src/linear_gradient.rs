@@ -1,20 +1,20 @@
-use crate::{enums::error::Error, point::Point, rgba::Rgba};
+use crate::{enums::Error, point::Point, rgba::Rgba};
 use rustler::ResourceArc;
 
-pub struct LinearGradientRaw {
+pub struct Raw {
     pub gradient: cairo::LinearGradient,
 }
 
-unsafe impl Send for LinearGradientRaw {}
-unsafe impl Sync for LinearGradientRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type LinearGradient = ResourceArc<LinearGradientRaw>;
+pub type LinearGradient = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn linear_gradient_new(start: Point, stop: Point) -> LinearGradient {
     let (x1, y1) = start.to_tuple();
     let (x2, y2) = stop.to_tuple();
-    ResourceArc::new(LinearGradientRaw {
+    ResourceArc::new(Raw {
         gradient: cairo::LinearGradient::new(x1, y1, x2, y2),
     })
 }
@@ -47,7 +47,7 @@ fn linear_gradient_color_stop_rgba(
     index: isize,
 ) -> Result<(f64, Rgba), Error> {
     match gradient.gradient.color_stop_rgba(index) {
-        Ok((o, r, g, b, a)) => Ok((o, Rgba::new(r, g, b, a))),
+        Ok((offset, red, green, blue, alpha)) => Ok((offset, Rgba::new(red, green, blue, alpha))),
         Err(err) => Err(err.into()),
     }
 }

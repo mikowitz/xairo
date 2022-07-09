@@ -6,7 +6,7 @@ pub struct Point {
 }
 
 impl Point {
-    pub fn to_tuple(&self) -> (f64, f64) {
+    pub const fn to_tuple(&self) -> (f64, f64) {
         (self.x, self.y)
     }
 }

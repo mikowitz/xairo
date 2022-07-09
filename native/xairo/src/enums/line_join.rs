@@ -5,26 +5,26 @@ pub enum LineJoin {
     Bevel,
 }
 
-impl From<LineJoin> for cairo::LineJoin {
-    fn from(line_join: LineJoin) -> Self {
+impl From<cairo::LineJoin> for LineJoin {
+    fn from(line_join: cairo::LineJoin) -> Self {
         match line_join {
-            LineJoin::Miter => cairo::LineJoin::Miter,
-            LineJoin::Round => cairo::LineJoin::Round,
-            LineJoin::Bevel => cairo::LineJoin::Bevel,
+            cairo::LineJoin::Miter => Self::Miter,
+            cairo::LineJoin::Round => Self::Round,
+            cairo::LineJoin::Bevel => Self::Bevel,
+            _ => {
+                println!("unknown line join: {:?}", line_join);
+                Self::Miter
+            }
         }
     }
 }
 
-impl From<cairo::LineJoin> for LineJoin {
-    fn from(line_join: cairo::LineJoin) -> Self {
+impl From<LineJoin> for cairo::LineJoin {
+    fn from(line_join: LineJoin) -> Self {
         match line_join {
-            cairo::LineJoin::Miter => LineJoin::Miter,
-            cairo::LineJoin::Round => LineJoin::Round,
-            cairo::LineJoin::Bevel => LineJoin::Bevel,
-            _ => {
-                println!("unknown line join: {:?}", line_join);
-                LineJoin::Miter
-            }
+            LineJoin::Miter => Self::Miter,
+            LineJoin::Round => Self::Round,
+            LineJoin::Bevel => Self::Bevel,
         }
     }
 }

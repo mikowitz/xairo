@@ -69,6 +69,9 @@ defmodule Xairo.LinearGradient do
   """
   defstruct [:pattern]
 
+  alias Xairo.Native, as: N
+  alias Xairo.{Point, Rgba}
+
   @type color_stop :: {number(), Rgba.t()}
 
   @typedoc """
@@ -78,9 +81,6 @@ defmodule Xairo.LinearGradient do
   @type t :: %__MODULE__{
           pattern: reference()
         }
-
-  alias Xairo.Native, as: N
-  alias Xairo.{Point, Rgba}
 
   @doc """
   Initializes a linear gradient from the given points.

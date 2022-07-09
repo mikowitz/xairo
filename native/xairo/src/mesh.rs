@@ -1,18 +1,18 @@
-use crate::{enums::error::Error, path::Path, path::PathRaw, point::Point, rgba::Rgba};
+use crate::{enums::Error, path, path::Path, point::Point, rgba::Rgba};
 use rustler::ResourceArc;
 
-pub struct MeshRaw {
+pub struct Raw {
     pub mesh: cairo::Mesh,
 }
 
-unsafe impl Send for MeshRaw {}
-unsafe impl Sync for MeshRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type Mesh = ResourceArc<MeshRaw>;
+pub type Mesh = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn mesh_new() -> Mesh {
-    ResourceArc::new(MeshRaw {
+    ResourceArc::new(Raw {
         mesh: cairo::Mesh::new(),
     })
 }
@@ -112,12 +112,12 @@ fn mesh_corner_color_rgba(mesh: Mesh, patch: usize, corner: u8) -> Result<Rgba, 
 #[rustler::nif]
 fn mesh_path(mesh: Mesh, patch: usize) -> Result<Path, Error> {
     match mesh.mesh.path(patch) {
-        Ok(path) => Ok(ResourceArc::new(PathRaw { path })),
+        Ok(mesh_path) => Ok(ResourceArc::new(path::Raw { path: mesh_path })),
         Err(err) => Err(err.into()),
     }
 }
 
-fn mesh_corner(index: u8) -> Result<cairo::MeshCorner, Error> {
+const fn mesh_corner(index: u8) -> Result<cairo::MeshCorner, Error> {
     match index {
         0 => Ok(cairo::MeshCorner::MeshCorner0),
         1 => Ok(cairo::MeshCorner::MeshCorner1),

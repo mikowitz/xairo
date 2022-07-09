@@ -69,6 +69,9 @@ defmodule Xairo.RadialGradient do
   """
   defstruct [:pattern]
 
+  alias Xairo.Native, as: N
+  alias Xairo.{Point, Rgba}
+
   @type circle :: {Point.t(), number()}
   @type color_stop :: {number(), Rgba.t()}
 
@@ -79,9 +82,6 @@ defmodule Xairo.RadialGradient do
   @type t :: %__MODULE__{
           pattern: reference()
         }
-
-  alias Xairo.Native, as: N
-  alias Xairo.{Point, Rgba}
 
   @doc """
   Initializes a radial gradient from the given circle definitions.

@@ -1,19 +1,19 @@
-use crate::enums::path_segment::PathSegment;
+use crate::enums::PathSegment;
 use rustler::ResourceArc;
 
-pub struct PathRaw {
+pub struct Raw {
     pub path: cairo::Path,
 }
 
-unsafe impl Send for PathRaw {}
-unsafe impl Sync for PathRaw {}
+unsafe impl Send for Raw {}
+unsafe impl Sync for Raw {}
 
-pub type Path = ResourceArc<PathRaw>;
+pub type Path = ResourceArc<Raw>;
 
 #[rustler::nif]
 fn path_iter(path: Path) -> Vec<PathSegment> {
     path.path
         .iter()
-        .map(|ps| ps.into())
+        .map(std::convert::Into::into)
         .collect::<Vec<PathSegment>>()
 }
