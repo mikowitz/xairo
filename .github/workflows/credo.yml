@@ -15,7 +15,7 @@ jobs:
     name: "[${{matrix.otp}}/${{matrix.elixir}}, ${{matrix.rust}}] Credo"
     strategy:
       matrix:
-        otp: [23, 24, 25, 26]
+        otp: [24, 25, 26]
         elixir: ["1.14.4"]
     steps:
       - uses: actions/checkout@v2.4.0
