@@ -15,7 +15,7 @@ jobs:
     name: "[${{matrix.otp}}/${{matrix.elixir}}, ${{matrix.rust}}] CI Tests"
     strategy:
       matrix:
-        otp: [24, 25, 26]
+        otp: [24, 25]
         elixir: ["1.14.4"]
         rust: ["stable", "nightly"]
     steps:
