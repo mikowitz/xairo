@@ -84,7 +84,7 @@ defimpl Enumerable, for: Xairo.Path do
 
   def slice(%Path{segments: segments}) do
     size = length(segments)
-    {:ok, size, &Enumerable.List.slice(segments, &1, &2, size)}
+    {:ok, size, fn _ -> segments end}
   end
 
   def reduce(%Path{segments: segments}, acc, fun) do
