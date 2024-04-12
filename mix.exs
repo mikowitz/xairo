@@ -28,7 +28,7 @@ defmodule Xairo.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.27", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:rustler, "~> 0.25.0"}
+      {:rustler, "~> 0.32.1"}
     ]
   end
 
