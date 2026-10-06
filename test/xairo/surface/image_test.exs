@@ -24,6 +24,21 @@ defmodule Xairo.Surface.ImageTest do
     end
   end
 
+  describe "create_from_png/1" do
+    test "returns a reference on success" do
+      {:ok, surface} = Image.create_from_png("test/support/dice.png")
+      assert is_reference(surface)
+    end
+
+    test "returns an error when the file doesn't exist" do
+      assert {:error, :file_not_found} = Image.create_from_png("/does/not/exist.png")
+    end
+
+    test "returns an error when the file isn't a PNG image" do
+      assert {:error, :png_error} = Image.create_from_png("test/support/dice.jpg")
+    end
+  end
+
   @formats ~w(argb32 rgb24 a8 a1 rgb16_565 rgb96f rgba128f)a
 
   describe "get_format/1" do

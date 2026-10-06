@@ -27,6 +27,7 @@ defmodule Xairo.NIF do
   pub const cairo_version = c.cairo_version_string;
 
   pub const image_surface_create = surface.image_surface_create;
+  pub const image_surface_create_from_png = surface.image_surface_create_from_png;
   pub const image_surface_get_width = surface.image_surface_get_width;
   pub const image_surface_get_height = surface.image_surface_get_height;
   pub const image_surface_get_format = surface.image_surface_get_format;

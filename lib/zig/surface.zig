@@ -13,12 +13,12 @@ const SurfaceType = enum(c.cairo_surface_type_t) {
 
 const Format = enum(c.cairo_format_t) {
     argb32 = c.CAIRO_FORMAT_ARGB32,
-    rgb24 = c.CAIRO_FORMAT_RGB24,
-    a8 = c.CAIRO_FORMAT_A8,
-    a1 = c.CAIRO_FORMAT_A1,
-    rgb16_565 = c.CAIRO_FORMAT_RGB16_565,
-    rgb96f = c.CAIRO_FORMAT_RGB96F,
-    rgba128f = c.CAIRO_FORMAT_RGBA128F,
+    rgb24,
+    a8,
+    a1,
+    rgb16_565,
+    rgb96f,
+    rgba128f,
 };
 
 const Surface = struct {
@@ -36,6 +36,22 @@ pub const SurfaceResource = beam.Resource(Surface, root, .{ .Callbacks = Surface
 
 pub fn image_surface_create(format: Format, width: i32, height: i32) !beam.term {
     const ptr = c.cairo_image_surface_create(@intFromEnum(format), width, height).?;
+    const raw = c.cairo_surface_status(ptr);
+    if (raw != c.CAIRO_STATUS_SUCCESS) {
+        c.cairo_surface_destroy(ptr);
+        if (std.enums.fromInt(status.Status, raw)) |found| {
+            return status.to_error(found);
+        }
+        return beam.make(.{ .@"error", .unknown_status, raw }, .{});
+    }
+    const resource = try SurfaceResource.create(.{ .ptr = ptr }, .{});
+    return beam.make(.{ .ok, resource }, .{});
+}
+
+pub fn image_surface_create_from_png(filename: []const u8) !beam.term {
+    var filename_c: [*c]const u8 = undefined;
+    filename_c = @ptrCast(filename);
+    const ptr = c.cairo_image_surface_create_from_png(filename_c).?;
     const raw = c.cairo_surface_status(ptr);
     if (raw != c.CAIRO_STATUS_SUCCESS) {
         c.cairo_surface_destroy(ptr);

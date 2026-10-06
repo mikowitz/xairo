@@ -11,6 +11,11 @@ defmodule Xairo.Surface.Image do
     NIF.image_surface_create(format, width, height)
   end
 
+  @spec create_from_png(String.t()) :: {:ok, Surface.t()} | {:error, atom()}
+  def create_from_png(filename) when is_bitstring(filename) do
+    NIF.image_surface_create_from_png(filename)
+  end
+
   @spec get_width(Surface.t()) :: integer()
   def get_width(surface), do: NIF.image_surface_get_width(surface)
 
