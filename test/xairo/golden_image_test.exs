@@ -3,24 +3,19 @@ defmodule Xairo.GoldenImageTest do
   use ExUnit.Case, async: true
 
   describe "golden images" do
-    test "shapes" do
-      {:ok, golden_data} = File.read(Path.join(Xairo.Goldens.golden_path(), "shapes.png"))
+    for image <- ~w(shapes transforms clipping)a do
+      test "#{image}" do
+        image = unquote(image)
 
-      {_ctx, surface} = Xairo.Goldens.shapes()
-      {:ok, data} = Surface.to_png_stream(surface)
+        {:ok, golden_data} =
+          File.read(Path.join(Xairo.Goldens.golden_path(), "#{image}.png"))
 
-      assert data == golden_data,
-             "Golden image data differs, check images and run `mix xairo.gen.goldens` to regenerate."
-    end
+        {_ctx, surface} = apply(Xairo.Goldens, image, [])
+        {:ok, data} = Surface.to_png_stream(surface)
 
-    test "transforms" do
-      {:ok, golden_data} = File.read(Path.join(Xairo.Goldens.golden_path(), "transforms.png"))
-
-      {_ctx, surface} = Xairo.Goldens.transforms()
-      {:ok, data} = Surface.to_png_stream(surface)
-
-      assert data == golden_data,
-             "Golden image data differs, check images and run `mix xairo.gen.goldens` to regenerate."
+        assert data == golden_data,
+               "Golden image data differs for #{image}.png, check images and run `mix xairo.gen.goldens` to regenerate."
+      end
     end
   end
 end

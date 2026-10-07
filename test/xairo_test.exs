@@ -101,6 +101,22 @@ defmodule XairoTest do
     end
   end
 
+  describe "line_to/3" do
+    test "returns the ctx" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.line_to(ctx, 1.5, 3.7) == ctx
+    end
+
+    test "casts integers to floats" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.line_to(ctx, 1, 3) == ctx
+    end
+  end
+
   describe "translate/3" do
     test "returns the ctx" do
       {:ok, surface} = Image.create(:argb32, 10, 10)
@@ -219,6 +235,32 @@ defmodule XairoTest do
       {:ok, ctx} = Context.create(surface)
 
       assert {:error, :invalid_restore} = Xairo.restore(ctx)
+    end
+  end
+
+  describe "clip/1" do
+    test "returns the ctx" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.clip(ctx) == ctx
+    end
+  end
+
+  describe "reset_clip/1" do
+    test "returns the ctx on succes" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      ctx = Xairo.clip(ctx)
+      assert Xairo.reset_clip(ctx) == ctx
+    end
+
+    test "reset clip is a no-op if there is no clip" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.reset_clip(ctx) == ctx
     end
   end
 end

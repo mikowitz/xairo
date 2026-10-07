@@ -75,6 +75,11 @@ pub fn move_to(ctx: ContextResource, x: f64, y: f64) beam.term {
     return checkContext(ctx);
 }
 
+pub fn line_to(ctx: ContextResource, x: f64, y: f64) beam.term {
+    c.cairo_line_to(ctx.unpack().ptr, x, y);
+    return checkContext(ctx);
+}
+
 pub fn rectangle(ctx: ContextResource, x: f64, y: f64, width: f64, height: f64) beam.term {
     c.cairo_rectangle(ctx.unpack().ptr, x, y, width, height);
     return checkContext(ctx);
@@ -131,5 +136,15 @@ pub fn save(ctx: ContextResource) beam.term {
 
 pub fn restore(ctx: ContextResource) beam.term {
     c.cairo_restore(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn clip(ctx: ContextResource) beam.term {
+    c.cairo_clip(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn reset_clip(ctx: ContextResource) beam.term {
+    c.cairo_reset_clip(ctx.unpack().ptr);
     return checkContext(ctx);
 }

@@ -53,4 +53,30 @@ defmodule Xairo.Goldens do
 
     {ctx, surface}
   end
+
+  def clipping do
+    {:ok, surface} = Image.create(:argb32, 120, 120)
+    {:ok, ctx} = Context.create(surface)
+
+    ctx
+    |> Xairo.arc(60, 60, 45, 0, 2 * :math.pi())
+    |> Xairo.clip()
+    |> Xairo.set_source_rgb(0.1, 0.6, 0.3)
+    |> Xairo.set_line_width(6)
+    |> then(fn ctx ->
+      Enum.reduce(0..12, ctx, fn i, ctx ->
+        ctx
+        |> Xairo.move_to(i * 10, 0)
+        |> Xairo.line_to(i * 10 - 60, 120)
+        |> Xairo.stroke()
+      end)
+    end)
+    |> Xairo.reset_clip()
+    |> Xairo.set_source_rgb(0, 0, 0)
+    |> Xairo.set_line_width(2)
+    |> Xairo.arc(60, 60, 45, 0, 2 * :math.pi())
+    |> Xairo.stroke()
+
+    {ctx, surface}
+  end
 end

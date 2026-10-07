@@ -8,5 +8,6 @@ defmodule Mix.Tasks.Xairo.Gen.Goldens do
   def run(_) do
     Xairo.Goldens.generate(&Xairo.Goldens.shapes/0, "shapes.png")
     Xairo.Goldens.generate(&Xairo.Goldens.transforms/0, "transforms.png")
+    Xairo.Goldens.generate(&Xairo.Goldens.clipping/0, "clipping.png")
   end
 end

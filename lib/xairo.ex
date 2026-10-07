@@ -36,6 +36,9 @@ defmodule Xairo do
   @spec move_to(Context.t(), number(), number()) :: maybe_ctx()
   def move_to(ctx, x, y), do: NIF.context_move_to(ctx, x * 1.0, y * 1.0)
 
+  @spec line_to(Context.t(), number(), number()) :: maybe_ctx()
+  def line_to(ctx, x, y), do: NIF.context_line_to(ctx, x * 1.0, y * 1.0)
+
   @spec rectangle(Context.t(), number(), number(), number(), number()) :: maybe_ctx()
   def rectangle(ctx, x, y, width, height) do
     NIF.context_rectangle(ctx, x * 1.0, y * 1.0, width * 1.0, height * 1.0)
@@ -75,4 +78,10 @@ defmodule Xairo do
 
   @spec restore(Context.t()) :: maybe_ctx()
   def restore(ctx), do: NIF.context_restore(ctx)
+
+  @spec clip(Context.t()) :: maybe_ctx()
+  def clip(ctx), do: NIF.context_clip(ctx)
+
+  @spec reset_clip(Context.t()) :: maybe_ctx()
+  def reset_clip(ctx), do: NIF.context_reset_clip(ctx)
 end

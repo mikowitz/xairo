@@ -33,6 +33,7 @@ defmodule Xairo.NIF do
   pub const context_set_dash = context.set_dash;
 
   pub const context_move_to = context.move_to;
+  pub const context_line_to = context.line_to;
   pub const context_rectangle = context.rectangle;
   pub const context_arc = context.arc;
   pub const context_curve_to = context.curve_to;
@@ -46,6 +47,8 @@ defmodule Xairo.NIF do
 
   pub const context_save = context.save;
   pub const context_restore = context.restore;
+  pub const context_clip = context.clip;
+  pub const context_reset_clip = context.reset_clip;
 
   pub const SurfaceResource = surface.SurfaceResource;
 
