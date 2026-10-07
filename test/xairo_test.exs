@@ -101,6 +101,31 @@ defmodule XairoTest do
     end
   end
 
+  describe "translate/3" do
+    test "returns the ctx" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.translate(ctx, 50.5, 50) == ctx
+    end
+  end
+
+  describe "rotate/2" do
+    test "returns the ctx" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.rotate(ctx, :math.pi() / 4) == ctx
+    end
+
+    test "casts integer to float" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.rotate(ctx, 4) == ctx
+    end
+  end
+
   describe "rectangle/5" do
     test "returns the context" do
       {:ok, surface} = Image.create(:argb32, 10, 10)
@@ -168,6 +193,32 @@ defmodule XairoTest do
       {:ok, ctx} = Context.create(surface)
 
       assert Xairo.stroke(ctx) == ctx
+    end
+  end
+
+  describe "save/1" do
+    test "returns the ctx" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.save(ctx) == ctx
+    end
+  end
+
+  describe "restore/1" do
+    test "returns the ctx on succes" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      ctx = Xairo.save(ctx)
+      assert Xairo.restore(ctx) == ctx
+    end
+
+    test "returns an error if there is no saved state to restore" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert {:error, :invalid_restore} = Xairo.restore(ctx)
     end
   end
 end

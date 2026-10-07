@@ -33,4 +33,24 @@ defmodule Xairo.Goldens do
 
     {ctx, surface}
   end
+
+  def transforms do
+    {:ok, surface} = Image.create(:argb32, 160, 160)
+    {:ok, ctx} = Context.create(surface)
+
+    ctx = Xairo.translate(ctx, 80, 80)
+
+    ctx =
+      Enum.reduce(0..11, ctx, fn i, ctx ->
+        ctx
+        |> Xairo.save()
+        |> Xairo.rotate(i * :math.pi() / 6)
+        |> Xairo.set_source_rgba(i / 12, 0.3, 1 - i / 12, 0.8)
+        |> Xairo.rectangle(20, -5, 50, 10)
+        |> Xairo.fill()
+        |> Xairo.restore()
+      end)
+
+    {ctx, surface}
+  end
 end

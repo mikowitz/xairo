@@ -52,6 +52,12 @@ defmodule Xairo do
     NIF.context_curve_to(ctx, x1 / 1, y1 / 1, x2 / 1, y2 / 1, x3 / 1, y3 / 1)
   end
 
+  @spec translate(Context.t(), number(), number()) :: maybe_ctx()
+  def translate(ctx, tx, ty), do: NIF.context_translate(ctx, tx / 1, ty / 1)
+
+  @spec rotate(Context.t(), number()) :: maybe_ctx()
+  def rotate(ctx, angle), do: NIF.context_rotate(ctx, angle / 1)
+
   @spec paint(Context.t()) :: maybe_ctx()
   def paint(ctx), do: NIF.context_paint(ctx)
 
@@ -63,4 +69,10 @@ defmodule Xairo do
 
   @spec stroke(Context.t()) :: maybe_ctx()
   def stroke(ctx), do: NIF.context_stroke(ctx)
+
+  @spec save(Context.t()) :: maybe_ctx()
+  def save(ctx), do: NIF.context_save(ctx)
+
+  @spec restore(Context.t()) :: maybe_ctx()
+  def restore(ctx), do: NIF.context_restore(ctx)
 end

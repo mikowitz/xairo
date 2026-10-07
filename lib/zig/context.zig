@@ -90,6 +90,16 @@ pub fn curve_to(ctx: ContextResource, x1: f64, y1: f64, x2: f64, y2: f64, x3: f6
     return checkContext(ctx);
 }
 
+pub fn translate(ctx: ContextResource, tx: f64, ty: f64) beam.term {
+    c.cairo_translate(ctx.unpack().ptr, tx, ty);
+    return checkContext(ctx);
+}
+
+pub fn rotate(ctx: ContextResource, angle: f64) beam.term {
+    c.cairo_rotate(ctx.unpack().ptr, angle);
+    return checkContext(ctx);
+}
+
 pub fn paint(ctx: ContextResource) beam.term {
     const ptr = ctx.unpack().ptr;
     c.cairo_paint(ptr);
@@ -111,5 +121,15 @@ pub fn fill_preserve(ctx: ContextResource) beam.term {
 pub fn stroke(ctx: ContextResource) beam.term {
     const ptr = ctx.unpack().ptr;
     c.cairo_stroke(ptr);
+    return checkContext(ctx);
+}
+
+pub fn save(ctx: ContextResource) beam.term {
+    c.cairo_save(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn restore(ctx: ContextResource) beam.term {
+    c.cairo_restore(ctx.unpack().ptr);
     return checkContext(ctx);
 }

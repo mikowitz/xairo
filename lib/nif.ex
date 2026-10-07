@@ -36,11 +36,16 @@ defmodule Xairo.NIF do
   pub const context_rectangle = context.rectangle;
   pub const context_arc = context.arc;
   pub const context_curve_to = context.curve_to;
+  pub const context_translate = context.translate;
+  pub const context_rotate = context.rotate;
 
   pub const context_paint = context.paint;
   pub const context_fill = context.fill;
   pub const context_fill_preserve = context.fill_preserve;
   pub const context_stroke = context.stroke;
+
+  pub const context_save = context.save;
+  pub const context_restore = context.restore;
 
   pub const SurfaceResource = surface.SurfaceResource;
 

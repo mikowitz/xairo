@@ -12,5 +12,15 @@ defmodule Xairo.GoldenImageTest do
       assert data == golden_data,
              "Golden image data differs, check images and run `mix xairo.gen.goldens` to regenerate."
     end
+
+    test "transforms" do
+      {:ok, golden_data} = File.read(Path.join(Xairo.Goldens.golden_path(), "transforms.png"))
+
+      {_ctx, surface} = Xairo.Goldens.transforms()
+      {:ok, data} = Surface.to_png_stream(surface)
+
+      assert data == golden_data,
+             "Golden image data differs, check images and run `mix xairo.gen.goldens` to regenerate."
+    end
   end
 end
