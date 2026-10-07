@@ -79,4 +79,50 @@ defmodule Xairo.Goldens do
 
     {ctx, surface}
   end
+
+  def lsystem_tree do
+    {:ok, surface} = Image.create(:argb32, 200, 200)
+    {:ok, ctx} = Context.create(surface)
+
+    ctx
+    |> Xairo.set_source_rgb(0.35, 0.2, 0.1)
+    |> Xairo.set_line_cap(:round)
+    |> Xairo.translate(100, 190)
+    |> branch(50, 7)
+
+    {ctx, surface}
+  end
+
+  defp branch(ctx, _length, 0), do: ctx
+
+  defp branch(ctx, length, depth) do
+    ctx
+    |> Xairo.set_line_width(depth)
+    |> Xairo.move_to(0, 0)
+    |> Xairo.line_to(0, -length)
+    |> Xairo.stroke()
+    |> Xairo.translate(0, -length)
+    |> Xairo.save()
+    |> Xairo.rotate(-0.45)
+    |> branch(length * 0.72, depth - 1)
+    |> Xairo.restore()
+    |> Xairo.save()
+    |> Xairo.rotate(0.35)
+    |> branch(length * 0.72, depth - 1)
+    |> Xairo.restore()
+  end
+
+  def text do
+    {:ok, surface} = Image.create(:argb32, 240, 80)
+    {:ok, ctx} = Context.create(surface)
+
+    ctx
+    |> Xairo.set_source_rgb(0.1, 0.1, 0.1)
+    |> Xairo.select_font_face("sans-serif", :normal, :bold)
+    |> Xairo.set_font_size(28)
+    |> Xairo.move_to(12, 50)
+    |> Xairo.show_text("Xairo!")
+
+    {ctx, surface}
+  end
 end

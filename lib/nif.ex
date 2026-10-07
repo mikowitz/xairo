@@ -31,6 +31,8 @@ defmodule Xairo.NIF do
   pub const context_set_line_width = context.set_line_width;
   pub const context_set_line_cap = context.set_line_cap;
   pub const context_set_dash = context.set_dash;
+  pub const context_select_font_face = context.select_font_face;
+  pub const context_set_font_size = context.set_font_size;
 
   pub const context_move_to = context.move_to;
   pub const context_line_to = context.line_to;
@@ -44,6 +46,7 @@ defmodule Xairo.NIF do
   pub const context_fill = context.fill;
   pub const context_fill_preserve = context.fill_preserve;
   pub const context_stroke = context.stroke;
+  pub const context_show_text = context.show_text;
 
   pub const context_save = context.save;
   pub const context_restore = context.restore;

@@ -5,6 +5,9 @@ const c = @import("cairo");
 const status = @import("status.zig");
 const surface = @import("surface.zig");
 const LineCap = @import("enums.zig").LineCap;
+const enums = @import("enums.zig");
+
+const allocator = std.heap.c_allocator;
 
 const Context = struct {
     ptr: *c.cairo_t,
@@ -70,6 +73,18 @@ pub fn set_dash(ctx: ContextResource, dashes: []f64, offset: f64) beam.term {
     return checkContext(ctx);
 }
 
+pub fn select_font_face(ctx: ContextResource, family: []const u8, slant: enums.FontSlant, weight: enums.FontWeight) !beam.term {
+    const family_c = try allocator.dupeZ(u8, family);
+    defer allocator.free(family_c);
+    c.cairo_select_font_face(ctx.unpack().ptr, family_c, @intFromEnum(slant), @intFromEnum(weight));
+    return checkContext(ctx);
+}
+
+pub fn set_font_size(ctx: ContextResource, size: f64) beam.term {
+    c.cairo_set_font_size(ctx.unpack().ptr, size);
+    return checkContext(ctx);
+}
+
 pub fn move_to(ctx: ContextResource, x: f64, y: f64) beam.term {
     c.cairo_move_to(ctx.unpack().ptr, x, y);
     return checkContext(ctx);
@@ -126,6 +141,13 @@ pub fn fill_preserve(ctx: ContextResource) beam.term {
 pub fn stroke(ctx: ContextResource) beam.term {
     const ptr = ctx.unpack().ptr;
     c.cairo_stroke(ptr);
+    return checkContext(ctx);
+}
+
+pub fn show_text(ctx: ContextResource, text: []const u8) !beam.term {
+    const text_c = try allocator.dupeZ(u8, text);
+    defer allocator.free(text_c);
+    c.cairo_show_text(ctx.unpack().ptr, text_c);
     return checkContext(ctx);
 }
 

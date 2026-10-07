@@ -3,7 +3,7 @@ defmodule Xairo.GoldenImageTest do
   use ExUnit.Case, async: true
 
   describe "golden images" do
-    for image <- ~w(shapes transforms clipping)a do
+    for image <- ~w(shapes transforms clipping lsystem_tree text)a do
       test "#{image}" do
         image = unquote(image)
 

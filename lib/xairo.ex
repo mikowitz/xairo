@@ -5,8 +5,13 @@ defmodule Xairo do
   import Xairo.Enums, only: [enum_type: 1]
 
   @line_caps ~w(butt round square)a
-
   @type line_cap :: unquote(enum_type(@line_caps))
+
+  @font_slants ~w(normal italic oblique)a
+  @type font_slant :: unquote(enum_type(@font_slants))
+
+  @font_weights ~w(normal bold)a
+  @type font_weight :: unquote(enum_type(@font_weights))
 
   @type maybe_ctx :: Context.t() | {:error, atom()}
 
@@ -32,6 +37,9 @@ defmodule Xairo do
       offset / 1
     )
   end
+
+  @spec set_font_size(Context.t(), number()) :: maybe_ctx()
+  def set_font_size(ctx, size), do: NIF.context_set_font_size(ctx, size / 1)
 
   @spec move_to(Context.t(), number(), number()) :: maybe_ctx()
   def move_to(ctx, x, y), do: NIF.context_move_to(ctx, x * 1.0, y * 1.0)
@@ -73,6 +81,9 @@ defmodule Xairo do
   @spec stroke(Context.t()) :: maybe_ctx()
   def stroke(ctx), do: NIF.context_stroke(ctx)
 
+  @spec show_text(Context.t(), String.t()) :: maybe_ctx()
+  def show_text(ctx, text), do: NIF.context_show_text(ctx, text)
+
   @spec save(Context.t()) :: maybe_ctx()
   def save(ctx), do: NIF.context_save(ctx)
 
@@ -84,4 +95,10 @@ defmodule Xairo do
 
   @spec reset_clip(Context.t()) :: maybe_ctx()
   def reset_clip(ctx), do: NIF.context_reset_clip(ctx)
+
+  @spec select_font_face(Context.t(), String.t(), font_slant(), font_weight()) :: maybe_ctx()
+  def select_font_face(ctx, family, slant, weight)
+      when slant in @font_slants and weight in @font_weights do
+    NIF.context_select_font_face(ctx, family, slant, weight)
+  end
 end
