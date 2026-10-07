@@ -53,6 +53,8 @@ defmodule Xairo.NIF do
   pub const context_clip = context.clip;
   pub const context_reset_clip = context.reset_clip;
 
+  pub const context_get_target = context.get_target;
+
   pub const SurfaceResource = surface.SurfaceResource;
 
   pub const cairo_version = c.cairo_version_string;

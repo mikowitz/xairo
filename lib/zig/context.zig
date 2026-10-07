@@ -11,6 +11,7 @@ const allocator = std.heap.c_allocator;
 
 const Context = struct {
     ptr: *c.cairo_t,
+    target: surface.SurfaceResource,
 };
 
 pub const ContextResourceCallbacks = struct {
@@ -32,7 +33,7 @@ pub fn context_create(s: surface.SurfaceResource) !beam.term {
         }
         return beam.make(.{ .@"error", .unknown_status, raw }, .{});
     }
-    const resource = try ContextResource.create(.{ .ptr = ptr }, .{});
+    const resource = try ContextResource.create(.{ .ptr = ptr, .target = s }, .{});
     return beam.make(.{ .ok, resource }, .{});
 }
 
@@ -169,4 +170,8 @@ pub fn clip(ctx: ContextResource) beam.term {
 pub fn reset_clip(ctx: ContextResource) beam.term {
     c.cairo_reset_clip(ctx.unpack().ptr);
     return checkContext(ctx);
+}
+
+pub fn get_target(ctx: ContextResource) beam.term {
+    return beam.make(.{ .ok, ctx.unpack().target }, .{});
 }
