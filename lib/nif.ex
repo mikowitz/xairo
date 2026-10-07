@@ -28,9 +28,34 @@ defmodule Xairo.NIF do
   pub const context_create = context.context_create;
   pub const context_set_source_rgb = context.set_source_rgb;
   pub const context_set_source_rgba = context.set_source_rgba;
+
+  pub const context_get_antialias = context.get_antialias;
+  pub const context_set_antialias = context.set_antialias;
+
+  pub const context_get_fill_rule = context.get_fill_rule;
+  pub const context_set_fill_rule = context.set_fill_rule;
+
+  pub const context_get_line_width = context.get_line_width;
   pub const context_set_line_width = context.set_line_width;
+
+  pub const context_get_line_join = context.get_line_join;
+  pub const context_set_line_join = context.set_line_join;
+
+  pub const context_get_operator = context.get_operator;
+  pub const context_set_operator = context.set_operator;
+
+  pub const context_get_miter_limit = context.get_miter_limit;
+  pub const context_set_miter_limit = context.set_miter_limit;
+
+  pub const context_get_tolerance = context.get_tolerance;
+  pub const context_set_tolerance = context.set_tolerance;
+
+  pub const context_get_line_cap = context.get_line_cap;
   pub const context_set_line_cap = context.set_line_cap;
+
+  pub const context_get_dash = context.get_dash;
   pub const context_set_dash = context.set_dash;
+
   pub const context_select_font_face = context.select_font_face;
   pub const context_set_font_size = context.set_font_size;
 

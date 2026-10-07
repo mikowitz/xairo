@@ -1,5 +1,6 @@
 const std = @import("std");
 const beam = @import("beam");
+const e = @import("erl_nif");
 const root = @import("root");
 const c = @import("cairo");
 const status = @import("status.zig");
@@ -57,14 +58,98 @@ pub fn set_source_rgba(ctx: ContextResource, r: f64, g: f64, b: f64, a: f64) bea
     return checkContext(ctx);
 }
 
+pub fn get_operator(ctx: ContextResource) beam.term {
+    const raw = c.cairo_get_operator(ctx.unpack().ptr);
+    if (std.enums.fromInt(enums.Operator, raw)) |found| return beam.make(found, .{});
+    unreachable;
+}
+
+pub fn set_operator(ctx: ContextResource, operator: beam.term) !beam.term {
+    var buf: [256]u8 = undefined;
+    const len: usize = @intCast(e.enif_get_atom(beam.context.env, operator.v, &buf, buf.len, e.ERL_NIF_LATIN1));
+    if (len == 0) return error.badarg;
+    const operator_e = std.meta.stringToEnum(enums.Operator, buf[0 .. len - 1]) orelse return error.badarg;
+    c.cairo_set_operator(ctx.unpack().ptr, @intFromEnum(operator_e));
+    return checkContext(ctx);
+}
+
+pub fn get_antialias(ctx: ContextResource) beam.term {
+    const raw = c.cairo_get_antialias(ctx.unpack().ptr);
+    if (std.enums.fromInt(enums.Antialias, raw)) |found| return beam.make(found, .{});
+    unreachable;
+}
+
+pub fn set_antialias(ctx: ContextResource, antialias: enums.Antialias) beam.term {
+    c.cairo_set_antialias(ctx.unpack().ptr, @intFromEnum(antialias));
+    return checkContext(ctx);
+}
+
+pub fn get_fill_rule(ctx: ContextResource) beam.term {
+    const raw = c.cairo_get_fill_rule(ctx.unpack().ptr);
+    if (std.enums.fromInt(enums.FillRule, raw)) |found| return beam.make(found, .{});
+    unreachable;
+}
+
+pub fn set_fill_rule(ctx: ContextResource, fill_rule: enums.FillRule) beam.term {
+    c.cairo_set_fill_rule(ctx.unpack().ptr, @intFromEnum(fill_rule));
+    return checkContext(ctx);
+}
+
+pub fn get_miter_limit(ctx: ContextResource) f64 {
+    return c.cairo_get_miter_limit(ctx.unpack().ptr);
+}
+
+pub fn set_miter_limit(ctx: ContextResource, width: f64) beam.term {
+    c.cairo_set_miter_limit(ctx.unpack().ptr, width);
+    return checkContext(ctx);
+}
+
+pub fn get_tolerance(ctx: ContextResource) f64 {
+    return c.cairo_get_tolerance(ctx.unpack().ptr);
+}
+
+pub fn set_tolerance(ctx: ContextResource, width: f64) beam.term {
+    c.cairo_set_tolerance(ctx.unpack().ptr, width);
+    return checkContext(ctx);
+}
+
+pub fn get_line_width(ctx: ContextResource) f64 {
+    return c.cairo_get_line_width(ctx.unpack().ptr);
+}
+
 pub fn set_line_width(ctx: ContextResource, width: f64) beam.term {
     c.cairo_set_line_width(ctx.unpack().ptr, width);
     return checkContext(ctx);
 }
 
+pub fn get_line_cap(ctx: ContextResource) beam.term {
+    const raw = c.cairo_get_line_cap(ctx.unpack().ptr);
+    if (std.enums.fromInt(enums.LineCap, raw)) |found| return beam.make(found, .{});
+    unreachable;
+}
+
 pub fn set_line_cap(ctx: ContextResource, line_cap: LineCap) beam.term {
     c.cairo_set_line_cap(ctx.unpack().ptr, @intFromEnum(line_cap));
     return checkContext(ctx);
+}
+
+pub fn get_line_join(ctx: ContextResource) beam.term {
+    const raw = c.cairo_get_line_join(ctx.unpack().ptr);
+    if (std.enums.fromInt(enums.LineJoin, raw)) |found| return beam.make(found, .{});
+    unreachable;
+}
+
+pub fn set_line_join(ctx: ContextResource, line_join: enums.LineJoin) beam.term {
+    c.cairo_set_line_join(ctx.unpack().ptr, @intFromEnum(line_join));
+    return checkContext(ctx);
+}
+
+pub fn get_dash(ctx: ContextResource) !beam.term {
+    const count = c.cairo_get_dash_count(ctx.unpack().ptr);
+    const dashes = try allocator.alloc(f64, @intCast(count));
+    var offset: f64 = 0.0;
+    c.cairo_get_dash(ctx.unpack().ptr, dashes.ptr, &offset);
+    return beam.make(.{ dashes, offset }, .{});
 }
 
 pub fn set_dash(ctx: ContextResource, dashes: []f64, offset: f64) beam.term {
