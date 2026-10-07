@@ -51,6 +51,11 @@ pub const Status = enum(c.cairo_status_t) {
     last_status,
 };
 
+pub fn atom(raw: c.cairo_status_t) beam.term {
+    if (std.enums.fromInt(Status, raw)) |found| return beam.make(found, .{});
+    return beam.make(.unknown_status, .{});
+}
+
 pub fn to_atom(status: Status) beam.term {
     return beam.make(status, .{});
 }

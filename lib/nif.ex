@@ -15,12 +15,32 @@ defmodule Xairo.NIF do
       link_lib: {:system, "cairo"},
       headers: [cairo: "zig/xairo.h"]
     ],
-    resources: [:SurfaceResource],
+    resources: [:ContextResource, :SurfaceResource],
     nifs: [...]
 
   ~Z"""
   const c = @import("cairo");
   const surface = @import("zig/surface.zig");
+  const context = @import("zig/context.zig");
+
+  pub const ContextResource = context.ContextResource;
+
+  pub const context_create = context.context_create;
+  pub const context_set_source_rgb = context.set_source_rgb;
+  pub const context_set_source_rgba = context.set_source_rgba;
+  pub const context_set_line_width = context.set_line_width;
+  pub const context_set_line_cap = context.set_line_cap;
+  pub const context_set_dash = context.set_dash;
+
+  pub const context_move_to = context.move_to;
+  pub const context_rectangle = context.rectangle;
+  pub const context_arc = context.arc;
+  pub const context_curve_to = context.curve_to;
+
+  pub const context_paint = context.paint;
+  pub const context_fill = context.fill;
+  pub const context_fill_preserve = context.fill_preserve;
+  pub const context_stroke = context.stroke;
 
   pub const SurfaceResource = surface.SurfaceResource;
 

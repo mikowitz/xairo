@@ -49,8 +49,8 @@ pub fn image_surface_create(format: Format, width: i32, height: i32) !beam.term 
 }
 
 pub fn image_surface_create_from_png(filename: []const u8) !beam.term {
-    var filename_c: [*c]const u8 = undefined;
-    filename_c = @ptrCast(filename);
+    const filename_c = try allocator.dupeZ(u8, filename);
+    defer allocator.free(filename_c);
     const ptr = c.cairo_image_surface_create_from_png(filename_c).?;
     const raw = c.cairo_surface_status(ptr);
     if (raw != c.CAIRO_STATUS_SUCCESS) {
@@ -84,9 +84,9 @@ pub fn image_surface_get_stride(surface: SurfaceResource) beam.term {
     return beam.make(c.cairo_image_surface_get_stride(surface.unpack().ptr), .{});
 }
 
-pub fn surface_write_to_png(surface: SurfaceResource, filename: []const u8) beam.term {
-    var filename_c: [*c]const u8 = undefined;
-    filename_c = @ptrCast(filename);
+pub fn surface_write_to_png(surface: SurfaceResource, filename: []const u8) !beam.term {
+    const filename_c = try allocator.dupeZ(u8, filename);
+    defer allocator.free(filename_c);
     const ptr = surface.unpack().ptr;
     const raw = c.cairo_surface_write_to_png(ptr, filename_c);
     if (raw != c.CAIRO_STATUS_SUCCESS) {

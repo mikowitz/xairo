@@ -7,6 +7,7 @@ defmodule Xairo.MixProject do
       version: "0.1.0",
       elixir: "~> 1.20",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps()
     ]
   end
@@ -21,7 +22,8 @@ defmodule Xairo.MixProject do
   def cli do
     [
       preferred_envs: [
-        "test.watch": :test
+        "test.watch": :test,
+        "xairo.gen.goldens": :test
       ]
     ]
   end
@@ -33,4 +35,7 @@ defmodule Xairo.MixProject do
       {:zigler, "0.16.0", runtime: false}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 end
