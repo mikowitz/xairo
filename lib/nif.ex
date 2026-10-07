@@ -65,5 +65,12 @@ defmodule Xairo.NIF do
   pub const image_surface_get_stride = surface.image_surface_get_stride;
   pub const surface_write_to_png = surface.surface_write_to_png;
   pub const surface_write_to_png_stream = surface.surface_write_to_png_stream;
+  pub const surface_get_type = surface.get_type;
+  pub const surface_flush = surface.flush;
+  pub const surface_finish = surface.finish;
+
+  pub const svg_surface_create = surface.svg_surface_create;
+  pub const svg_surface_create_for_stream = surface.svg_surface_create_for_stream;
+  pub const svg_surface_to_binary = surface.svg_surface_to_binary;
   """
 end

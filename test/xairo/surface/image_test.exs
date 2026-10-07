@@ -1,7 +1,7 @@
 defmodule Xairo.Surface.ImageTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.Surface.Image
+  alias Xairo.Surface.{Image, Svg}
 
   describe "create/3" do
     test "returns a reference on success" do
@@ -47,6 +47,12 @@ defmodule Xairo.Surface.ImageTest do
         {:ok, surface} = Image.create(format, 10, 10)
         assert Image.get_format(surface) == format
       end
+    end
+
+    test "returns an error tuple when called on a non-image surface" do
+      {:ok, surface} = Svg.create_for_stream(100, 200)
+
+      assert {:error, :surface_type_mismatch} = Image.get_format(surface)
     end
   end
 
