@@ -15,6 +15,10 @@ defmodule Xairo.Drawing do
       defdelegate fill_extents(ctx), to: Drawing
       defdelegate in_stroke(ctx, x, y), to: Drawing
       defdelegate in_fill(ctx, x, y), to: Drawing
+      defdelegate clip(ctx), to: Drawing
+      defdelegate clip_preserve(ctx), to: Drawing
+      defdelegate clip_extents(ctx), to: Drawing
+      defdelegate reset_clip(ctx), to: Drawing
     end
   end
 
@@ -49,6 +53,18 @@ defmodule Xairo.Drawing do
 
   @spec in_stroke(Context.t(), number(), number()) :: boolean()
   def in_stroke(ctx, x, y), do: NIF.in_stroke(ctx, f(x), f(y))
+
+  @spec clip(Context.t()) :: Xairo.maybe_ctx()
+  def clip(ctx), do: NIF.clip(ctx)
+
+  @spec clip_preserve(Context.t()) :: Xairo.maybe_ctx()
+  def clip_preserve(ctx), do: NIF.clip_preserve(ctx)
+
+  @spec reset_clip(Context.t()) :: Xairo.maybe_ctx()
+  def reset_clip(ctx), do: NIF.reset_clip(ctx)
+
+  @spec clip_extents(Context.t()) :: {{number(), number()}, {number(), number()}}
+  def clip_extents(ctx), do: NIF.clip_extents(ctx)
 
   defp f(x), do: float(x)
 end

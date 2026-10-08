@@ -123,12 +123,6 @@ defmodule Xairo do
   @spec restore(Context.t()) :: maybe_ctx()
   def restore(ctx), do: NIF.context_restore(ctx)
 
-  @spec clip(Context.t()) :: maybe_ctx()
-  def clip(ctx), do: NIF.context_clip(ctx)
-
-  @spec reset_clip(Context.t()) :: maybe_ctx()
-  def reset_clip(ctx), do: NIF.context_reset_clip(ctx)
-
   @spec select_font_face(Context.t(), String.t(), font_slant(), font_weight()) :: maybe_ctx()
   def select_font_face(ctx, family, slant, weight)
       when slant in @font_slants and weight in @font_weights do

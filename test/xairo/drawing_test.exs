@@ -71,6 +71,38 @@ defmodule Xairo.DrawingTest do
     end
   end
 
+  describe "clipping" do
+    test "the default clip is the whole surface", %{ctx: ctx} do
+      assert Xairo.clip_extents(ctx) == {{0.0, 0.0}, {100.0, 80.0}}
+    end
+
+    test "clip/1 restricts drawing to the current path and clears the path", %{ctx: ctx} do
+      ctx = Xairo.clip(ctx)
+
+      assert Xairo.clip_extents(ctx) == {{10.0, 20.0}, {40.0, 60.0}}
+      refute Xairo.has_current_point(ctx)
+    end
+
+    test "clip_preserve/1 keeps the path", %{ctx: ctx} do
+      ctx = ctx |> Xairo.clip_preserve()
+
+      assert Xairo.clip_extents(ctx) == {{10.0, 20.0}, {40.0, 60.0}}
+      assert Xairo.has_current_point(ctx)
+    end
+
+    test "multiple calls to clip/1 are intersections", %{ctx: ctx} do
+      ctx = ctx |> Xairo.clip() |> Xairo.rectangle(5, 5, 20, 20) |> Xairo.clip()
+
+      assert Xairo.clip_extents(ctx) == {{10.0, 20.0}, {25.0, 25.0}}
+    end
+
+    test "reset_clip/1 restores the full clip", %{ctx: ctx} do
+      ctx = ctx |> Xairo.rectangle(10, 10, 20, 20) |> Xairo.clip() |> Xairo.reset_clip()
+
+      assert Xairo.clip_extents(ctx) == {{0.0, 0.0}, {100.0, 80.0}}
+    end
+  end
+
   test "drawing on a finished surface returns a surface_finished error", %{ctx: ctx} do
     {:ok, surface} = ctx |> Context.get_target()
     Surface.finish(surface)

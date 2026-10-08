@@ -90,13 +90,15 @@ defmodule Xairo.NIF do
   pub const fill_extents = drawing.fill_extents;
   pub const in_fill = drawing.in_fill;
   pub const in_stroke = drawing.in_stroke;
+  pub const clip = drawing.clip;
+  pub const clip_preserve = drawing.clip_preserve;
+  pub const reset_clip = drawing.reset_clip;
+  pub const clip_extents = drawing.clip_extents;
 
   pub const context_show_text = context.show_text;
 
   pub const context_save = context.save;
   pub const context_restore = context.restore;
-  pub const context_clip = context.clip;
-  pub const context_reset_clip = context.reset_clip;
 
   pub const context_get_target = context.get_target;
 

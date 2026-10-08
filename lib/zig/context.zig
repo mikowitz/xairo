@@ -197,16 +197,6 @@ pub fn restore(ctx: ContextResource) beam.term {
     return checkContext(ctx);
 }
 
-pub fn clip(ctx: ContextResource) beam.term {
-    c.cairo_clip(ctx.unpack().ptr);
-    return checkContext(ctx);
-}
-
-pub fn reset_clip(ctx: ContextResource) beam.term {
-    c.cairo_reset_clip(ctx.unpack().ptr);
-    return checkContext(ctx);
-}
-
 pub fn get_target(ctx: ContextResource) beam.term {
     return beam.make(.{ .ok, ctx.unpack().target }, .{});
 }

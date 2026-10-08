@@ -60,3 +60,27 @@ pub fn in_fill(ctx: ContextResource, x: f64, y: f64) bool {
 pub fn in_stroke(ctx: ContextResource, x: f64, y: f64) bool {
     return c.cairo_in_stroke(ctx.unpack().ptr, x, y) == 1;
 }
+
+pub fn clip(ctx: ContextResource) beam.term {
+    c.cairo_clip(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn clip_preserve(ctx: ContextResource) beam.term {
+    c.cairo_clip_preserve(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn reset_clip(ctx: ContextResource) beam.term {
+    c.cairo_reset_clip(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn clip_extents(ctx: ContextResource) beam.term {
+    var x1: f64 = 0.0;
+    var y1: f64 = 0.0;
+    var x2: f64 = 0.0;
+    var y2: f64 = 0.0;
+    c.cairo_clip_extents(ctx.unpack().ptr, &x1, &y1, &x2, &y2);
+    return beam.make(.{ .{ x1, y1 }, .{ x2, y2 } }, .{});
+}
