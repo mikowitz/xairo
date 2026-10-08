@@ -23,6 +23,7 @@ defmodule Xairo.NIF do
   const surface = @import("zig/surface.zig");
   const context = @import("zig/context.zig");
   const path = @import("zig/path.zig");
+  const drawing = @import("zig/drawing.zig");
 
   pub const ContextResource = context.ContextResource;
 
@@ -79,10 +80,17 @@ defmodule Xairo.NIF do
   pub const context_translate = context.translate;
   pub const context_rotate = context.rotate;
 
-  pub const context_paint = context.paint;
-  pub const context_fill = context.fill;
-  pub const context_fill_preserve = context.fill_preserve;
-  pub const context_stroke = context.stroke;
+  pub const paint = drawing.paint;
+  pub const paint_with_alpha = drawing.paint_with_alpha;
+  pub const fill = drawing.fill;
+  pub const fill_preserve = drawing.fill_preserve;
+  pub const stroke = drawing.stroke;
+  pub const stroke_preserve = drawing.stroke_preserve;
+  pub const stroke_extents = drawing.stroke_extents;
+  pub const fill_extents = drawing.fill_extents;
+  pub const in_fill = drawing.in_fill;
+  pub const in_stroke = drawing.in_stroke;
+
   pub const context_show_text = context.show_text;
 
   pub const context_save = context.save;

@@ -180,30 +180,6 @@ pub fn rotate(ctx: ContextResource, angle: f64) beam.term {
     return checkContext(ctx);
 }
 
-pub fn paint(ctx: ContextResource) beam.term {
-    const ptr = ctx.unpack().ptr;
-    c.cairo_paint(ptr);
-    return checkContext(ctx);
-}
-
-pub fn fill(ctx: ContextResource) beam.term {
-    const ptr = ctx.unpack().ptr;
-    c.cairo_fill(ptr);
-    return checkContext(ctx);
-}
-
-pub fn fill_preserve(ctx: ContextResource) beam.term {
-    const ptr = ctx.unpack().ptr;
-    c.cairo_fill_preserve(ptr);
-    return checkContext(ctx);
-}
-
-pub fn stroke(ctx: ContextResource) beam.term {
-    const ptr = ctx.unpack().ptr;
-    c.cairo_stroke(ptr);
-    return checkContext(ctx);
-}
-
 pub fn show_text(ctx: ContextResource, text: []const u8) !beam.term {
     const text_c = try allocator.dupeZ(u8, text);
     defer allocator.free(text_c);

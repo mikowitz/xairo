@@ -83,7 +83,6 @@ defmodule Xairo.PathTest do
       {x, y} = Xairo.get_current_point(ctx)
       assert_in_delta x, 6.5, 0.001
       assert_in_delta y, 8.7, 0.001
-      # assert Xairo.get_current_point(ctx) == {6.5, 8.7}
     end
 
     test "returns an error if there is no current point" do

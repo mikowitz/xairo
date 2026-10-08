@@ -5,6 +5,7 @@ defmodule Xairo do
   import Xairo.Enums, only: [enum_type: 1]
 
   use Xairo.Path
+  use Xairo.Drawing
 
   @antialiases ~w(default none gray subpixel fast good best)a
   @type antialias :: unquote(enum_type(@antialiases))
@@ -112,18 +113,6 @@ defmodule Xairo do
 
   @spec rotate(Context.t(), number()) :: maybe_ctx()
   def rotate(ctx, angle), do: NIF.context_rotate(ctx, angle / 1)
-
-  @spec paint(Context.t()) :: maybe_ctx()
-  def paint(ctx), do: NIF.context_paint(ctx)
-
-  @spec fill(Context.t()) :: maybe_ctx()
-  def fill(ctx), do: NIF.context_fill(ctx)
-
-  @spec fill_preserve(Context.t()) :: maybe_ctx()
-  def fill_preserve(ctx), do: NIF.context_fill_preserve(ctx)
-
-  @spec stroke(Context.t()) :: maybe_ctx()
-  def stroke(ctx), do: NIF.context_stroke(ctx)
 
   @spec show_text(Context.t(), String.t()) :: maybe_ctx()
   def show_text(ctx, text), do: NIF.context_show_text(ctx, text)
