@@ -21,38 +21,6 @@ defmodule XairoTest do
     end
   end
 
-  describe "move_to/3" do
-    test "returns the ctx" do
-      {:ok, surface} = Image.create(:argb32, 10, 10)
-      {:ok, ctx} = Context.create(surface)
-
-      assert Xairo.move_to(ctx, 1.5, 3.7) == ctx
-    end
-
-    test "casts integers to floats" do
-      {:ok, surface} = Image.create(:argb32, 10, 10)
-      {:ok, ctx} = Context.create(surface)
-
-      assert Xairo.move_to(ctx, 1, 3) == ctx
-    end
-  end
-
-  describe "line_to/3" do
-    test "returns the ctx" do
-      {:ok, surface} = Image.create(:argb32, 10, 10)
-      {:ok, ctx} = Context.create(surface)
-
-      assert Xairo.line_to(ctx, 1.5, 3.7) == ctx
-    end
-
-    test "casts integers to floats" do
-      {:ok, surface} = Image.create(:argb32, 10, 10)
-      {:ok, ctx} = Context.create(surface)
-
-      assert Xairo.line_to(ctx, 1, 3) == ctx
-    end
-  end
-
   describe "translate/3" do
     test "returns the ctx" do
       {:ok, surface} = Image.create(:argb32, 10, 10)
@@ -91,24 +59,6 @@ defmodule XairoTest do
       {:ok, ctx} = Context.create(surface)
 
       assert Xairo.rectangle(ctx, 10, 5, 200, 150) == ctx
-    end
-  end
-
-  describe "arc/6" do
-    test "returns the context" do
-      {:ok, surface} = Image.create(:argb32, 10, 10)
-      {:ok, ctx} = Context.create(surface)
-
-      assert Xairo.arc(ctx, 50.0, 50, 20, 0, :math.pi() / 2) == ctx
-    end
-  end
-
-  describe "curve_to/7" do
-    test "returns the context" do
-      {:ok, surface} = Image.create(:argb32, 10, 10)
-      {:ok, ctx} = Context.create(surface)
-
-      assert Xairo.curve_to(ctx, 50.0, 50, 20, 0, 0, 3)
     end
   end
 

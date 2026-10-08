@@ -5,7 +5,6 @@ const root = @import("root");
 const c = @import("cairo");
 const status = @import("status.zig");
 const surface = @import("surface.zig");
-const LineCap = @import("enums.zig").LineCap;
 const enums = @import("enums.zig");
 
 const allocator = std.heap.c_allocator;
@@ -38,7 +37,7 @@ pub fn context_create(s: surface.SurfaceResource) !beam.term {
     return beam.make(.{ .ok, resource }, .{});
 }
 
-fn checkContext(ctx: ContextResource) beam.term {
+pub fn checkContext(ctx: ContextResource) beam.term {
     const raw = c.cairo_status(ctx.unpack().ptr);
     if (raw != c.CAIRO_STATUS_SUCCESS) {
         return beam.make(.{ .@"error", status.atom(raw) }, .{});
@@ -128,7 +127,7 @@ pub fn get_line_cap(ctx: ContextResource) beam.term {
     unreachable;
 }
 
-pub fn set_line_cap(ctx: ContextResource, line_cap: LineCap) beam.term {
+pub fn set_line_cap(ctx: ContextResource, line_cap: enums.LineCap) beam.term {
     c.cairo_set_line_cap(ctx.unpack().ptr, @intFromEnum(line_cap));
     return checkContext(ctx);
 }
@@ -168,31 +167,6 @@ pub fn select_font_face(ctx: ContextResource, family: []const u8, slant: enums.F
 
 pub fn set_font_size(ctx: ContextResource, size: f64) beam.term {
     c.cairo_set_font_size(ctx.unpack().ptr, size);
-    return checkContext(ctx);
-}
-
-pub fn move_to(ctx: ContextResource, x: f64, y: f64) beam.term {
-    c.cairo_move_to(ctx.unpack().ptr, x, y);
-    return checkContext(ctx);
-}
-
-pub fn line_to(ctx: ContextResource, x: f64, y: f64) beam.term {
-    c.cairo_line_to(ctx.unpack().ptr, x, y);
-    return checkContext(ctx);
-}
-
-pub fn rectangle(ctx: ContextResource, x: f64, y: f64, width: f64, height: f64) beam.term {
-    c.cairo_rectangle(ctx.unpack().ptr, x, y, width, height);
-    return checkContext(ctx);
-}
-
-pub fn arc(ctx: ContextResource, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64) beam.term {
-    c.cairo_arc(ctx.unpack().ptr, xc, yc, radius, angle1, angle2);
-    return checkContext(ctx);
-}
-
-pub fn curve_to(ctx: ContextResource, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64) beam.term {
-    c.cairo_curve_to(ctx.unpack().ptr, x1, y1, x2, y2, x3, y3);
     return checkContext(ctx);
 }
 

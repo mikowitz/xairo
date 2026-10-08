@@ -22,6 +22,7 @@ defmodule Xairo.NIF do
   const c = @import("cairo");
   const surface = @import("zig/surface.zig");
   const context = @import("zig/context.zig");
+  const path = @import("zig/path.zig");
 
   pub const ContextResource = context.ContextResource;
 
@@ -59,11 +60,22 @@ defmodule Xairo.NIF do
   pub const context_select_font_face = context.select_font_face;
   pub const context_set_font_size = context.set_font_size;
 
-  pub const context_move_to = context.move_to;
-  pub const context_line_to = context.line_to;
-  pub const context_rectangle = context.rectangle;
-  pub const context_arc = context.arc;
-  pub const context_curve_to = context.curve_to;
+  pub const context_new_path = path.new_path;
+  pub const context_new_sub_path = path.new_sub_path;
+  pub const close_path = path.close_path;
+  pub const path_extents = path.path_extents;
+  pub const has_current_point = path.has_current_point;
+  pub const get_current_point = path.get_current_point;
+  pub const context_move_to = path.move_to;
+  pub const context_rel_move_to = path.rel_move_to;
+  pub const context_line_to = path.line_to;
+  pub const context_rel_line_to = path.rel_line_to;
+  pub const context_rectangle = path.rectangle;
+  pub const context_arc = path.arc;
+  pub const context_arc_negative = path.arc_negative;
+  pub const context_curve_to = path.curve_to;
+  pub const context_rel_curve_to = path.rel_curve_to;
+
   pub const context_translate = context.translate;
   pub const context_rotate = context.rotate;
 

@@ -1,4 +1,4 @@
-defmodule XairoContextSettingsTest do
+defmodule Xairo.ContextSettingsTest do
   use ExUnit.Case, async: true
 
   alias Xairo.{Context, Surface.Image}

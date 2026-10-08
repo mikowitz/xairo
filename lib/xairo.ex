@@ -4,6 +4,8 @@ defmodule Xairo do
 
   import Xairo.Enums, only: [enum_type: 1]
 
+  use Xairo.Path
+
   @antialiases ~w(default none gray subpixel fast good best)a
   @type antialias :: unquote(enum_type(@antialiases))
 
@@ -104,28 +106,6 @@ defmodule Xairo do
 
   @spec set_font_size(Context.t(), number()) :: maybe_ctx()
   def set_font_size(ctx, size), do: NIF.context_set_font_size(ctx, size / 1)
-
-  @spec move_to(Context.t(), number(), number()) :: maybe_ctx()
-  def move_to(ctx, x, y), do: NIF.context_move_to(ctx, x * 1.0, y * 1.0)
-
-  @spec line_to(Context.t(), number(), number()) :: maybe_ctx()
-  def line_to(ctx, x, y), do: NIF.context_line_to(ctx, x * 1.0, y * 1.0)
-
-  @spec rectangle(Context.t(), number(), number(), number(), number()) :: maybe_ctx()
-  def rectangle(ctx, x, y, width, height) do
-    NIF.context_rectangle(ctx, x * 1.0, y * 1.0, width * 1.0, height * 1.0)
-  end
-
-  @spec arc(Context.t(), number(), number(), number(), number(), number()) :: maybe_ctx()
-  def arc(ctx, xc, yc, radius, angle1, angle2) do
-    NIF.context_arc(ctx, xc * 1.0, yc * 1.0, radius * 1.0, angle1 * 1.0, angle2 * 1.0)
-  end
-
-  @spec curve_to(Context.t(), number(), number(), number(), number(), number(), number()) ::
-          maybe_ctx()
-  def curve_to(ctx, x1, y1, x2, y2, x3, y3) do
-    NIF.context_curve_to(ctx, x1 / 1, y1 / 1, x2 / 1, y2 / 1, x3 / 1, y3 / 1)
-  end
 
   @spec translate(Context.t(), number(), number()) :: maybe_ctx()
   def translate(ctx, tx, ty), do: NIF.context_translate(ctx, tx / 1, ty / 1)
