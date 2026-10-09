@@ -6,6 +6,7 @@ defmodule Xairo do
 
   use Xairo.Path
   use Xairo.Drawing
+  use Xairo.Transformations
 
   @antialiases ~w(default none gray subpixel fast good best)a
   @type antialias :: unquote(enum_type(@antialiases))
@@ -107,12 +108,6 @@ defmodule Xairo do
 
   @spec set_font_size(Context.t(), number()) :: maybe_ctx()
   def set_font_size(ctx, size), do: NIF.context_set_font_size(ctx, size / 1)
-
-  @spec translate(Context.t(), number(), number()) :: maybe_ctx()
-  def translate(ctx, tx, ty), do: NIF.context_translate(ctx, tx / 1, ty / 1)
-
-  @spec rotate(Context.t(), number()) :: maybe_ctx()
-  def rotate(ctx, angle), do: NIF.context_rotate(ctx, angle / 1)
 
   @spec show_text(Context.t(), String.t()) :: maybe_ctx()
   def show_text(ctx, text), do: NIF.context_show_text(ctx, text)

@@ -170,16 +170,6 @@ pub fn set_font_size(ctx: ContextResource, size: f64) beam.term {
     return checkContext(ctx);
 }
 
-pub fn translate(ctx: ContextResource, tx: f64, ty: f64) beam.term {
-    c.cairo_translate(ctx.unpack().ptr, tx, ty);
-    return checkContext(ctx);
-}
-
-pub fn rotate(ctx: ContextResource, angle: f64) beam.term {
-    c.cairo_rotate(ctx.unpack().ptr, angle);
-    return checkContext(ctx);
-}
-
 pub fn show_text(ctx: ContextResource, text: []const u8) !beam.term {
     const text_c = try allocator.dupeZ(u8, text);
     defer allocator.free(text_c);

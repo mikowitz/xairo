@@ -24,6 +24,8 @@ defmodule Xairo.NIF do
   const context = @import("zig/context.zig");
   const path = @import("zig/path.zig");
   const drawing = @import("zig/drawing.zig");
+  const matrix = @import("zig/matrix.zig");
+  const transformation = @import("zig/transformation.zig");
 
   pub const ContextResource = context.ContextResource;
 
@@ -77,8 +79,6 @@ defmodule Xairo.NIF do
   pub const context_curve_to = path.curve_to;
   pub const context_rel_curve_to = path.rel_curve_to;
 
-  pub const context_translate = context.translate;
-  pub const context_rotate = context.rotate;
 
   pub const paint = drawing.paint;
   pub const paint_with_alpha = drawing.paint_with_alpha;
@@ -121,5 +121,25 @@ defmodule Xairo.NIF do
   pub const svg_surface_create = surface.svg_surface_create;
   pub const svg_surface_create_for_stream = surface.svg_surface_create_for_stream;
   pub const svg_surface_to_binary = surface.svg_surface_to_binary;
+
+  pub const matrix_translate = matrix.translate;
+  pub const matrix_scale = matrix.scale;
+  pub const matrix_rotate = matrix.rotate;
+  pub const matrix_invert = matrix.invert;
+  pub const matrix_multiply = matrix.multiply;
+  pub const matrix_transform_distance = matrix.transform_distance;
+  pub const matrix_transform_point = matrix.transform_point;
+
+  pub const context_translate = transformation.translate;
+  pub const context_scale = transformation.scale;
+  pub const context_rotate = transformation.rotate;
+  pub const context_transform = transformation.transform;
+  pub const context_set_matrix = transformation.set_matrix;
+  pub const context_get_matrix = transformation.get_matrix;
+  pub const context_identity_matrix = transformation.identity_matrix;
+  pub const device_to_user = transformation.device_to_user;
+  pub const device_to_user_distance = transformation.device_to_user_distance;
+  pub const user_to_device = transformation.user_to_device;
+  pub const user_to_device_distance = transformation.user_to_device_distance;
   """
 end
