@@ -26,6 +26,7 @@ defmodule Xairo.NIF do
   const drawing = @import("zig/drawing.zig");
   const matrix = @import("zig/matrix.zig");
   const transformation = @import("zig/transformation.zig");
+  const text = @import("zig/text.zig");
 
   pub const ContextResource = context.ContextResource;
 
@@ -60,8 +61,12 @@ defmodule Xairo.NIF do
   pub const context_get_dash = context.get_dash;
   pub const context_set_dash = context.set_dash;
 
-  pub const context_select_font_face = context.select_font_face;
-  pub const context_set_font_size = context.set_font_size;
+  pub const context_select_font_face = text.select_font_face;
+  pub const context_set_font_size = text.set_font_size;
+  pub const context_show_text = text.show_text;
+  pub const context_text_path = text.text_path;
+  pub const context_text_extents = text.text_extents;
+  pub const context_font_extents = text.font_extents;
 
   pub const context_new_path = path.new_path;
   pub const context_new_sub_path = path.new_sub_path;
@@ -94,8 +99,6 @@ defmodule Xairo.NIF do
   pub const clip_preserve = drawing.clip_preserve;
   pub const reset_clip = drawing.reset_clip;
   pub const clip_extents = drawing.clip_extents;
-
-  pub const context_show_text = context.show_text;
 
   pub const context_save = context.save;
   pub const context_restore = context.restore;

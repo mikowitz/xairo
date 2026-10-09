@@ -62,6 +62,24 @@ defmodule XairoTest do
     end
   end
 
+  describe "arc/6" do
+    test "returns the context" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.arc(ctx, 50.0, 50, 20, 0, :math.pi() / 2) == ctx
+    end
+  end
+
+  describe "curve_to/7" do
+    test "returns the context" do
+      {:ok, surface} = Image.create(:argb32, 10, 10)
+      {:ok, ctx} = Context.create(surface)
+
+      assert Xairo.curve_to(ctx, 50.0, 50, 20, 0, 0, 3)
+    end
+  end
+
   describe "paint/1" do
     test "returns the ctx when successful" do
       {:ok, surface} = Image.create(:argb32, 10, 10)

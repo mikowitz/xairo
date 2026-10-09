@@ -6,6 +6,7 @@ defmodule Xairo do
 
   use Xairo.Path
   use Xairo.Drawing
+  use Xairo.Text
   use Xairo.Transformations
 
   @antialiases ~w(default none gray subpixel fast good best)a
@@ -19,17 +20,10 @@ defmodule Xairo do
 
   @line_joins ~w(miter round bevel)a
   @type line_join :: unquote(enum_type(@line_joins))
-
-  @font_slants ~w(normal italic oblique)a
-  @type font_slant :: unquote(enum_type(@font_slants))
-
   @operators ~w( clear source over in out atop dest dest_over dest_in dest_out dest_atop 
     xor add saturate multiply screen overlay darken lighten color_dodge color_burn 
     hard_light soft_light difference exclusion hsl_hue hsl_saturation hsl_color hsl_luminosity)a
   @type operator :: unquote(enum_type(@operators))
-
-  @font_weights ~w(normal bold)a
-  @type font_weight :: unquote(enum_type(@font_weights))
 
   @type maybe_ctx :: Context.t() | {:error, atom()}
 
@@ -106,21 +100,9 @@ defmodule Xairo do
     NIF.context_set_operator(ctx, operator)
   end
 
-  @spec set_font_size(Context.t(), number()) :: maybe_ctx()
-  def set_font_size(ctx, size), do: NIF.context_set_font_size(ctx, size / 1)
-
-  @spec show_text(Context.t(), String.t()) :: maybe_ctx()
-  def show_text(ctx, text), do: NIF.context_show_text(ctx, text)
-
   @spec save(Context.t()) :: maybe_ctx()
   def save(ctx), do: NIF.context_save(ctx)
 
   @spec restore(Context.t()) :: maybe_ctx()
   def restore(ctx), do: NIF.context_restore(ctx)
-
-  @spec select_font_face(Context.t(), String.t(), font_slant(), font_weight()) :: maybe_ctx()
-  def select_font_face(ctx, family, slant, weight)
-      when slant in @font_slants and weight in @font_weights do
-    NIF.context_select_font_face(ctx, family, slant, weight)
-  end
 end
