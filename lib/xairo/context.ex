@@ -1,4 +1,8 @@
 defmodule Xairo.Context do
+  @moduledoc """
+  Module for handling base Cairo contexts
+  """
+
   alias Xairo.{NIF, Surface}
 
   @type t :: reference()

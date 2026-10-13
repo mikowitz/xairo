@@ -1,8 +1,7 @@
 defmodule Xairo.TransformationsTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.Matrix
-  alias Xairo.{Context, Surface.Image}
+  alias Xairo.{Context, Matrix, Surface.Image}
 
   setup do
     {:ok, surface} = Image.create(:argb32, 100, 100)

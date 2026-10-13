@@ -1,4 +1,8 @@
 defmodule Xairo.Surface.Image do
+  @moduledoc """
+  Module for working with image-backed surfaces.
+  """
+
   alias Xairo.NIF
   alias Xairo.Surface
   @type format :: :argb32 | :rgb24 | :a8 | :a1 | :rgb16_565 | :rgb96f | :rgba128f

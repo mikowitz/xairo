@@ -1,4 +1,6 @@
 defmodule Xairo.Path do
+  @moduledoc false
+
   alias Xairo.{Context, NIF}
 
   defmacro __using__(_) do

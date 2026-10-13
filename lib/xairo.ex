@@ -1,4 +1,8 @@
 defmodule Xairo do
+  @moduledoc """
+  API for drawing operations on a Cairo context.
+  """
+
   alias Xairo.Context
   alias Xairo.NIF
 
@@ -20,8 +24,8 @@ defmodule Xairo do
 
   @line_joins ~w(miter round bevel)a
   @type line_join :: unquote(enum_type(@line_joins))
-  @operators ~w( clear source over in out atop dest dest_over dest_in dest_out dest_atop 
-    xor add saturate multiply screen overlay darken lighten color_dodge color_burn 
+  @operators ~w( clear source over in out atop dest dest_over dest_in dest_out dest_atop
+    xor add saturate multiply screen overlay darken lighten color_dodge color_burn
     hard_light soft_light difference exclusion hsl_hue hsl_saturation hsl_color hsl_luminosity)a
   @type operator :: unquote(enum_type(@operators))
 

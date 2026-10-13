@@ -1,4 +1,8 @@
 defmodule Xairo.Surface do
+  @moduledoc """
+  Module for functions that apply to all surface types.
+  """
+
   alias Xairo.NIF
 
   require Xairo.Enums

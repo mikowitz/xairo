@@ -1,4 +1,8 @@
 defmodule Xairo.Matrix do
+  @moduledoc """
+  Module for modeling an affine transformation matrix. 
+  """
+
   alias Xairo.NIF
 
   defstruct xx: 1.0, yx: 0.0, xy: 0.0, yy: 1.0, x0: 0.0, y0: 0.0
@@ -13,7 +17,7 @@ defmodule Xairo.Matrix do
         }
 
   @spec init_identity() :: t()
-  def init_identity(), do: %__MODULE__{}
+  def init_identity, do: %__MODULE__{}
 
   @spec init(number(), number(), number(), number(), number(), number()) :: t()
   def init(xx, yx, xy, yy, x0, y0) do

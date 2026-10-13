@@ -1,4 +1,8 @@
 defmodule Mix.Tasks.Xairo.Gen.Goldens do
+  @moduledoc """
+  Mix task to generate golden images for end-to-end testing.
+  """
+
   use Mix.Task
 
   @doc """

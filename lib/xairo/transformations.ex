@@ -1,4 +1,6 @@
 defmodule Xairo.Transformations do
+  @moduledoc false
+
   alias Xairo.{Context, Matrix, NIF}
 
   defmacro __using__(_) do

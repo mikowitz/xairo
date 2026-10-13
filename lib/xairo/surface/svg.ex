@@ -1,4 +1,8 @@
 defmodule Xairo.Surface.Svg do
+  @moduledoc """
+  Module for working with SVG-backed surfaces, both in memory and on disk.
+  """
+
   alias Xairo.{NIF, Surface}
 
   @spec create(String.t(), number(), number()) :: {:ok, Surface.t()} | {:error, atom()}

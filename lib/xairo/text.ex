@@ -1,4 +1,6 @@
 defmodule Xairo.Text do
+  @moduledoc false
+
   alias Xairo.{Context, FontExtents, NIF, TextExtents}
 
   import Xairo.Enums, only: [enum_type: 1]
