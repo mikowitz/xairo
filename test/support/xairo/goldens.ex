@@ -1,4 +1,6 @@
 defmodule Xairo.Goldens do
+  @moduledoc false
+
   alias Xairo
   alias Xairo.{Context, Surface, Surface.Image}
 

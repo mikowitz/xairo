@@ -1,0 +1,44 @@
+name: "CI Tests"
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: "[${{matrix.otp}}/${{matrix.elixir}}] CI Tests"
+    strategy:
+      matrix:
+        otp: ['27', '28', '29']
+        elixir: ['1.20.2']
+    steps:
+      - uses: gerlero/apt-install@c0fa73fe5c4a22deecf6d629565be92a15dd2026
+        with:
+          packages: pkg-config libcairo2-dev
+      - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29
+        with:
+          version: 0.16.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        id: cache-deps
+        with:
+          path: |
+            deps
+            _build
+            !_build/test/lib/xairo
+          key: ${{runner.os}}-${{matrix.elixir}}-${{matrix.otp}}-deps-cache-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: mix deps.get
+      - if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: MIX_ENV=test mix deps.compile
+      - run: MIX_ENV=test mix test --exclude skip_ci
+
+

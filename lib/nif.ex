@@ -1,4 +1,6 @@
 defmodule Xairo.NIF do
+  @moduledoc false
+
   case System.cmd("pkg-config", ["--variable=includedir", "cairo"]) do
     {dir, 0} ->
       @cairo_include_dir Path.join(String.trim(dir), "cairo")

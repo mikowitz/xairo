@@ -31,6 +31,8 @@ defmodule Xairo.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:credo, "~> 1.7.19", only: [:test], runtime: false},
+      {:ex_doc, "~> 0.39", runtime: false, warn_if_outdated: true},
       {:mix_test_watch, "~> 1.4", only: [:test], runtime: false},
       {:zigler, "0.16.0", runtime: false}
     ]
