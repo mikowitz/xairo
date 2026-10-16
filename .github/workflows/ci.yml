@@ -33,6 +33,7 @@ jobs:
           path: |
             deps
             _build
+            !_build/test/lib/xairo
           key: ${{runner.os}}-${{matrix.elixir}}-${{matrix.otp}}-deps-cache-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
       - if: steps.cache-deps.outputs.cache-hit != 'true'
         run: mix deps.get
