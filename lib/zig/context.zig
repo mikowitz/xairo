@@ -158,6 +158,15 @@ pub fn set_dash(ctx: ContextResource, dashes: []f64, offset: f64) beam.term {
     return checkContext(ctx);
 }
 
+pub fn get_hairline(ctx: ContextResource) bool {
+    return c.cairo_get_hairline(ctx.unpack().ptr) == 1;
+}
+
+pub fn set_hairline(ctx: ContextResource, hairline: bool) beam.term {
+    c.cairo_set_hairline(ctx.unpack().ptr, @intFromBool(hairline));
+    return checkContext(ctx);
+}
+
 pub fn save(ctx: ContextResource) beam.term {
     c.cairo_save(ctx.unpack().ptr);
     return checkContext(ctx);

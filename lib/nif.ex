@@ -63,6 +63,9 @@ defmodule Xairo.NIF do
   pub const context_get_dash = context.get_dash;
   pub const context_set_dash = context.set_dash;
 
+  pub const get_hairline = context.get_hairline;
+  pub const set_hairline = context.set_hairline;
+
   pub const context_select_font_face = text.select_font_face;
   pub const context_set_font_size = text.set_font_size;
   pub const context_show_text = text.show_text;

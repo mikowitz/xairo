@@ -1,4 +1,4 @@
-defmodule Xairo.ContextSettingsTest do
+defmodule Xairo.GraphicsStateTest do
   use ExUnit.Case, async: true
 
   import Xairo.TestHelpers
@@ -15,6 +15,8 @@ defmodule Xairo.ContextSettingsTest do
     assert Xairo.get_miter_limit(ctx) == 10.0
     assert Xairo.get_operator(ctx) == :over
     assert Xairo.get_tolerance(ctx) == 0.1
+
+    refute Xairo.get_hairline(ctx)
   end
 
   describe "setter and getter round trips" do
@@ -92,6 +94,10 @@ defmodule Xairo.ContextSettingsTest do
 
     test "tolerance", %{ctx: ctx} do
       assert Xairo.set_tolerance(ctx, 1) |> Xairo.get_tolerance() == 1.0
+    end
+
+    test "hairline", %{ctx: ctx} do
+      assert Xairo.set_hairline(ctx, true) |> Xairo.get_hairline() == true
     end
   end
 
