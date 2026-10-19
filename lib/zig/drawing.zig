@@ -116,3 +116,13 @@ pub fn copy_clip_rectangle_list(ctx: ContextResource) !beam.term {
 
     return beam.make(.{ .ok, rects.items }, .{});
 }
+
+pub fn copy_page(ctx: ContextResource) beam.term {
+    c.cairo_copy_page(ctx.unpack().ptr);
+    return checkContext(ctx);
+}
+
+pub fn show_page(ctx: ContextResource) beam.term {
+    c.cairo_show_page(ctx.unpack().ptr);
+    return checkContext(ctx);
+}

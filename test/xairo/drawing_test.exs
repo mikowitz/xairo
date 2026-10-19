@@ -148,4 +148,16 @@ defmodule Xairo.DrawingTest do
     Surface.finish(surface)
     assert {:error, :surface_finished} = Xairo.paint(ctx)
   end
+
+  describe "show_page/1" do
+    test "returns the context", %{ctx: ctx} do
+      assert Xairo.show_page(ctx) == ctx
+    end
+  end
+
+  describe "copy_page/1" do
+    test "returns the context", %{ctx: ctx} do
+      assert Xairo.copy_page(ctx) == ctx
+    end
+  end
 end
