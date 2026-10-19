@@ -2,8 +2,18 @@ const std = @import("std");
 const beam = @import("beam");
 const root = @import("root");
 const c = @import("cairo");
+const status = @import("status.zig");
 const ContextResource = @import("context.zig").ContextResource;
 const checkContext = @import("context.zig").checkContext;
+
+const allocator = std.heap.c_allocator;
+
+pub const Rectangle = struct {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+};
 
 pub fn paint(ctx: ContextResource) beam.term {
     c.cairo_paint(ctx.unpack().ptr);
@@ -87,4 +97,22 @@ pub fn clip_extents(ctx: ContextResource) beam.term {
     var y2: f64 = 0.0;
     c.cairo_clip_extents(ctx.unpack().ptr, &x1, &y1, &x2, &y2);
     return beam.make(.{ .{ x1, y1 }, .{ x2, y2 } }, .{});
+}
+
+pub fn copy_clip_rectangle_list(ctx: ContextResource) !beam.term {
+    const list = c.cairo_copy_clip_rectangle_list(ctx.unpack().ptr);
+    defer c.cairo_rectangle_list_destroy(list);
+
+    if (list.*.status != c.CAIRO_STATUS_SUCCESS) {
+        return beam.make(.{ .@"error", status.atom(list.*.status) }, .{});
+    }
+
+    var rects: std.ArrayList(Rectangle) = .empty;
+
+    for (0..@intCast(list.*.num_rectangles)) |i| {
+        const rect = list.*.rectangles[i];
+        try rects.append(allocator, Rectangle{ .x = rect.x, .y = rect.y, .width = rect.width, .height = rect.height });
+    }
+
+    return beam.make(.{ .ok, rects.items }, .{});
 }

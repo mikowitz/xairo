@@ -102,6 +102,7 @@ defmodule Xairo.NIF do
   pub const reset_clip = drawing.reset_clip;
   pub const in_clip = drawing.in_clip;
   pub const clip_extents = drawing.clip_extents;
+  pub const copy_clip_rectangle_list = drawing.copy_clip_rectangle_list;
 
   pub const context_save = context.save;
   pub const context_restore = context.restore;

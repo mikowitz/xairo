@@ -262,6 +262,19 @@ defmodule Xairo.Drawing do
       @doc group: "Drawing"
       @spec reset_clip(Context.t()) :: Xairo.maybe_ctx()
       defdelegate reset_clip(ctx), to: Drawing
+
+      @doc """
+      Gets the current clip region as a list of rectangles in user coordinates.
+      Never returns `nil`.
+
+      The status in the list may be `:clip_not_representable` to indicate that
+      the clip region cannot be represented as a list of user-space rectangles.
+      The status may have other values to indicate other errors.
+      """
+      @doc group: "Drawing"
+      @spec copy_clip_rectangle_list(Context.t()) ::
+              {:ok, {{float(), float()}, {float(), float()}}} | {:error, atom()}
+      defdelegate copy_clip_rectangle_list(ctx), to: Drawing
     end
   end
 
@@ -296,6 +309,16 @@ defmodule Xairo.Drawing do
   def clip_extents(ctx), do: NIF.clip_extents(ctx)
 
   def reset_clip(ctx), do: NIF.reset_clip(ctx)
+
+  def copy_clip_rectangle_list(ctx) do
+    case NIF.copy_clip_rectangle_list(ctx) do
+      {:error, _} = error ->
+        error
+
+      {:ok, list} ->
+        {:ok, Enum.map(list, &Xairo.Rectangle.from_nif/1)}
+    end
+  end
 
   defp f(x), do: float(x)
 end

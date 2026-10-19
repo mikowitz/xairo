@@ -1,7 +1,7 @@
 defmodule Xairo.DrawingTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, Surface, Surface.Image}
+  alias Xairo.{Context, Rectangle, Surface, Surface.Image}
 
   setup do
     {:ok, surface} = Image.create(:argb32, 100, 80)
@@ -114,6 +114,32 @@ defmodule Xairo.DrawingTest do
       ctx = ctx |> Xairo.rectangle(10, 10, 20, 20) |> Xairo.clip() |> Xairo.reset_clip()
 
       assert Xairo.clip_extents(ctx) == {{0.0, 0.0}, {100.0, 80.0}}
+    end
+
+    test "copy_clip_rectangle/1 returns the full surface when no clip exists", %{ctx: ctx} do
+      assert Xairo.copy_clip_rectangle_list(ctx) ==
+               {:ok,
+                [
+                  Rectangle.new(0, 0, 100, 80)
+                ]}
+    end
+
+    test "copy_clip_rectangle/1 returns the current clip rectangle", %{ctx: ctx} do
+      assert Xairo.clip(ctx)
+             |> Xairo.copy_clip_rectangle_list() ==
+               {:ok,
+                [
+                  Rectangle.new(10, 20, 30, 40)
+                ]}
+    end
+
+    test "copy_clip_rectangle_list/1 returns an error when the clip is not rectangular", %{
+      ctx: ctx
+    } do
+      assert Xairo.new_path(ctx)
+             |> Xairo.arc(50, 40, 10, 0, 2 * :math.pi())
+             |> Xairo.clip()
+             |> Xairo.copy_clip_rectangle_list() == {:error, :clip_not_representable}
     end
   end
 
