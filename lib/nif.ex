@@ -100,6 +100,7 @@ defmodule Xairo.NIF do
   pub const clip = drawing.clip;
   pub const clip_preserve = drawing.clip_preserve;
   pub const reset_clip = drawing.reset_clip;
+  pub const in_clip = drawing.in_clip;
   pub const clip_extents = drawing.clip_extents;
 
   pub const context_save = context.save;

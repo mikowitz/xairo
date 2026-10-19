@@ -76,6 +76,10 @@ pub fn reset_clip(ctx: ContextResource) beam.term {
     return checkContext(ctx);
 }
 
+pub fn in_clip(ctx: ContextResource, x: f64, y: f64) bool {
+    return c.cairo_in_clip(ctx.unpack().ptr, x, y) == 1;
+}
+
 pub fn clip_extents(ctx: ContextResource) beam.term {
     var x1: f64 = 0.0;
     var y1: f64 = 0.0;

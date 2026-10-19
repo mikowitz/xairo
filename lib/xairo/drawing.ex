@@ -224,6 +224,17 @@ defmodule Xairo.Drawing do
       defdelegate clip_preserve(ctx), to: Drawing
 
       @doc """
+      Tests whether the given point is inside the area that would be visible
+      through the current clip, i.e. the area that would be filled by a
+      `paint/1` operation.
+
+      See `clip/1`, and `clip_preserve/1`.
+      """
+      @doc group: "Drawing"
+      @spec in_clip(Context.t(), number(), number()) :: boolean()
+      defdelegate in_clip(ctx, x, y), to: Drawing
+
+      @doc """
       Computes a bounding box in user coordinates covering the area inside the
       current clip.
 
@@ -280,9 +291,11 @@ defmodule Xairo.Drawing do
 
   def clip_preserve(ctx), do: NIF.clip_preserve(ctx)
 
-  def reset_clip(ctx), do: NIF.reset_clip(ctx)
+  def in_clip(ctx, x, y), do: NIF.in_clip(ctx, f(x), f(y))
 
   def clip_extents(ctx), do: NIF.clip_extents(ctx)
+
+  def reset_clip(ctx), do: NIF.reset_clip(ctx)
 
   defp f(x), do: float(x)
 end

@@ -83,6 +83,20 @@ defmodule Xairo.DrawingTest do
       refute Xairo.has_current_point(ctx)
     end
 
+    test "in_clip/3 is true for all points if no clip exists", %{ctx: ctx} do
+      assert Xairo.in_clip(ctx, 30, 40)
+      assert Xairo.in_clip(ctx, 0, 0)
+      assert Xairo.in_clip(ctx, 10, 20)
+    end
+
+    test "in_clip/3 is false for points outside the current clip", %{ctx: ctx} do
+      ctx = Xairo.clip(ctx)
+
+      assert Xairo.in_clip(ctx, 30, 40)
+      refute Xairo.in_clip(ctx, 0, 0)
+      assert Xairo.in_clip(ctx, 10, 20)
+    end
+
     test "clip_preserve/1 keeps the path", %{ctx: ctx} do
       ctx = ctx |> Xairo.clip_preserve()
 
