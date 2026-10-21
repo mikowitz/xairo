@@ -127,4 +127,45 @@ defmodule Xairo.Goldens do
 
     {ctx, surface}
   end
+
+  def surface_source do
+    {:ok, tile} = Image.create(:argb32, 20, 20)
+    {:ok, tile_ctx} = Context.create(tile)
+
+    tile_ctx
+    |> Xairo.set_source_rgb(0.8, 0.2, 0.2)
+    |> Xairo.paint()
+
+    {:ok, surface} = Image.create(:argb32, 60, 60)
+    {:ok, ctx} = Context.create(surface)
+
+    ctx
+    |> Xairo.set_source_rgb(1, 1, 1)
+    |> Xairo.paint()
+    |> Xairo.set_source_surface(tile, 20, 20)
+    |> Xairo.paint()
+
+    {ctx, surface}
+  end
+
+  def hairlines do
+    {:ok, surface} = Image.create(:argb32, 80, 80)
+    {:ok, ctx} = Context.create(surface)
+
+    ctx
+    |> Xairo.set_source_rgb(1, 1, 1)
+    |> Xairo.paint()
+    |> Xairo.set_source_rgb(0, 0, 0)
+    |> Xairo.scale(4, 4)
+    |> Xairo.set_line_width(2)
+    |> Xairo.move_to(2, 5)
+    |> Xairo.line_to(18, 5)
+    |> Xairo.stroke()
+    |> Xairo.set_hairline(true)
+    |> Xairo.move_to(2, 15.125)
+    |> Xairo.line_to(18, 15.125)
+    |> Xairo.stroke()
+
+    {ctx, surface}
+  end
 end

@@ -57,6 +57,11 @@ pub fn set_source_rgba(ctx: ContextResource, r: f64, g: f64, b: f64, a: f64) bea
     return checkContext(ctx);
 }
 
+pub fn set_source_surface(ctx: ContextResource, s: surface.SurfaceResource, x: f64, y: f64) beam.term {
+    c.cairo_set_source_surface(ctx.unpack().ptr, s.unpack().ptr, x, y);
+    return checkContext(ctx);
+}
+
 pub fn get_operator(ctx: ContextResource) beam.term {
     const raw = c.cairo_get_operator(ctx.unpack().ptr);
     if (std.enums.fromInt(enums.Operator, raw)) |found| return beam.make(found, .{});

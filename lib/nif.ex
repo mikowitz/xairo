@@ -35,6 +35,7 @@ defmodule Xairo.NIF do
   pub const context_create = context.context_create;
   pub const context_set_source_rgb = context.set_source_rgb;
   pub const context_set_source_rgba = context.set_source_rgba;
+  pub const set_source_surface = context.set_source_surface;
 
   pub const context_get_antialias = context.get_antialias;
   pub const context_set_antialias = context.set_antialias;
