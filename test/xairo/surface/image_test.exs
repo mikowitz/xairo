@@ -53,7 +53,7 @@ defmodule Xairo.Surface.ImageTest do
     test "returns an error tuple when called on a non-image surface" do
       {:ok, surface} = Svg.create_for_stream(100, 200)
 
-      assert {:error, :surface_type_mismatch} = Image.get_format(surface)
+      assert Image.get_format(surface) == :invalid
     end
   end
 
@@ -62,12 +62,24 @@ defmodule Xairo.Surface.ImageTest do
       {:ok, surface} = Image.create(:argb32, 100, 80)
       assert Image.get_width(surface) == 100
     end
+
+    test "returns 0 for a non-image surface" do
+      {:ok, surface} = Svg.create_for_stream(100, 200)
+
+      assert Image.get_width(surface) == 0
+    end
   end
 
   describe "get_height/1" do
     test "returns the correct height" do
       {:ok, surface} = Image.create(:argb32, 100, 80)
       assert Image.get_height(surface) == 80
+    end
+
+    test "returns 0 for a non-image surface" do
+      {:ok, surface} = Svg.create_for_stream(100, 200)
+
+      assert Image.get_height(surface) == 0
     end
   end
 
@@ -81,6 +93,12 @@ defmodule Xairo.Surface.ImageTest do
 
       {:ok, surface} = Image.create(:a1, 33, 10)
       assert Image.get_stride(surface) == 8
+    end
+
+    test "returns 0 for a non-image surface" do
+      {:ok, surface} = Svg.create_for_stream(100, 200)
+
+      assert Image.get_stride(surface) == 0
     end
   end
 end

@@ -82,9 +82,6 @@ pub fn image_surface_get_height(surface: SurfaceResource) beam.term {
 
 pub fn image_surface_get_format(surface: SurfaceResource) beam.term {
     const format = c.cairo_image_surface_get_format(surface.unpack().ptr);
-    if (format == c.CAIRO_FORMAT_INVALID) {
-        return beam.make(.{ .@"error", .surface_type_mismatch }, .{});
-    }
     if (std.enums.fromInt(Format, format)) |found| {
         return beam.make(found, .{});
     }
