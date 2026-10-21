@@ -35,6 +35,7 @@ defmodule Xairo.NIF do
   pub const context_create = context.context_create;
   pub const context_set_source_rgb = context.set_source_rgb;
   pub const context_set_source_rgba = context.set_source_rgba;
+  pub const set_source_surface = context.set_source_surface;
 
   pub const context_get_antialias = context.get_antialias;
   pub const context_set_antialias = context.set_antialias;
@@ -62,6 +63,9 @@ defmodule Xairo.NIF do
 
   pub const context_get_dash = context.get_dash;
   pub const context_set_dash = context.set_dash;
+
+  pub const get_hairline = context.get_hairline;
+  pub const set_hairline = context.set_hairline;
 
   pub const context_select_font_face = text.select_font_face;
   pub const context_set_font_size = text.set_font_size;
@@ -100,7 +104,11 @@ defmodule Xairo.NIF do
   pub const clip = drawing.clip;
   pub const clip_preserve = drawing.clip_preserve;
   pub const reset_clip = drawing.reset_clip;
+  pub const in_clip = drawing.in_clip;
   pub const clip_extents = drawing.clip_extents;
+  pub const copy_clip_rectangle_list = drawing.copy_clip_rectangle_list;
+  pub const show_page = drawing.show_page;
+  pub const copy_page = drawing.copy_page;
 
   pub const context_save = context.save;
   pub const context_restore = context.restore;

@@ -1,13 +1,11 @@
 defmodule Xairo.TransformationsTest do
   use ExUnit.Case, async: true
 
-  alias Xairo.{Context, Matrix, Surface.Image}
+  alias Xairo.Matrix
 
-  setup do
-    {:ok, surface} = Image.create(:argb32, 100, 100)
-    {:ok, ctx} = Context.create(surface)
-    %{ctx: ctx}
-  end
+  import Xairo.TestHelpers
+
+  setup :with_context
 
   describe "translate/3" do
     test "returns the context", %{ctx: ctx} do

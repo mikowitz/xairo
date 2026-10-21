@@ -1,7 +1,7 @@
 # credo:disable-for-this-file Credo.Check.Refactor.LongQuoteBlocks
 defmodule Xairo.Drawing do
   @moduledoc false
-  alias Xairo.{Context, NIF}
+  alias Xairo.{Context, NIF, Rectangle}
 
   defmacro __using__(_) do
     quote location: :keep do
@@ -224,6 +224,17 @@ defmodule Xairo.Drawing do
       defdelegate clip_preserve(ctx), to: Drawing
 
       @doc """
+      Tests whether the given point is inside the area that would be visible
+      through the current clip, i.e. the area that would be filled by a
+      `paint/1` operation.
+
+      See `clip/1`, and `clip_preserve/1`.
+      """
+      @doc group: "Drawing"
+      @spec in_clip(Context.t(), number(), number()) :: boolean()
+      defdelegate in_clip(ctx, x, y), to: Drawing
+
+      @doc """
       Computes a bounding box in user coordinates covering the area inside the
       current clip.
 
@@ -251,6 +262,36 @@ defmodule Xairo.Drawing do
       @doc group: "Drawing"
       @spec reset_clip(Context.t()) :: Xairo.maybe_ctx()
       defdelegate reset_clip(ctx), to: Drawing
+
+      @doc """
+      Gets the current clip region as a list of rectangles in user coordinates.
+      Never returns `nil`.
+
+      The status in the list may be `:clip_not_representable` to indicate that
+      the clip region cannot be represented as a list of user-space rectangles.
+      The status may have other values to indicate other errors.
+      """
+      @doc group: "Drawing"
+      @spec copy_clip_rectangle_list(Context.t()) :: {:ok, [Rectangle.t()]} | {:error, atom()}
+      defdelegate copy_clip_rectangle_list(ctx), to: Drawing
+
+      @doc """
+      Emits and clears the current page for backends that support multiple
+      pages. Use `copy_page/1` if you don't want to clear the page.
+      """
+      @doc group: "Drawing"
+      @spec show_page(Context.t()) :: Xairo.maybe_ctx()
+      defdelegate show_page(ctx), to: Drawing
+
+      @doc """
+      Emits the current page for backends that support multiple pages, but
+      doesn't clear it, so the contents of the current page will be retained
+      for the next page too. Use `show_page/1` if you want to get an empty
+      page after the emission.
+      """
+      @doc group: "Drawing"
+      @spec copy_page(Context.t()) :: Xairo.maybe_ctx()
+      defdelegate copy_page(ctx), to: Drawing
     end
   end
 
@@ -280,9 +321,25 @@ defmodule Xairo.Drawing do
 
   def clip_preserve(ctx), do: NIF.clip_preserve(ctx)
 
-  def reset_clip(ctx), do: NIF.reset_clip(ctx)
+  def in_clip(ctx, x, y), do: NIF.in_clip(ctx, f(x), f(y))
 
   def clip_extents(ctx), do: NIF.clip_extents(ctx)
+
+  def reset_clip(ctx), do: NIF.reset_clip(ctx)
+
+  def copy_clip_rectangle_list(ctx) do
+    case NIF.copy_clip_rectangle_list(ctx) do
+      {:error, _} = error ->
+        error
+
+      {:ok, list} ->
+        {:ok, Enum.map(list, &Xairo.Rectangle.from_nif/1)}
+    end
+  end
+
+  def show_page(ctx), do: NIF.show_page(ctx)
+
+  def copy_page(ctx), do: NIF.copy_page(ctx)
 
   defp f(x), do: float(x)
 end

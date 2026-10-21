@@ -15,5 +15,7 @@ defmodule Mix.Tasks.Xairo.Gen.Goldens do
     Xairo.Goldens.generate(&Xairo.Goldens.clipping/0, "clipping.png")
     Xairo.Goldens.generate(&Xairo.Goldens.lsystem_tree/0, "lsystem_tree.png")
     Xairo.Goldens.generate(&Xairo.Goldens.text/0, "text.png")
+    Xairo.Goldens.generate(&Xairo.Goldens.surface_source/0, "surface_source.png")
+    Xairo.Goldens.generate(&Xairo.Goldens.hairlines/0, "hairlines.png")
   end
 end

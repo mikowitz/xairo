@@ -373,6 +373,39 @@ defmodule Xairo.GraphicsState do
       def set_operator(ctx, operator) when operator in @operators do
         NIF.context_set_operator(ctx, operator)
       end
+
+      @doc """
+      Sets lines within the cairo context to be hairlines. Hairlines are
+      logically zero-width lines that are drawn at the thinnest renderable
+      width possible in the current context.
+
+      On surfaces with native hairline support, the native hairline
+      functionality will be used. Surfaces that support hairlines include:
+
+      * pdf/ps: Encoded as 0-width line.
+      * win32_printing: Rendered with PS_COSMETIC pen.
+      * svg: Encoded as 1px non-scaling-stroke.
+      * script: Encoded with set-hairline function.
+
+      Cairo will always render hairlines at 1 device unit wide, even if an
+      anisotropic scaling was applied to the stroke width. In the wild,
+      handling of this situation is not well-defined. Some PDF, PS, and SVG
+      renderers match Cairo's output, but some very popular implementations
+      (Acrobat, Chrome, rsvg) will scale the hairline unevenly. As such, best
+      practice is to reset any anisotropic scaling before calling `stroke/1`.
+
+      See [https://cairographics.org/cookbook/ellipses/] for an example.
+      """
+      @doc group: "Graphics state"
+      @spec set_hairline(Context.t(), boolean()) :: Xairo.maybe_ctx()
+      def set_hairline(ctx, hairline), do: NIF.set_hairline(ctx, hairline)
+
+      @doc """
+      Returns whether or not hairline mode is set, as set by `set_hairline/2`.
+      """
+      @doc group: "Graphics state"
+      @spec get_hairline(Context.t()) :: boolean()
+      def get_hairline(ctx), do: NIF.get_hairline(ctx)
     end
   end
 end

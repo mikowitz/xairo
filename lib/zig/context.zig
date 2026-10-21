@@ -57,6 +57,11 @@ pub fn set_source_rgba(ctx: ContextResource, r: f64, g: f64, b: f64, a: f64) bea
     return checkContext(ctx);
 }
 
+pub fn set_source_surface(ctx: ContextResource, s: surface.SurfaceResource, x: f64, y: f64) beam.term {
+    c.cairo_set_source_surface(ctx.unpack().ptr, s.unpack().ptr, x, y);
+    return checkContext(ctx);
+}
+
 pub fn get_operator(ctx: ContextResource) beam.term {
     const raw = c.cairo_get_operator(ctx.unpack().ptr);
     if (std.enums.fromInt(enums.Operator, raw)) |found| return beam.make(found, .{});
@@ -155,6 +160,15 @@ pub fn set_dash(ctx: ContextResource, dashes: []f64, offset: f64) beam.term {
     var dashes_c: [*c]f64 = undefined;
     dashes_c = @ptrCast(dashes);
     c.cairo_set_dash(ctx.unpack().ptr, dashes_c, @as(c_int, @intCast(dashes.len)), offset);
+    return checkContext(ctx);
+}
+
+pub fn get_hairline(ctx: ContextResource) bool {
+    return c.cairo_get_hairline(ctx.unpack().ptr) == 1;
+}
+
+pub fn set_hairline(ctx: ContextResource, hairline: bool) beam.term {
+    c.cairo_set_hairline(ctx.unpack().ptr, @intFromBool(hairline));
     return checkContext(ctx);
 }
 
